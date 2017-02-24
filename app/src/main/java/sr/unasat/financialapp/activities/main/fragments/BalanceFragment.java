@@ -103,6 +103,50 @@ public class BalanceFragment extends Fragment {
     private void setDays(Date date,int month){
         Dao dao=new Dao(getActivity());
 
+        if (month==0&&counter2!=0) {
+
+            List<String> days = new ArrayList<>();
+            int[] years = new int[(endyear-startyear)+1];
+            int nyear=startyear;
+            for (int i=1;i<years.length;i++){
+                years[i]=nyear+1;
+                nyear++;
+            }
+            years[0]=startyear;
+            HashMap<String, List<String>> transactions = new HashMap<>();
+            List<String> tranNames;
+
+            for (int i =1;i<years.length;i++) {
+                for (int year:years) {
+                    List<String> listDays = dao.getDays(i, year);
+
+                    for (String theDay : listDays) {
+
+                        String[] array = theDay.split("\\s");
+                        int day = Integer.valueOf(array[0]);
+                        tranNames = new ArrayList<>();
+                        List<Transaction> list = dao.getTransactionsByDay(day, i, year);
+                        for (Transaction transaction : list) {
+
+                            tranNames.add(transaction.getTran_name());
+                            transactions.put(theDay, tranNames);
+                        }
+                        days.add(theDay);
+                    }
+                }
+            }
+
+
+            ExpandableListView groupListView = (ExpandableListView) getView().findViewById(R.id.group_listView);
+
+            DateGroupExpendableAdapter adapter = new DateGroupExpendableAdapter(days, transactions, getContext());
+
+            groupListView.setAdapter(adapter);
+
+
+        }
+        else {
+
 
             counter2++;
             int[] dateArr = convertDate(date);
@@ -143,7 +187,7 @@ public class BalanceFragment extends Fragment {
             DateGroupExpendableAdapter adapter = new DateGroupExpendableAdapter(days, transactions, getContext());
 
             groupListView.setAdapter(adapter);
-
+        }
 
     }
 
