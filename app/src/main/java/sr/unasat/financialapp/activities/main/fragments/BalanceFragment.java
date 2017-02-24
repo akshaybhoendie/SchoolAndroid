@@ -105,6 +105,8 @@ public class BalanceFragment extends Fragment {
         if (month==0&&counter2!=0){
             int []years = new int[(endyear-startyear)+1];
 
+            List<String> days=new ArrayList<>();HashMap<String, List<String>> transactions = new HashMap<>();
+
             int startingYear =startyear,startingMonth=startmonth;
             for (int i = 1; i<years.length-1;i++){
 
@@ -123,7 +125,42 @@ public class BalanceFragment extends Fragment {
                     startingMonth++;
                 }
                 months[0]=startmonth;
+
+                for (int month1:months){
+                    List<String> listwithdates = dao.getDays(month1, year);
+                    for (String s : listwithdates){
+                        days.add(s);
+                    }
+
+
+                    List<String> tranNames;
+
+
+                    for (String theDay : days) {
+
+                        String[] array = theDay.split("\\s");
+                        int day = Integer.valueOf(array[0]);
+                        tranNames = new ArrayList<>();
+                        List<Transaction> list = dao.getTransactionsByDay(day, month, year);
+                        for (Transaction transaction : list) {
+
+                            tranNames.add(transaction.getTran_name());
+                            transactions.put(theDay, tranNames);
+
+                        }
+
+
+                    }
+
+                }
+
             }
+            ExpandableListView groupListView = (ExpandableListView) getView().findViewById(R.id.group_listView);
+
+            DateGroupExpendableAdapter adapter = new DateGroupExpendableAdapter(days, transactions, getContext());
+
+            groupListView.setAdapter(adapter);
+
 
   }else {
             counter2++;
@@ -133,6 +170,7 @@ public class BalanceFragment extends Fragment {
                 month = dateArr[1];
             }
             List<String> days = dao.getDays(month, dateArr[0]);
+
 
             //day+" "+int_to_month(month)+" "+year;
 
@@ -165,9 +203,9 @@ public class BalanceFragment extends Fragment {
 
             groupListView.setAdapter(adapter);
 
-
         }
-    }
+        }
+
 
 
     private void openDatePicker(int year1,int month1,int day1){
