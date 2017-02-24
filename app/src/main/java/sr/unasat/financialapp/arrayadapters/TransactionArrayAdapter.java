@@ -22,7 +22,7 @@ public class TransactionArrayAdapter extends ArrayAdapter<String> {
     }
 
 
-    @NonNull
+   /* @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -45,5 +45,5 @@ public class TransactionArrayAdapter extends ArrayAdapter<String> {
 
 
         return customView;
-    }
+    }*/
 }

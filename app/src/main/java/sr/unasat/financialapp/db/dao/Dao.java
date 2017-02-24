@@ -371,18 +371,15 @@ public class Dao extends SQLiteOpenHelper {
         return transaction;
     }
 
-    public List<Transaction> getTransactionsByDay(int day,int year){
+    public List<Transaction> getTransactionsByMonth(int month, int year){
         List<Transaction> list = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
         Transaction transaction;
 
         Cursor cursor = db.query(
-                REP_TABLE,new String[]{DAY},
-                MONTH+" = ? and "+YEAR+" = ?", new String[] { "" + String.valueOf(day),String.valueOf(year)},null,null,null);
-
-
-
-        if (cursor .moveToFirst()) {
+                REP_TABLE,null,
+                MONTH+" = ? and "+YEAR+" = ?", new String[] { "" + String.valueOf(month),String.valueOf(year)},null,null,null);
+ if (cursor .moveToFirst()) {
             do {
                 int id = cursor.getInt(cursor.getColumnIndex(TRAN_ID));
                 transaction = getTransactionByID(id);
@@ -398,6 +395,29 @@ public class Dao extends SQLiteOpenHelper {
         return list;
     }
 
+    public List<Transaction> getTransactionsByDay(int day,int month, int year){
+        List<Transaction> list = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Transaction transaction;
+
+        Cursor cursor = db.query(
+                REP_TABLE,null,
+                DAY+" = ? and "+MONTH+" = ? and "+YEAR+" = ?", new String[] { "" + String.valueOf(day),String.valueOf(month),String.valueOf(year)},null,null,null);
+        if (cursor .moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndex(TRAN_ID));
+                transaction = getTransactionByID(id);
+
+                cursor.moveToNext();
+
+                list.add(transaction);
+
+            }while (cursor.isAfterLast() == false);
+
+        }
+
+        return list;
+    }
 
 
 

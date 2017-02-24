@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.ExpandableListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,10 +16,10 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import sr.unasat.financialapp.R;
-import sr.unasat.financialapp.arrayadapters.DateGroupArrayAdapter;
-import sr.unasat.financialapp.arrayadapters.TransactionArrayAdapter;
+import sr.unasat.financialapp.arrayadapters.DateGroupExpendableAdapter;
 import sr.unasat.financialapp.db.dao.Dao;
 import sr.unasat.financialapp.dto.Transaction;
 
@@ -38,11 +38,10 @@ public class BalanceFragment extends Fragment {
         Dao dao = new Dao(getActivity());
         final String spinnerItem1 ="this month";
         final String spinnerItem2 ="last month";
-        final String spinnerItem3 ="last 7 days";
         final String spinnerItem4 ="custom date range";
 
         Spinner spinner = (Spinner)view.findViewById(R.id.balance_month_spinner);
-        final String[] items = {spinnerItem1,spinnerItem2,spinnerItem3,spinnerItem4};
+        final String[] items = {spinnerItem1,spinnerItem2,spinnerItem4};
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getActivity(),R.layout.spinner_layout,R.id.spinner_item, items);
 
         spinner.setAdapter(spinnerAdapter);
@@ -56,14 +55,19 @@ public class BalanceFragment extends Fragment {
                 switch (String.valueOf(parent.getItemAtPosition(position))){
 
                     case spinnerItem1:
-                        setDays(date);
+                        setDays(date,0);
                         break;
                     case spinnerItem2:
+                        int month=convertDate(date)[1];
+                        if (month==1){
+                            setDays(date,12);
+                        }else{
+                            setDays(date,month-1);
+                        }
+                        break;
 
-                        break;
-                    case spinnerItem3:
-                        break;
                     case spinnerItem4:
+
                         break;
 
                 }
@@ -81,30 +85,51 @@ public class BalanceFragment extends Fragment {
 
 
 
-
-
-
-
-
-
-
-
         closingView.setText(String.valueOf(dao.getUserById(1).getClosing()));
 
 
         return view;
     }
 
-    private void setDays(Date date){
+    private void setDays(Date date,int month){
+
         int[] dateArr = convertDate(date);
         Dao dao=new Dao(getActivity());
-        List<String> days = dao.getDays(dateArr[1],dateArr[0]);
+        if (month==0){
+            month = dateArr[1];
+        }
+        List<String> days = dao.getDays(month,dateArr[0]);
 
-        ListView groupListView = (ListView)getView().findViewById(R.id.group_listView);
+        //day+" "+int_to_month(month)+" "+year;
 
-        DateGroupArrayAdapter dateAdapter= new DateGroupArrayAdapter(getActivity(),days);
 
-        groupListView.setAdapter(dateAdapter);
+
+        HashMap<String,List<String>> transactions= new HashMap<>();
+
+        List<String> tranNames;
+
+
+        for (String theDay:days){
+
+            String[] array = theDay.split("\\s");
+            int day = Integer.valueOf(array[0]);
+            tranNames = new ArrayList<>();
+            List<Transaction> list =dao.getTransactionsByDay(day,month,dateArr[0]);
+            for (Transaction transaction:list){
+
+                tranNames.add(transaction.getTran_name());
+                transactions.put(theDay,tranNames);
+
+            }
+
+        }
+
+
+        ExpandableListView groupListView = (ExpandableListView) getView().findViewById(R.id.group_listView);
+
+        DateGroupExpendableAdapter adapter = new DateGroupExpendableAdapter(days,transactions,getContext());
+
+        groupListView.setAdapter(adapter);
 
          }
 
