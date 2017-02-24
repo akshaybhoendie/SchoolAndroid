@@ -1,0 +1,75 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="sr.unasat.financialapp.activities.main.fragments.AddTransactionDialog">
+
+
+    <TextView
+        android:text="transaction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/transaction_dialog_titel"
+        android:textSize="24sp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/transaction_name_input"
+        android:layout_marginTop="60dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        android:hint="transaction name " />
+
+    <Spinner
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:id="@+id/trandialog_category_spinner"
+        android:layout_below="@+id/transaction_name_input"
+        android:layout_centerHorizontal="true"
+         />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:layout_marginTop="194dp"
+        android:id="@+id/transaction_amount_input"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/trandialog_category_spinner"
+        android:layout_alignStart="@+id/trandialog_category_spinner"
+        android:hint="0.00"
+        android:textAlignment="center" />
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:srcCompat="@drawable/x"
+        android:id="@+id/cancel_button"
+        android:onClick="cancelTransactionEvent"
+        android:layout_alignTop="@+id/ok_button"
+        android:layout_alignLeft="@+id/transaction_amount_input"
+        android:layout_alignStart="@+id/transaction_amount_input"
+        android:layout_marginLeft="21dp"
+        android:layout_marginStart="21dp" />
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:srcCompat="@drawable/v"
+        android:id="@+id/ok_button"
+        android:onClick="okTransactionEvent"
+        android:layout_marginTop="291dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/trandialog_category_spinner"
+        android:layout_alignEnd="@+id/trandialog_category_spinner" />
+
+</RelativeLayout>

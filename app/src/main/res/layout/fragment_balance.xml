@@ -1,0 +1,82 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.main.fragments.BalanceFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="9"
+        android:paddingBottom="@dimen/activity_horizontal_margin"
+        >
+
+        <TextView
+            android:text="closing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/closing_TextView"
+            android:textSize="24sp" />
+
+        <TextView
+            android:text="0.00"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/closing_TextView"
+            android:layout_toRightOf="@+id/closing_TextView"
+            android:layout_toEndOf="@+id/closing_TextView"
+            android:layout_marginLeft="30dp"
+            android:layout_marginStart="30dp"
+            android:id="@+id/balance_closing_value"
+            android:textSize="24sp" />
+
+        <Spinner
+            android:layout_height="wrap_content"
+            android:id="@+id/balance_month_spinner"
+            android:layout_width="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/rootLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        >
+
+
+
+
+        <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/group_listView"
+        style="@style/Widget.AppCompat.ListView"
+
+        />
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            app:fabSize="normal"
+            android:layout_gravity="bottom|end"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="10dp"
+            app:srcCompat="@drawable/float2"
+            android:id="@+id/floatingActionButton"
+            android:onClick="balance_floatingButtonEvent"/>
+
+
+    </android.support.design.widget.CoordinatorLayout>
+
+
+</LinearLayout>
+
+

@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">FinancialApp</string>
+
+    <string name="drawer_open">drawer open</string>
+    <string name="drawer_closed">drawer closed</string>
+
+    <string name="overview">overview</string>
+    <string name="settings">settings</string>
+    <string name="balance">balance</string>
+    <string name="reports">reports</string>
+    <string name="categories">categories</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="budgets">budgets</string>
+</resources>
