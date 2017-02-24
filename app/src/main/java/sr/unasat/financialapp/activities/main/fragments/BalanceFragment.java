@@ -43,7 +43,7 @@ public class BalanceFragment extends Fragment {
         Dao dao = new Dao(getActivity());
         final String spinnerItem1 ="this month";
         final String spinnerItem2 ="last month";
-        final String spinnerItem3 ="custom date range";
+        final String spinnerItem3 ="custom month range";
 
         Spinner spinner = (Spinner)view.findViewById(R.id.balance_month_spinner);
         final String[] items = {spinnerItem1,spinnerItem2,spinnerItem3};
