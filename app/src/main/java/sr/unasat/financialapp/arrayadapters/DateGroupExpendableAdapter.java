@@ -17,10 +17,6 @@ import sr.unasat.financialapp.R;
 import sr.unasat.financialapp.db.dao.Dao;
 import sr.unasat.financialapp.dto.Transaction;
 
-/**
- * Created by Jair on 2/23/2017.
- */
-
 public class DateGroupExpendableAdapter extends BaseExpandableListAdapter {
 
     private List<String> date;

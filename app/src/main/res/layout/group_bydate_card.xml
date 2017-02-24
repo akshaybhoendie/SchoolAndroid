@@ -5,15 +5,20 @@
     android:background="@color/DimGray" >
 
         <TextView
-            android:text="date"
+            android:text="year"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
             android:id="@+id/tran_date_onCard"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:textColor="@color/GhostWhite"
             android:layout_marginLeft="34dp"
             android:layout_marginStart="34dp"
             />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@color/default_bmb_dimColor"/>
+
 
 
 </LinearLayout>

@@ -492,5 +492,52 @@ public class Dao extends SQLiteOpenHelper {
         return db.update(USER_TABLE, contentValues, USER_ID+ " = " + user.getId(), null)>0;
     }
 
+    public List<String> getTransactionYears(){
+        SQLiteDatabase db=getReadableDatabase();
+        Cursor cursor = null;
+        List<String>list=new ArrayList<>();
+        cursor = db.query(REP_TABLE,null,null,null,null,null,null);
+
+        if (cursor .moveToFirst()) {
+            do {
+                String year = String.valueOf(cursor.getInt(cursor.getColumnIndex(YEAR)));
+                if (!list.contains(year)) {
+                    list.add(year);
+                }
+
+                cursor.moveToNext();
+
+
+            }while (cursor.isAfterLast() == false);
+
+        }
+
+        return list;
+    }
+
+    public List<String> getTransactionMonthsByYear(int year){
+        SQLiteDatabase db = getReadableDatabase();
+        List<String> months=new ArrayList<>();
+        Cursor cursor = db.query(
+                REP_TABLE,new String[]{MONTH},
+                YEAR+" = ?", new String[] { "" +year},null,null,null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                String month=String.valueOf(cursor.getInt(cursor.getColumnIndex(MONTH)));
+
+                if (!months.contains(month)){
+                    months.add(month);
+                }
+
+                cursor.moveToNext();
+
+            }while(!cursor.isAfterLast());
+        }
+
+        return months;
+    }
+
+
 
 }
