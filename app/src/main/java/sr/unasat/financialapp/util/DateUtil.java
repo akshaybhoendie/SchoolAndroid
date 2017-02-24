@@ -7,7 +7,7 @@ import java.util.Date;
  */
 
 public class DateUtil {
-    private static int original;
+    private static int ordinal;
 
     private static int day_to_int(String dayStr){
 
@@ -95,40 +95,52 @@ public class DateUtil {
         int monthInt ;
         switch (monthStr.toLowerCase()){
             case "jan":
-                monthInt = 1;original=0;
+                monthInt = 1;
+                ordinal =0;
                 break;
             case "feb":
-                monthInt = 2;original=31;
+                monthInt = 2;
+                ordinal =31;
                 break;
             case "mar":
-                monthInt = 3;original=59;
+                monthInt = 3;
+                ordinal =59;
                 break;
             case "apr":
-                monthInt = 4;original=90;
+                monthInt = 4;
+                ordinal =90;
                 break;
             case "may":
-                monthInt = 5;original=120;
+                monthInt = 5;
+                ordinal =120;
                 break;
             case "jun":
-                monthInt = 6;original=151;
+                monthInt = 6;
+                ordinal =151;
                 break;
             case "jul":
-                monthInt = 7;original=181;
+                monthInt = 7;
+                ordinal =181;
                 break;
             case "aug":
-                monthInt = 8;original=212;
+                monthInt = 8;
+                ordinal =212;
                 break;
             case "sep":
-                monthInt = 9;original=243;
+                monthInt = 9;
+                ordinal =243;
                 break;
             case "oct":
-                monthInt = 10;original=273;
+                monthInt = 10;
+                ordinal =273;
                 break;
             case "nov":
-                monthInt = 11;original=304;
+                monthInt = 11;
+                ordinal =304;
                 break;
             case "dec":
-                monthInt = 12;original=334;
+                monthInt = 12;
+                ordinal =334;
                 break;
             default:
                 monthInt=0;
@@ -147,23 +159,29 @@ public class DateUtil {
         int month = month_to_int(array[1]);
         int day = Integer.valueOf(array[2]);
         int year = Integer.valueOf(array[5]);
+        int weekYear;
         //Ordinal day: 244 + 26 = 270
         //Weekday: Friday = 5
         //270 − 5 + 10 = 275
         //275 / 7 = 39.28…
         //Result: Week 39
 
-        //int theDay = original + day;
+        //int theDay = ordinal + day;
         //int vat = theDay - weekday;
         //int vat2 = vat + 10;
         //double result = vat2/7;
+         if (year % 4 == 0){
 
-        int weekYear =(int) Math.round((((original + day) - weekday) + 10)/7);
+             if (month == 1 || month == 2){
+                 weekYear =(int) Math.round((((ordinal + day) - weekday) + 10)/7);
+             }else{
+                 ordinal++;
+
+             }
+         }
+        weekYear =(int) Math.round((((ordinal + day) - weekday) + 10)/7);
 
         return new int[] {year,month,weekYear,weekday,day};
     }
-
-
-
 
 }
