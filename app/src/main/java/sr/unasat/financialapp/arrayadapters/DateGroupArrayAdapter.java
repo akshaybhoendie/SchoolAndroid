@@ -20,7 +20,7 @@ public class DateGroupArrayAdapter extends ArrayAdapter <String>{
     public DateGroupArrayAdapter(Context context, List<String> date) {
         super(context, R.layout.group_bydate_card, date);
     }
-
+/*
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -47,5 +47,5 @@ public class DateGroupArrayAdapter extends ArrayAdapter <String>{
 
 
         return customView;
-    }
+    }*/
 }
