@@ -4,13 +4,11 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 import sr.unasat.financialapp.R;
@@ -70,7 +68,7 @@ public class TransactionExpendableAdapter extends BaseExpandableListAdapter {
         String date = (String)getGroup(groupPosition);
         if (convertView==null){
             LayoutInflater inflater = (LayoutInflater)this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView =   inflater.inflate(R.layout.group_bydate_card3,null);
+            convertView =   inflater.inflate(R.layout.card_date,null);
         }
 
         TextView dateView= (TextView)convertView.findViewById(R.id.tran_date_onCard3);
@@ -90,10 +88,10 @@ public class TransactionExpendableAdapter extends BaseExpandableListAdapter {
 
         if (convertView==null){
             LayoutInflater inflater = (LayoutInflater)this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView =   inflater.inflate(R.layout.transaction_card ,null);
+            convertView =   inflater.inflate(R.layout.card_transaction,null);
         }
 
-        TextView tranName = (TextView)convertView.findViewById(R.id.transaction_name);
+        TextView tranName = (TextView)convertView.findViewById(R.id.category_name);
         TextView tranDescr = (TextView) convertView.findViewById(R.id.transaction_descr);
         TextView tranVal = (TextView) convertView.findViewById(R.id.transaction_value);
 
