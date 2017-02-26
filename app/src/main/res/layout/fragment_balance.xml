@@ -69,6 +69,7 @@
         android:layout_height="match_parent"
         android:id="@+id/group_listViewMain"
         style="@style/Widget.AppCompat.ListView"
+            android:groupIndicator="@null"
 
         />
         <android.support.design.widget.FloatingActionButton

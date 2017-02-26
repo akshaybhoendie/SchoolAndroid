@@ -5,19 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import java.util.List;
-
 import sr.unasat.financialapp.R;
 
-/**
- * Created by Jair on 2/26/2017.
- */
-
-public class TransactionRecyclerAdapter extends RecyclerView.Adapter<TransactionRecyclerAdapter.RecyclerViewHolder> {
+public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecyclerAdapter.RecyclerViewHolder> {
 
     List<String> category_names;
-    public TransactionRecyclerAdapter(List<String> category_names){
+    public CategoryRecyclerAdapter(List<String> category_names){
 
         this.category_names=category_names;
     }
@@ -51,4 +45,5 @@ public class TransactionRecyclerAdapter extends RecyclerView.Adapter<Transaction
 
         }
     }
+
 }

@@ -16,14 +16,15 @@
         />
     <View
         android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:background="@color/Gray"/>
+        android:layout_height="2dp"
+        android:background="@color/LightGrey"/>
 
     <ExpandableListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/transactions_list"
         style="@style/Widget.AppCompat.ListView"
+        android:groupIndicator="@null"
 
         />
 

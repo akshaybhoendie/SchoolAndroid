@@ -4,13 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/transaction_card"
-    android:orientation="vertical">
-
+    android:orientation="vertical"
+    android:layout_marginBottom="10dp">
 
 
     <RelativeLayout
-    android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="10dp">
 
         <TextView
         android:text="0.00"
@@ -61,7 +62,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="3dp"
+        android:layout_height="2dp"
         android:background="@color/LightGrey">
 
     </View>

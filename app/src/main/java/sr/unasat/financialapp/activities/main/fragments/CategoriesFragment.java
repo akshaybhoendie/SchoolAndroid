@@ -13,15 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sr.unasat.financialapp.R;
-import sr.unasat.financialapp.arrayadapters.TransactionRecyclerAdapter;
+import sr.unasat.financialapp.arrayadapters.CategoryRecyclerAdapter;
 import sr.unasat.financialapp.db.dao.Dao;
 import sr.unasat.financialapp.dto.Category;
-import sr.unasat.financialapp.dto.Transaction;
 
 public class CategoriesFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private TransactionRecyclerAdapter adapter;
+    private CategoryRecyclerAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,7 +38,7 @@ public class CategoriesFragment extends Fragment {
         }
 
         recyclerView = (RecyclerView)view.findViewById(R.id.cat_recycler);
-        adapter = new TransactionRecyclerAdapter(categoriesStr);
+        adapter = new CategoryRecyclerAdapter(categoriesStr);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
