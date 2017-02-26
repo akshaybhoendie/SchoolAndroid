@@ -2,7 +2,6 @@ package sr.unasat.financialapp.activities.main.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +18,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import sr.unasat.financialapp.R;
-import sr.unasat.financialapp.arrayadapters.DateGroupExpendableAdapter;
-import sr.unasat.financialapp.arrayadapters.YearGroupExpandableAdapter;
+import sr.unasat.financialapp.arrayadapters.TransactionExpendableAdapter;
 import sr.unasat.financialapp.db.dao.Dao;
 import sr.unasat.financialapp.dto.Transaction;
 
@@ -39,7 +37,7 @@ public class BalanceFragment extends Fragment {
         Dao dao = new Dao(getActivity());
         final String spinnerItem1 ="this month";
         final String spinnerItem2 ="last month";
-        final String spinnerItem3 ="all transactions";
+        final String spinnerItem3 ="choose month";
 
         Spinner spinner = (Spinner)view.findViewById(R.id.balance_month_spinner);
         final String[] items = {spinnerItem1,spinnerItem2,spinnerItem3};
@@ -70,7 +68,7 @@ public class BalanceFragment extends Fragment {
                         break;
 
                     case spinnerItem3:
-                        groupByYear();
+
                         break;
 
 
@@ -97,15 +95,17 @@ public class BalanceFragment extends Fragment {
     }
 
     public void setDays(Date date,int month,int year){
-        getView().findViewById(R.id.group_listView).refreshDrawableState();
+        getView().findViewById(R.id.group_listViewMain).refreshDrawableState();
         Dao dao=new Dao(getActivity());
 
                 int[] dateArr = convertDate(date);
 
-            if (month == 0||year==0) {
+            if (month == 0&&year==0) {
                 month = dateArr[1];
-                year = dateArr[0];
+
             }
+
+        year = dateArr[0];
             List<String> days = dao.getDays(month, year);
 
 
@@ -134,9 +134,9 @@ public class BalanceFragment extends Fragment {
             }
 
 
-            ExpandableListView groupListView = (ExpandableListView) getView().findViewById(R.id.group_listView);
+            ExpandableListView groupListView = (ExpandableListView) getView().findViewById(R.id.group_listViewMain);
 
-            DateGroupExpendableAdapter adapter = new DateGroupExpendableAdapter(days, transactions, getContext());
+            TransactionExpendableAdapter adapter = new TransactionExpendableAdapter(days, transactions, getContext());
 
             groupListView.setAdapter(adapter);
 
@@ -145,31 +145,7 @@ public class BalanceFragment extends Fragment {
 
         }
 
-    private void groupByYear(){
-
-        Dao dao = new Dao(getActivity());
-        List<Transaction>transactions=dao.getTransactions();
-
-        List<String> years=dao.getTransactionYears();
-        HashMap<String ,List<String>> months=new HashMap<>();
-
-        for (String year : years) {
-
-            months.put(year,dao.getTransactionMonthsByYear(Integer.valueOf(year)));
-
-        }
-        ExpandableListView groupListView = (ExpandableListView) getView().findViewById(R.id.group_listView);
-
-        YearGroupExpandableAdapter adapter = new YearGroupExpandableAdapter(years, months, getContext());
-
-        groupListView.setAdapter(adapter);
-
-
-
-    }
-
-
-}
+   }
 
 
 

@@ -8,7 +8,7 @@
         android:text="date"
         android:layout_width="wrap_content"
         android:layout_height="25dp"
-        android:id="@+id/tran_date_onCard2"
+        android:id="@+id/tran_date_onCard3"
         android:textSize="16sp"
         android:textColor="@color/Black"
         android:layout_marginLeft="34dp"
@@ -19,6 +19,13 @@
         android:layout_height="4dp"
         android:background="@color/Gray"/>
 
+    <ExpandableListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/transactions_list"
+        style="@style/Widget.AppCompat.ListView"
+
+        />
 
 
 </LinearLayout>

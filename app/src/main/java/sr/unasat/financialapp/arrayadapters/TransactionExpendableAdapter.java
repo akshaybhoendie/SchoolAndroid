@@ -17,13 +17,13 @@ import sr.unasat.financialapp.R;
 import sr.unasat.financialapp.db.dao.Dao;
 import sr.unasat.financialapp.dto.Transaction;
 
-public class DateGroupExpendableAdapter extends BaseExpandableListAdapter {
+public class TransactionExpendableAdapter extends BaseExpandableListAdapter {
 
     private List<String> date;
     private HashMap<String,List<String>> transactions;
     private Context context;
 
-    public DateGroupExpendableAdapter(List<String> date, HashMap<String, List<String>> transactions, Context context) {
+    public TransactionExpendableAdapter(List<String> date, HashMap<String, List<String>> transactions, Context context) {
         this.date = date;
         this.transactions = transactions;
         this.context = context;
@@ -70,10 +70,10 @@ public class DateGroupExpendableAdapter extends BaseExpandableListAdapter {
         String date = (String)getGroup(groupPosition);
         if (convertView==null){
             LayoutInflater inflater = (LayoutInflater)this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView =   inflater.inflate(R.layout.group_bydate_card,null);
+            convertView =   inflater.inflate(R.layout.group_bydate_card3,null);
         }
 
-        TextView dateView= (TextView)convertView.findViewById(R.id.tran_date_onCard);
+        TextView dateView= (TextView)convertView.findViewById(R.id.tran_date_onCard3);
         dateView.setText(date);
 
         ExpandableListView mExpandableListView = (ExpandableListView) parent;

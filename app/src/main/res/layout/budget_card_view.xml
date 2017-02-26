@@ -18,7 +18,6 @@
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/lisa_kudrow"
                 android:id="@+id/person_image"/>
 
             <TextView
