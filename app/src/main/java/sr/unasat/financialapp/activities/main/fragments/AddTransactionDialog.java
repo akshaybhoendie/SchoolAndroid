@@ -151,6 +151,8 @@ public class AddTransactionDialog extends DialogFragment {
             Log.i(TAG, "addTransaction: view NULL pointer exception");
 
         }
+        transactionToEditID=null;
     }
+
 
 }

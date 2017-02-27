@@ -96,11 +96,13 @@ public class TransactionExpendableAdapter extends BaseExpandableListAdapter {
         TextView tranName = (TextView)convertView.findViewById(R.id.category_name);
         TextView tranDescr = (TextView) convertView.findViewById(R.id.transaction_descr);
         TextView tranVal = (TextView) convertView.findViewById(R.id.transaction_value);
+        TextView tranID = (TextView) convertView.findViewById(R.id.transaction_id_onCard);
 
         Transaction transaction = dao.getTransactionByID(transactionID);
         tranName.setText(transaction.getTran_name());
         tranDescr.setText(transaction.getCategory().getName());
         tranVal.setText(String.valueOf(transaction.getTran_amount()));
+        tranID.setText(String.valueOf(transactionID));
 
         return convertView;
     }

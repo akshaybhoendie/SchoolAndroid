@@ -1,5 +1,6 @@
 package sr.unasat.financialapp.activities.main.fragments;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -18,6 +19,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.StringTokenizer;
+
 import sr.unasat.financialapp.R;
 import sr.unasat.financialapp.activities.main.MainActivity;
 import sr.unasat.financialapp.arrayadapters.TransactionExpendableAdapter;
@@ -26,11 +29,12 @@ import sr.unasat.financialapp.dto.Transaction;
 import sr.unasat.financialapp.dto.User;
 
 import static sr.unasat.financialapp.activities.main.MainActivity.addTransactionDialog;
+import static sr.unasat.financialapp.activities.main.MainActivity.editOrDeleteFragment;
 import static sr.unasat.financialapp.util.DateUtil.convertDate;
 
 public class BalanceFragment extends Fragment {
 
-     Date date ;
+    Date date ;
 
 
     @Override
@@ -117,13 +121,13 @@ public class BalanceFragment extends Fragment {
             }
 
         year = dateArr[0];
-            final List<String> days = dao.getDays(month, year);
+            List<String> days = dao.getDays(month, year);
 
 
             //day+" "+int_to_month(month)+" "+year;
 
 
-            final HashMap<String, List<String>> transactions = new HashMap<>();
+            HashMap<String, List<String>> transactions = new HashMap<>();
 
             List<String> tranNames;
 
@@ -144,48 +148,47 @@ public class BalanceFragment extends Fragment {
                 Collections.reverse(tranNames);
 
             }
+        final List<String>thedays=days;
+        final HashMap<String, List<String>>tran=transactions;
 
 
         Collections.reverse(days);
+        ExpandableListView groupListView = (ExpandableListView) getView().findViewById(R.id.group_listViewMain);
+        TransactionExpendableAdapter adapter = new TransactionExpendableAdapter(days, transactions, getContext());
 
-        final ExpandableListView groupListView = (ExpandableListView) getView().findViewById(R.id.group_listViewMain);
+        groupListView.setAdapter(adapter);
+
+
         groupListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
 
-                if(!groupListView.getOnItemLongClickListener().equals(true)) {
 
-                    Toast.makeText(getActivity(), String.valueOf(childPosition) + " " + String.valueOf(groupPosition), Toast.LENGTH_SHORT).show();
+                editOrDeleteFragment = new EditOrDeleteFragment();
+                editOrDeleteFragment.show(getFragmentManager(),"edit/delete frag");
 
-                    addTransactionDialog = new AddTransactionDialog();
-                    addTransactionDialog.transactionToEditID = Integer.valueOf(transactions.get(days.get(groupPosition)).get(childPosition));
 
-                    addTransactionDialog.show(getFragmentManager(), "editTran");
+                Toast.makeText(getActivity(), String.valueOf(childPosition) + " " + String.valueOf(groupPosition), Toast.LENGTH_SHORT).show();
 
-                }
+
+                //addTransactionDialog = new AddTransactionDialog();
+
+                String day = thedays.get(groupPosition);
+                List<String> testList =tran.get(day);
+                String tranId = testList.get(childPosition);
+
+                addTransactionDialog = new AddTransactionDialog();
+                addTransactionDialog.transactionToEditID = Integer.valueOf(tranId);
+
+
+                //addTransactionDialog.show(getFragmentManager(), "editTran");
+
+
                 return false;
             }
         });
 
-        groupListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-                Toast.makeText(getActivity(), "long", Toast.LENGTH_SHORT).show();
-                return true;
-            }
-        });
-
-            TransactionExpendableAdapter adapter = new TransactionExpendableAdapter(days, transactions, getContext());
-
-            groupListView.setAdapter(adapter);
-
-
-
-
-        }
-
-
+    }
 
 
 }

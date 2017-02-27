@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content" android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:id="@+id/edit_item"
+        android:layout_margin="@dimen/cardview_compat_inset_shadow"
+        >
+
+        <TextView
+            android:text="edit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/textView"
+            android:onClick="editTran"
+            android:textAlignment="center" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:id="@+id/delete_item"
+        android:layout_margin="@dimen/cardview_compat_inset_shadow">
+
+        <TextView
+            android:text="delete"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/textView2"
+            android:onClick="deleteTran"
+            android:textAlignment="center" />
+    </RelativeLayout>
+
+</LinearLayout>

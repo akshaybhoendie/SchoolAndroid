@@ -12,17 +12,25 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.List;
 
 import sr.unasat.financialapp.R;
 import sr.unasat.financialapp.activities.main.fragments.AddTransactionDialog;
 import sr.unasat.financialapp.activities.main.fragments.BalanceFragment;
 import sr.unasat.financialapp.activities.main.fragments.BudgetsFragment;
 import sr.unasat.financialapp.activities.main.fragments.CategoriesFragment;
+import sr.unasat.financialapp.activities.main.fragments.ConfirmFragment;
+import sr.unasat.financialapp.activities.main.fragments.EditOrDeleteFragment;
 import sr.unasat.financialapp.activities.main.fragments.OverviewFragment;
 import sr.unasat.financialapp.activities.main.fragments.ReportsFragment;
 import sr.unasat.financialapp.activities.main.fragments.SettingsFragment;
+import sr.unasat.financialapp.arrayadapters.TransactionExpendableAdapter;
 import sr.unasat.financialapp.db.dao.Dao;
+
+import static sr.unasat.financialapp.R.id.transactions;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -31,6 +39,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     static public AddTransactionDialog addTransactionDialog;
+    static public EditOrDeleteFragment editOrDeleteFragment;
+    ConfirmFragment confirmFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,15 +126,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void cancelTransactionEvent(View view){
         addTransactionDialog.getDialog().dismiss();
+        addTransactionDialog.transactionToEditID=null;
         Toast.makeText(this, "no transaction added", Toast.LENGTH_SHORT).show();
     }
 
     public void okTransactionEvent(View view) {
 
-
-
-            addTransactionDialog.addTransaction();
-
+        addTransactionDialog.addTransaction();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.main_container, new BalanceFragment()).commit();
 
@@ -131,8 +140,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    public void editTran(View view){
+
+        editOrDeleteFragment.dismiss();
+        addTransactionDialog.show(getSupportFragmentManager(),"edit");
 
 
+    }
+
+    public void deleteTran(View view){
+        confirmFragment=new ConfirmFragment();
+        confirmFragment.show(getSupportFragmentManager(),"deleteTran");
+        editOrDeleteFragment.dismiss();
+
+
+    }
+
+    public void confirmDelete(View view){
+
+        Dao dao=new Dao(this);
+        dao.deleteTransaction(addTransactionDialog.transactionToEditID);
+        addTransactionDialog.transactionToEditID=null;
+        confirmFragment.dismiss();
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_container, new BalanceFragment()).commit();
+
+        getSupportActionBar().setTitle(getResources().getString(R.string.balance));
+    }
+
+    public void cancelDelete(View view){
+        confirmFragment.dismiss();
+    }
     public void cardReportEvent(View view){
         Toast.makeText(this, "report selected", Toast.LENGTH_SHORT).show();
 

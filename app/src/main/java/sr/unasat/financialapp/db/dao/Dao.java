@@ -328,6 +328,17 @@ public class Dao extends SQLiteOpenHelper {
 
     }
 
+    public boolean deleteTransaction(int id){
+        SQLiteDatabase db=getWritableDatabase();
+        ContentValues contentValues=new ContentValues();
+        contentValues.put(TRAN_AMOUNT,0);
+
+        editTransaction(contentValues,id);
+        db.delete(REP_TABLE,TRAN_ID+" = ?", new String[] { "" + id });
+        return db.delete(TRAN_TABLE,TRAN_ID+" = ?", new String[] { "" + id })>0;
+
+    }
+
 
 
     private Transaction getLastTransaction(){
