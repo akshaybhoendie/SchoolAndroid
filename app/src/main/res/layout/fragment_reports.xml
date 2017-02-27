@@ -4,14 +4,11 @@
     android:layout_height="match_parent"
     tools:context=".activities.main.fragments.ReportsFragment">
 
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rep_recycler">
 
-    <TextView
-        android:text="Reports"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="245dp"
-        android:id="@+id/textView4"
-        android:textSize="36sp" />
+    </android.support.v7.widget.RecyclerView>
+
 </RelativeLayout>

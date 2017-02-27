@@ -126,4 +126,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setTitle(getResources().getString(R.string.balance));
 
     }
+
+    public void cardReportEvent(View view){
+        Toast.makeText(this, "report selected", Toast.LENGTH_SHORT).show();
+    }
 }
