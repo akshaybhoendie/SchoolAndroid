@@ -8,45 +8,85 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:orientation="vertical"
         >
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="9"
-        android:paddingBottom="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="@dimen/cardview_default_elevation"
+
         >
+
+        <TextView
+            android:text="starting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="17dp"
+            android:id="@+id/starting_text"
+            android:layout_alignParentTop="true"
+            android:layout_alignLeft="@+id/closing_TextView"
+            android:layout_alignStart="@+id/closing_TextView" />
+
+        <Spinner
+            android:layout_height="wrap_content"
+            android:id="@+id/balance_month_spinner"
+            android:layout_width="150dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_alignTop="@+id/starting_value"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
         <TextView
             android:text="closing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             android:id="@+id/closing_TextView"
-            android:textSize="24sp" />
+            android:textSize="20sp"
+            android:layout_marginLeft="29dp"
+            android:layout_marginStart="29dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:text="transactions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/transactions"
+            android:layout_below="@+id/balance_month_spinner"
+            android:layout_alignLeft="@+id/closing_TextView"
+            android:layout_alignStart="@+id/closing_TextView" />
 
         <TextView
             android:text="0.00"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/closing_TextView"
-            android:layout_toRightOf="@+id/closing_TextView"
-            android:layout_toEndOf="@+id/closing_TextView"
-            android:layout_marginLeft="30dp"
-            android:layout_marginStart="30dp"
-            android:id="@+id/balance_closing_value"
-            android:textSize="24sp" />
+            android:id="@+id/transactions_value"
+            android:layout_below="@+id/balance_month_spinner"
+            android:layout_alignLeft="@+id/balance_closing_value"
+            android:layout_alignStart="@+id/balance_closing_value" />
 
-        <Spinner
-            android:layout_height="wrap_content"
-            android:id="@+id/balance_month_spinner"
+        <TextView
+            android:text="0.00"
             android:layout_width="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_height="wrap_content"
+            android:id="@+id/starting_value"
+            android:layout_alignBaseline="@+id/starting_text"
+            android:layout_alignBottom="@+id/starting_text"
+            android:layout_alignLeft="@+id/transactions_value"
+            android:layout_alignStart="@+id/transactions_value" />
+
+        <TextView
+            android:text="0.00"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/balance_closing_value"
+            android:textSize="14sp"
+            android:layout_alignTop="@+id/closing_TextView"
+            android:layout_centerHorizontal="true" />
 
 
     </RelativeLayout>

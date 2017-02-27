@@ -33,6 +33,7 @@ import static sr.unasat.financialapp.db.schema.Schema.SchemaCurrency.CUR_LOGO;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaCurrency.DROP_CURTABLE;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaReport.CREATE_REPTABLE;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaReport.DAY;
+import static sr.unasat.financialapp.db.schema.Schema.SchemaReport.REPORT_ID;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaReport.WEEKDAY;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaReport.DROP_REPTABLE;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaReport.MONTH;
@@ -143,6 +144,7 @@ public class Dao extends SQLiteOpenHelper {
             currency = new Currency(curID,country,nameCurrency,logo);
 
         }
+        cursor.close();
 
         return currency;
     }
@@ -169,8 +171,10 @@ public class Dao extends SQLiteOpenHelper {
             user = new User(userID, password, email, created, opening, transactions, closing, null,null,null,null,null);
 
 
+
         }
 
+        cursor.close();
         return user;
     }
 
@@ -205,6 +209,7 @@ public class Dao extends SQLiteOpenHelper {
             category = new Category(cat_id,name,description,budget,getUserById(userID));
 
         }
+        cursor.close();
         return category;
     }
 
@@ -226,6 +231,7 @@ public class Dao extends SQLiteOpenHelper {
             category = new Category(cat_id,cat_name,description,budget,getUserById(userID));
 
         }
+        cursor.close();
         return category;
     }
 
@@ -248,6 +254,7 @@ public class Dao extends SQLiteOpenHelper {
             }while (cursor.isAfterLast() == false);
 
         }
+        cursor.close();
 
         return list;
 
@@ -296,8 +303,285 @@ public class Dao extends SQLiteOpenHelper {
 
 
         }
-
+        cursor.close();
         return transaction;
+    }
+
+    public boolean editTransaction(ContentValues contentValues,int id){
+        SQLiteDatabase db = getWritableDatabase();
+        Transaction oldTransaction = getTransactionByID(id);
+
+        //String date = String.valueOf(contentValues.get(DATE));
+
+        if (db.update(TRAN_TABLE,contentValues,
+                TRAN_ID+" = ?", new String[] { "" + id })>0){
+
+            Transaction transaction=getTransactionByID(id);
+            editreportTrigger(transaction);
+            editbalanceTrigger(oldTransaction,transaction);
+            Log.i(TAG, "insertTransaction: succes");
+
+            return true;
+        }else {
+            return false;
+        }
+
+    }
+
+
+
+    private Transaction getLastTransaction(){
+        Transaction transaction = null;
+        Cursor cursor = null;
+        SQLiteDatabase db= getReadableDatabase();
+
+        cursor = db.query(TRAN_TABLE,null,null,null,null,null,null);
+
+        if (cursor.moveToLast()) {
+
+            int tranID = cursor.getInt(cursor.getColumnIndex(TRAN_ID));
+            String tran_name = cursor.getString(cursor.getColumnIndex(TRAN_NAME));
+            String description= cursor.getString(cursor.getColumnIndex(TRAN_DESCR));
+            double amount = cursor.getDouble(cursor.getColumnIndex(TRAN_AMOUNT));
+            String date= cursor.getString(cursor.getColumnIndex(DATE));
+            int catID = cursor.getInt(cursor.getColumnIndex(CAT_ID));
+
+            transaction= new Transaction(tranID, tran_name, amount, date, getCategoryById(catID).getUser(),getCategoryById(catID));
+        }
+        cursor.close();
+        return transaction;
+    }
+
+
+    public List<Transaction> getTransactionsByDay(int day,int month, int year){
+        List<Transaction> list = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Transaction transaction;
+
+        Cursor cursor = db.query(
+                REP_TABLE,null,
+                DAY+" = ? and "+MONTH+" = ? and "+YEAR+" = ?", new String[] { "" + String.valueOf(day),String.valueOf(month),String.valueOf(year)},null,null,null);
+        if (cursor .moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndex(TRAN_ID));
+                transaction = getTransactionByID(id);
+
+                cursor.moveToNext();
+
+                list.add(transaction);
+
+            }while (cursor.isAfterLast() == false);
+
+        }
+        cursor.close();
+        return list;
+    }
+
+
+
+    private boolean insertReport(ContentValues contentValues){
+
+        return getWritableDatabase().insert(REP_TABLE, null, contentValues)>0;
+    }
+
+    private boolean editReport(ContentValues contentValues,int id){
+        return getWritableDatabase().update(REP_TABLE,contentValues,
+                TRAN_ID+" = ?", new String[] { "" + id })>0;
+    }
+
+    public List<String> getDays(int month,int year){
+        SQLiteDatabase db = getReadableDatabase();
+        List<String> days=new ArrayList<>();
+        Cursor cursor = db.query(
+                REP_TABLE,new String[]{DAY},
+                MONTH+" = ? and "+YEAR+" = ?", new String[] { "" + String.valueOf(month),String.valueOf(year)},null,null,null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                String day=String.valueOf(cursor.getInt(cursor.getColumnIndex(DAY)));
+
+                if (!days.contains(day+" "+int_to_month(month)+" "+year)){
+                    String date = day+" "+int_to_month(month)+" "+year;
+                    days.add(date);
+                }
+
+                cursor.moveToNext();
+
+            }while(!cursor.isAfterLast());
+        }
+        cursor.close();
+        return days;
+    }
+
+    private boolean reportTrigger(Transaction transaction){
+
+        ContentValues contentValues=new ContentValues();
+
+        contentValues.put(USER_ID,transaction.getUser().getId());
+        contentValues.put(CAT_ID,transaction.getCategory().getId());
+        contentValues.put(TRAN_ID,transaction.getTran_id());
+
+        int[] date= convertDate(Calendar.getInstance().getTime());
+
+        contentValues.put(YEAR,date[0]);
+        contentValues.put(MONTH,date[1]);
+        contentValues.put(WEEK,date[2]);
+        contentValues.put(WEEKDAY,date[3]);
+        contentValues.put(DAY,date[4]);
+
+        return insertReport(contentValues);
+
+    }
+
+    private boolean editreportTrigger(Transaction transaction){
+
+        ContentValues contentValues=new ContentValues();
+
+        contentValues.put(USER_ID,transaction.getUser().getId());
+        contentValues.put(CAT_ID,transaction.getCategory().getId());
+        contentValues.put(TRAN_ID,transaction.getTran_id());
+
+        return editReport(contentValues,transaction.getTran_id());
+
+    }
+
+    private boolean balanceTrigger(Transaction transaction){
+
+        double amount = transaction.getTran_amount();
+        User user = transaction.getUser();
+
+        double transactionsValue = user.getTransactions();
+        double opening = user.getOpening();
+
+        double newValue = transactionsValue+amount;
+        double closing = opening-newValue;
+
+        ContentValues contentValues =new ContentValues();
+
+
+        contentValues.put(TRANSACTIONS,newValue);
+        contentValues.put(CLOSING,closing);
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        return db.update(USER_TABLE, contentValues, USER_ID+ " = " + user.getId(), null)>0;
+    }
+
+    private boolean editbalanceTrigger(Transaction transactionold,Transaction transaction){
+
+        double oldAmount = transactionold.getTran_amount();
+        double amount = transaction.getTran_amount();
+        User user = transaction.getUser();
+
+        double transactionsValue = user.getTransactions();
+        double opening = user.getOpening();
+
+        double newValue = transactionsValue-oldAmount+amount;
+        double closing = opening-newValue;
+
+        ContentValues contentValues =new ContentValues();
+
+
+        contentValues.put(TRANSACTIONS,newValue);
+        contentValues.put(CLOSING,closing);
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        return db.update(USER_TABLE, contentValues, USER_ID+ " = " + user.getId(), null)>0;
+    }
+
+
+    public List<String> getTransactionYears(){
+        SQLiteDatabase db=getReadableDatabase();
+        Cursor cursor = null;
+        List<String>list=new ArrayList<>();
+        cursor = db.query(REP_TABLE,null,null,null,null,null,null);
+
+        if (cursor .moveToFirst()) {
+            do {
+                String year = String.valueOf(cursor.getInt(cursor.getColumnIndex(YEAR)));
+                if (!list.contains(year)) {
+                    list.add(year);
+                }
+
+                cursor.moveToNext();
+
+
+            }while (cursor.isAfterLast() == false);
+
+        }cursor.close();
+
+        return list;
+    }
+
+    public List<String> getTransactionMonthsByYear(int year){
+        SQLiteDatabase db = getReadableDatabase();
+        List<String> months=new ArrayList<>();
+        Cursor cursor = db.query(
+                REP_TABLE,new String[]{MONTH},
+                YEAR+" = ?", new String[] { "" +year},null,null,null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                String month=String.valueOf(cursor.getInt(cursor.getColumnIndex(MONTH)));
+
+                if (!months.contains(month)){
+                    months.add(month);
+                }
+
+                cursor.moveToNext();
+
+            }while(!cursor.isAfterLast());
+        }
+        cursor.close();
+        return months;
+    }
+
+    public List<String> getTransactionMonthsByYearInt(int year){
+        SQLiteDatabase db = getReadableDatabase();
+        List<String> months=new ArrayList<>();
+        Cursor cursor = db.query(
+                REP_TABLE,new String[]{MONTH},
+                YEAR+" = ?", new String[] { "" +year},null,null,null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                String month=String.valueOf(cursor.getInt(cursor.getColumnIndex(MONTH)));
+
+                if (!months.contains(month)){
+                    months.add(month);
+                }
+
+                cursor.moveToNext();
+
+            }while(!cursor.isAfterLast());
+        }cursor.close();
+
+        return months;
+    }
+
+    public List<Transaction> getTransactionsByMonth(int month, int year){
+        List<Transaction> list = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Transaction transaction;
+
+        Cursor cursor = db.query(
+                REP_TABLE,null,
+                MONTH+" = ? and "+YEAR+" = ?", new String[] { "" + String.valueOf(month),String.valueOf(year)},null,null,null);
+        if (cursor .moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndex(TRAN_ID));
+                transaction = getTransactionByID(id);
+
+                cursor.moveToNext();
+
+                list.add(transaction);
+
+            }while (cursor.isAfterLast() == false);
+
+        }
+
+        return list;
     }
 
     public Transaction getTransactionByName( String name ){
@@ -347,218 +631,6 @@ public class Dao extends SQLiteOpenHelper {
         }
 
         return list;
-    }
-
-    private Transaction getLastTransaction(){
-        Transaction transaction = null;
-        Cursor cursor = null;
-        SQLiteDatabase db= getReadableDatabase();
-
-        cursor = db.query(TRAN_TABLE,null,null,null,null,null,null);
-
-        if (cursor.moveToLast()) {
-
-            int tranID = cursor.getInt(cursor.getColumnIndex(TRAN_ID));
-            String tran_name = cursor.getString(cursor.getColumnIndex(TRAN_NAME));
-            String description= cursor.getString(cursor.getColumnIndex(TRAN_DESCR));
-            double amount = cursor.getDouble(cursor.getColumnIndex(TRAN_AMOUNT));
-            String date= cursor.getString(cursor.getColumnIndex(DATE));
-            int catID = cursor.getInt(cursor.getColumnIndex(CAT_ID));
-
-            transaction= new Transaction(tranID, tran_name, amount, date, getCategoryById(catID).getUser(),getCategoryById(catID));
-        }
-
-        return transaction;
-    }
-
-    public List<Transaction> getTransactionsByMonth(int month, int year){
-        List<Transaction> list = new ArrayList<>();
-        SQLiteDatabase db = getReadableDatabase();
-        Transaction transaction;
-
-        Cursor cursor = db.query(
-                REP_TABLE,null,
-                MONTH+" = ? and "+YEAR+" = ?", new String[] { "" + String.valueOf(month),String.valueOf(year)},null,null,null);
- if (cursor .moveToFirst()) {
-            do {
-                int id = cursor.getInt(cursor.getColumnIndex(TRAN_ID));
-                transaction = getTransactionByID(id);
-
-                cursor.moveToNext();
-
-                list.add(transaction);
-
-            }while (cursor.isAfterLast() == false);
-
-        }
-
-        return list;
-    }
-
-    public List<Transaction> getTransactionsByDay(int day,int month, int year){
-        List<Transaction> list = new ArrayList<>();
-        SQLiteDatabase db = getReadableDatabase();
-        Transaction transaction;
-
-        Cursor cursor = db.query(
-                REP_TABLE,null,
-                DAY+" = ? and "+MONTH+" = ? and "+YEAR+" = ?", new String[] { "" + String.valueOf(day),String.valueOf(month),String.valueOf(year)},null,null,null);
-        if (cursor .moveToFirst()) {
-            do {
-                int id = cursor.getInt(cursor.getColumnIndex(TRAN_ID));
-                transaction = getTransactionByID(id);
-
-                cursor.moveToNext();
-
-                list.add(transaction);
-
-            }while (cursor.isAfterLast() == false);
-
-        }
-
-        return list;
-    }
-
-
-
-    private boolean insertReport(ContentValues contentValues){
-
-        return getWritableDatabase().insert(REP_TABLE, null, contentValues)>0;
-    }
-
-    public List<String> getDays(int month,int year){
-        SQLiteDatabase db = getReadableDatabase();
-        List<String> days=new ArrayList<>();
-        Cursor cursor = db.query(
-                REP_TABLE,new String[]{DAY},
-                MONTH+" = ? and "+YEAR+" = ?", new String[] { "" + String.valueOf(month),String.valueOf(year)},null,null,null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                String day=String.valueOf(cursor.getInt(cursor.getColumnIndex(DAY)));
-
-                if (!days.contains(day+" "+int_to_month(month)+" "+year)){
-                    String date = day+" "+int_to_month(month)+" "+year;
-                    days.add(date);
-                }
-
-                cursor.moveToNext();
-
-            }while(!cursor.isAfterLast());
-        }
-
-        return days;
-    }
-
-    private boolean reportTrigger(Transaction transaction){
-
-        ContentValues contentValues=new ContentValues();
-
-        contentValues.put(USER_ID,transaction.getUser().getId());
-        contentValues.put(CAT_ID,transaction.getCategory().getId());
-        contentValues.put(TRAN_ID,transaction.getTran_id());
-
-        int[] date= convertDate(Calendar.getInstance().getTime());
-
-        contentValues.put(YEAR,date[0]);
-        contentValues.put(MONTH,date[1]);
-        contentValues.put(WEEK,date[2]);
-        contentValues.put(WEEKDAY,date[3]);
-        contentValues.put(DAY,date[4]);
-
-        return insertReport(contentValues);
-
-    }
-
-    private boolean balanceTrigger(Transaction transaction){
-
-        double amount = transaction.getTran_amount();
-        User user = transaction.getUser();
-
-        double transactionsValue = user.getTransactions();
-        double opening = user.getOpening();
-
-        double newValue = transactionsValue+amount;
-        double closing = opening-newValue;
-
-        ContentValues contentValues =new ContentValues();
-
-
-        contentValues.put(TRANSACTIONS,newValue);
-        contentValues.put(CLOSING,closing);
-
-        SQLiteDatabase db = getWritableDatabase();
-
-        return db.update(USER_TABLE, contentValues, USER_ID+ " = " + user.getId(), null)>0;
-    }
-
-    public List<String> getTransactionYears(){
-        SQLiteDatabase db=getReadableDatabase();
-        Cursor cursor = null;
-        List<String>list=new ArrayList<>();
-        cursor = db.query(REP_TABLE,null,null,null,null,null,null);
-
-        if (cursor .moveToFirst()) {
-            do {
-                String year = String.valueOf(cursor.getInt(cursor.getColumnIndex(YEAR)));
-                if (!list.contains(year)) {
-                    list.add(year);
-                }
-
-                cursor.moveToNext();
-
-
-            }while (cursor.isAfterLast() == false);
-
-        }
-
-        return list;
-    }
-
-    public List<String> getTransactionMonthsByYear(int year){
-        SQLiteDatabase db = getReadableDatabase();
-        List<String> months=new ArrayList<>();
-        Cursor cursor = db.query(
-                REP_TABLE,new String[]{MONTH},
-                YEAR+" = ?", new String[] { "" +year},null,null,null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                String month=String.valueOf(cursor.getInt(cursor.getColumnIndex(MONTH)));
-
-                if (!months.contains(month)){
-                    months.add(month);
-                }
-
-                cursor.moveToNext();
-
-            }while(!cursor.isAfterLast());
-        }
-
-        return months;
-    }
-
-    public List<String> getTransactionMonthsByYearInt(int year){
-        SQLiteDatabase db = getReadableDatabase();
-        List<String> months=new ArrayList<>();
-        Cursor cursor = db.query(
-                REP_TABLE,new String[]{MONTH},
-                YEAR+" = ?", new String[] { "" +year},null,null,null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                String month=String.valueOf(cursor.getInt(cursor.getColumnIndex(MONTH)));
-
-                if (!months.contains(month)){
-                    months.add(month);
-                }
-
-                cursor.moveToNext();
-
-            }while(!cursor.isAfterLast());
-        }
-
-        return months;
     }
 
 

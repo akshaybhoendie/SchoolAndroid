@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -31,17 +32,22 @@ import static android.content.ContentValues.TAG;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.CAT_ID;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaTransaction.DATE;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaTransaction.TRAN_AMOUNT;
+import static sr.unasat.financialapp.db.schema.Schema.SchemaTransaction.TRAN_DESCR;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaTransaction.TRAN_NAME;
 
 public class AddTransactionDialog extends DialogFragment {
 
-    Category category;Dao dao;
+    Category category;Dao dao;  public Integer transactionToEditID;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_transaction_dialog, container, false);
+
         dao = new Dao(getActivity());
+
+
+
         List<Category> categories = dao.getCategories();
         List<String>categorynames = new ArrayList<>();
         for (Category category:categories){
@@ -55,7 +61,6 @@ public class AddTransactionDialog extends DialogFragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),R.layout.spinner_layout,R.id.spinner_item, categorynames);
 
         spinner.setAdapter(adapter);
-
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -78,7 +83,18 @@ public class AddTransactionDialog extends DialogFragment {
 
         });
 
+        if (transactionToEditID!=null){
+            EditText transactionName = (EditText)view.findViewById(R.id.transaction_name_input);
+            EditText transactionAmount = (EditText)view.findViewById(R.id.transaction_amount_input);
+            //EditText transactionDescr = (EditText)view.findViewById(R.id.transaction_descr);
 
+            Transaction transaction = dao.getTransactionByID(transactionToEditID);
+            transactionName.setText(transaction.getTran_name());
+            transactionAmount.setText(String.valueOf(transaction.getTran_amount()));
+
+            spinner.setSelection(transaction.getCategory().getId()-1);
+
+        }
         return view;
     }
 
@@ -88,9 +104,11 @@ public class AddTransactionDialog extends DialogFragment {
         if (view!= null) {
             EditText transactionNameView = (EditText) view.findViewById(R.id.transaction_name_input);
             EditText transactionAmountView = (EditText) view.findViewById(R.id.transaction_amount_input);
+            EditText transactionDescrView = (EditText) view.findViewById(R.id.transaction_descr);
 
             String transactionName= String.valueOf(transactionNameView.getText());
             double transactionAmount = Double.valueOf(String.valueOf(transactionAmountView.getText()));
+            String transactionDescr= String.valueOf(transactionDescrView.getText());
 
 
             Date date = Calendar.getInstance().getTime();
@@ -105,17 +123,26 @@ public class AddTransactionDialog extends DialogFragment {
             ContentValues contentValues = new ContentValues();
             contentValues.put(TRAN_NAME,transactionName);
             contentValues.put(TRAN_AMOUNT,transactionAmount);
-            contentValues.put(DATE,customDate);
+            contentValues.put(TRAN_DESCR,transactionDescr);
             contentValues.put(CAT_ID,category.getId());
 
-            if (dao.insertTransaction(contentValues))
-                Toast.makeText(getActivity(), "transaction inserted", Toast.LENGTH_SHORT).show();
-            else{
-                Toast.makeText(getActivity(), "failure", Toast.LENGTH_SHORT).show();
+            if (transactionToEditID!=null){
+                if (dao.editTransaction(contentValues,transactionToEditID))
+                    Toast.makeText(getActivity(), "update succesful", Toast.LENGTH_SHORT).show();
+                else{
+                    Toast.makeText(getActivity(), "update unsuccesful", Toast.LENGTH_SHORT).show();
+                }
+                dao.close();
+            }else {contentValues.put(DATE,customDate);
+
+                if (dao.insertTransaction(contentValues))
+                    Toast.makeText(getActivity(), "transaction inserted", Toast.LENGTH_SHORT).show();
+                else {
+                    Toast.makeText(getActivity(), "failure", Toast.LENGTH_SHORT).show();
+                }
+                dao.close();
+
             }
-            dao.close();
-
-
             Toast.makeText(getActivity(), transactionName+"\n"+transactionAmount, Toast.LENGTH_SHORT).show();
             getDialog().dismiss();
 

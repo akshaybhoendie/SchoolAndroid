@@ -14,19 +14,24 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import sr.unasat.financialapp.R;
+import sr.unasat.financialapp.activities.main.MainActivity;
 import sr.unasat.financialapp.arrayadapters.TransactionExpendableAdapter;
 import sr.unasat.financialapp.db.dao.Dao;
 import sr.unasat.financialapp.dto.Transaction;
+import sr.unasat.financialapp.dto.User;
 
+import static sr.unasat.financialapp.activities.main.MainActivity.addTransactionDialog;
 import static sr.unasat.financialapp.util.DateUtil.convertDate;
 
 public class BalanceFragment extends Fragment {
 
      Date date ;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -86,9 +91,15 @@ public class BalanceFragment extends Fragment {
 
         TextView closingView = (TextView)view.findViewById(R.id.balance_closing_value);
 
+        TextView transactionView = (TextView)view.findViewById(R.id.transactions_value);
 
+        TextView openingView = (TextView)view.findViewById(R.id.starting_value);
 
-        closingView.setText(String.valueOf(dao.getUserById(1).getClosing()));
+        User user=dao.getUserById(1);
+
+        closingView.setText(String.valueOf(user.getClosing()));
+        transactionView.setText(String.valueOf(user.getTransactions()));
+        openingView.setText(String.valueOf(user.getOpening()));
 
 
         return view;
@@ -106,13 +117,13 @@ public class BalanceFragment extends Fragment {
             }
 
         year = dateArr[0];
-            List<String> days = dao.getDays(month, year);
+            final List<String> days = dao.getDays(month, year);
 
 
             //day+" "+int_to_month(month)+" "+year;
 
 
-            HashMap<String, List<String>> transactions = new HashMap<>();
+            final HashMap<String, List<String>> transactions = new HashMap<>();
 
             List<String> tranNames;
 
@@ -125,16 +136,45 @@ public class BalanceFragment extends Fragment {
                 List<Transaction> list = dao.getTransactionsByDay(day, month, year);
                 for (Transaction transaction : list) {
 
-                    tranNames.add(transaction.getTran_name());
+                    tranNames.add(String.valueOf(transaction.getTran_id()));
                     transactions.put(theDay, tranNames);
 
                 }
 
+                Collections.reverse(tranNames);
 
             }
 
 
-            ExpandableListView groupListView = (ExpandableListView) getView().findViewById(R.id.group_listViewMain);
+        Collections.reverse(days);
+
+        final ExpandableListView groupListView = (ExpandableListView) getView().findViewById(R.id.group_listViewMain);
+        groupListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+
+                if(!groupListView.getOnItemLongClickListener().equals(true)) {
+
+                    Toast.makeText(getActivity(), String.valueOf(childPosition) + " " + String.valueOf(groupPosition), Toast.LENGTH_SHORT).show();
+
+                    addTransactionDialog = new AddTransactionDialog();
+                    addTransactionDialog.transactionToEditID = Integer.valueOf(transactions.get(days.get(groupPosition)).get(childPosition));
+
+                    addTransactionDialog.show(getFragmentManager(), "editTran");
+
+                }
+                return false;
+            }
+        });
+
+        groupListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Toast.makeText(getActivity(), "long", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
 
             TransactionExpendableAdapter adapter = new TransactionExpendableAdapter(days, transactions, getContext());
 
@@ -145,7 +185,10 @@ public class BalanceFragment extends Fragment {
 
         }
 
-   }
+
+
+
+}
 
 
 

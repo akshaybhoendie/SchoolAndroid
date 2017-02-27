@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import sr.unasat.financialapp.R;
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Toolbar toolbar;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
-    AddTransactionDialog addTransactionDialog;
+    static public AddTransactionDialog addTransactionDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,9 +118,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toast.makeText(this, "no transaction added", Toast.LENGTH_SHORT).show();
     }
 
-    public void okTransactionEvent(View view){
+    public void okTransactionEvent(View view) {
 
-        addTransactionDialog.addTransaction();
+
+
+            addTransactionDialog.addTransaction();
+
 
         getSupportFragmentManager().beginTransaction().replace(R.id.main_container, new BalanceFragment()).commit();
 
@@ -127,7 +131,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+
+
     public void cardReportEvent(View view){
         Toast.makeText(this, "report selected", Toast.LENGTH_SHORT).show();
+
+
     }
 }

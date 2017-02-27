@@ -8,6 +8,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class TransactionExpendableAdapter extends BaseExpandableListAdapter {
     private Context context;
 
     public TransactionExpendableAdapter(List<String> date, HashMap<String, List<String>> transactions, Context context) {
+
         this.date = date;
         this.transactions = transactions;
         this.context = context;
@@ -84,7 +86,7 @@ public class TransactionExpendableAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
         Dao dao = new Dao(context);
-        String transactionName = (String) getChild(groupPosition,childPosition);
+        int transactionID = Integer.valueOf((String)getChild(groupPosition,childPosition));
 
         if (convertView==null){
             LayoutInflater inflater = (LayoutInflater)this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -95,7 +97,7 @@ public class TransactionExpendableAdapter extends BaseExpandableListAdapter {
         TextView tranDescr = (TextView) convertView.findViewById(R.id.transaction_descr);
         TextView tranVal = (TextView) convertView.findViewById(R.id.transaction_value);
 
-        Transaction transaction = dao.getTransactionByName(transactionName);
+        Transaction transaction = dao.getTransactionByID(transactionID);
         tranName.setText(transaction.getTran_name());
         tranDescr.setText(transaction.getCategory().getName());
         tranVal.setText(String.valueOf(transaction.getTran_amount()));
