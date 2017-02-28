@@ -44,8 +44,7 @@
             android:background="@color/WhiteSmoke"
             android:layout_alignTop="@+id/edit_category"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:onClick="deleteCat"/>
+            />
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -58,7 +57,18 @@
             android:layout_alignTop="@+id/category_name_cat"
             android:layout_toLeftOf="@+id/delete_category"
             android:layout_toStartOf="@+id/delete_category"
-            android:onClick="editCat"/>
+            />
+
+        <TextView
+            android:text="cat_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/category_id"
+            android:textSize="8sp"
+            android:visibility="gone"
+            android:layout_alignTop="@+id/delete_category" />
     </RelativeLayout>
 
     <View

@@ -22,6 +22,9 @@ import sr.unasat.financialapp.R;
 import sr.unasat.financialapp.db.dao.Dao;
 
 import static android.content.ContentValues.TAG;
+import static sr.unasat.financialapp.activities.main.MainActivity.categoryToEditID;
+import static sr.unasat.financialapp.activities.main.MainActivity.confirmFragment;
+import static sr.unasat.financialapp.activities.main.MainActivity.fragmentAction;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.BUDGET;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.CAT_ID;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.CAT_TABLE;
@@ -35,10 +38,6 @@ import static sr.unasat.financialapp.db.schema.Schema.SchemaTransaction.TRAN_NAM
  */
 public class AddCategoryDialog extends DialogFragment {
 
-
-    public AddCategoryDialog() {
-        // Required empty public constructor
-    }
 
 
     @Override
@@ -62,16 +61,34 @@ public class AddCategoryDialog extends DialogFragment {
             contentValues.put(CAT_TABLE, categorynName);
             contentValues.put(BUDGET, budget);
             Dao dao=new Dao(getActivity());
-            if(dao.insertCategory(categorynName,null,budget)){
-                Toast.makeText(getActivity(), "category added", Toast.LENGTH_SHORT).show();
+
+            if (categoryToEditID!=null){
+
+                if(dao.editCategory(categorynName,null,budget, categoryToEditID)){
+                    Toast.makeText(getActivity(), "category updated", Toast.LENGTH_SHORT).show();
+
+                }else{
+                    Toast.makeText(getActivity(), "category not updated", Toast.LENGTH_SHORT).show();
+                }
+
             }else{
-                Toast.makeText(getActivity(), "category not added", Toast.LENGTH_SHORT).show();
+
+                if(dao.insertCategory(categorynName,null,budget)){
+                    Toast.makeText(getActivity(), "category added", Toast.LENGTH_SHORT).show();
+
+                }else{
+                    Toast.makeText(getActivity(), "category not added", Toast.LENGTH_SHORT).show();
+                }
+
             }
-        }else{
+        } else{
 
             Log.i(TAG, "addTransaction: view NULL pointer exception");
 
         }
+
         getDialog().dismiss();
     }
+
+
 }

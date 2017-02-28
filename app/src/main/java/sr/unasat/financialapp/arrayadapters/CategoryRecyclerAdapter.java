@@ -1,38 +1,66 @@
 package sr.unasat.financialapp.arrayadapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
 import sr.unasat.financialapp.R;
+import sr.unasat.financialapp.activities.main.MainActivity;
+import sr.unasat.financialapp.activities.main.fragments.AddCategoryDialog;
+import sr.unasat.financialapp.activities.main.fragments.AddTransactionDialog;
+import sr.unasat.financialapp.activities.main.fragments.ConfirmFragment;
+import sr.unasat.financialapp.db.dao.Dao;
+import sr.unasat.financialapp.dto.Category;
+
+
+import static android.content.Context.BATTERY_SERVICE;
+import static sr.unasat.financialapp.activities.main.MainActivity.addCategoryDialog;
+import static sr.unasat.financialapp.activities.main.MainActivity.addTransactionDialog;
+import static sr.unasat.financialapp.activities.main.MainActivity.confirmFragment;
+import static sr.unasat.financialapp.activities.main.MainActivity.fragmentAction;
 
 public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecyclerAdapter.RecyclerViewHolder> {
 
     private List<String> category_names;
-    public CategoryRecyclerAdapter(List<String> category_names){
+    Context context;
+    FragmentManager fragmentManager;
+
+
+    public CategoryRecyclerAdapter(List<String> category_names,Context context,FragmentManager fragmentManager){
 
         this.category_names=category_names;
-        category_names.remove("no report");
+        this.context=context;
+        category_names.remove("no category");
+        this.fragmentManager=fragmentManager;
 
     }
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.card_category,parent,false);
-        return new RecyclerViewHolder(view);
+        return new RecyclerViewHolder(view,fragmentManager);
 
     }
 
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
 
-        holder.category.setText(category_names.get(position));
+        String name=category_names.get(position);
+        Category category=new Dao(context).getCategoryByName(name);
+        String id=String.valueOf(category.getId());
+        holder.category.setText(name);
+        holder.category_id.setText(id);
     }
 
     @Override
@@ -41,22 +69,55 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
     }
 
 
-     static class RecyclerViewHolder extends RecyclerView.ViewHolder implements AdapterView.OnItemClickListener{
+     public static class RecyclerViewHolder extends RecyclerView.ViewHolder implements AdapterView.OnClickListener{
 
         TextView category;
+         TextView category_id;
 
-        public RecyclerViewHolder(View itemView) {
+
+        public RecyclerViewHolder(View itemView, final FragmentManager fragmentManager) {
             super(itemView);
-                 category= (TextView)itemView.findViewById(R.id.category_name_cat);
+            itemView.setOnClickListener(this);
+            category= (TextView)itemView.findViewById(R.id.category_name_cat);
+
+            category_id=(TextView)itemView.findViewById(R.id.category_id);
+
+            ImageButton deleteButton=(ImageButton) itemView.findViewById(R.id.delete_category);
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                    MainActivity.categoryToEditID = Integer.valueOf(String.valueOf(category_id.getText()));
+                    confirmFragment = new ConfirmFragment();
+                    confirmFragment.show(fragmentManager,"confirm");
+                    fragmentAction = "category";
+
+                }
+            });
+
+            ImageButton editButton=(ImageButton) itemView.findViewById(R.id.edit_category);
+            editButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MainActivity.categoryToEditID = Integer.valueOf(String.valueOf(category_id.getText()));
+                    addCategoryDialog = new AddCategoryDialog();
+                    addCategoryDialog.show(fragmentManager,"add");
+
+                }
+            });
 
         }
 
 
          @Override
-         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+         public void onClick(View v) {
 
-             Toast.makeText(view.getContext(), "itemselected "+parent.getItemAtPosition(position).toString(), Toast.LENGTH_SHORT).show();
+
+
          }
+
+
      }
 
 }

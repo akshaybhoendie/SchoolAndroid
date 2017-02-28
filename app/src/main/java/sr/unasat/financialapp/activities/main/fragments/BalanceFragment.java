@@ -185,7 +185,7 @@ public class BalanceFragment extends Fragment {
                 addTransactionDialog.transactionToEditID = Integer.valueOf(tranId);
 
 
-                //addTransactionDialog.show(getFragmentManager(), "editTran");
+                //addTransactionDialog.show(getFragmentManager(), "editTransaction");
 
 
                 return false;

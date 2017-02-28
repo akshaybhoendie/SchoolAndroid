@@ -16,10 +16,6 @@ import sr.unasat.financialapp.R;
 public class ConfirmFragment extends DialogFragment {
 
 
-    public ConfirmFragment() {
-        // Required empty public constructor
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

@@ -272,7 +272,7 @@ public class Dao extends SQLiteOpenHelper {
 
     }
 
-    public boolean editCategory(String name, String descr, double budget){
+    public boolean editCategory(String name, String descr, double budget,int id){
 
         SQLiteDatabase db=getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -281,7 +281,41 @@ public class Dao extends SQLiteOpenHelper {
         contentValues.put(BUDGET,budget);
         contentValues.put(USER_ID,1);
 
-        return db.update(CAT_TABLE, contentValues,CAT_NAME+" = ?", new String[] { "" + name })>0;
+        return db.update(CAT_TABLE, contentValues,CAT_ID+" = ?", new String[] { "" + id })>0;
+
+    }
+
+    public boolean deleteCategory(int id) {
+        List<Transaction> transactionsToUpdate = new ArrayList<>();
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(CAT_ID, 1);
+        Cursor cursor;
+        cursor = db.query(TRAN_TABLE, null,
+                CAT_ID + " = ?", new String[]{"" + id}, null, null, null);
+        if (cursor.moveToFirst()) {
+
+            do {
+                int tranID = cursor.getInt(cursor.getColumnIndex(TRAN_ID));
+                String name = cursor.getString(cursor.getColumnIndex(TRAN_NAME));
+                String description = cursor.getString(cursor.getColumnIndex(TRAN_DESCR));
+                double amount = cursor.getDouble(cursor.getColumnIndex(TRAN_AMOUNT));
+                String date = cursor.getString(cursor.getColumnIndex(DATE));
+                int catID = cursor.getInt(cursor.getColumnIndex(CAT_ID));
+
+                Transaction transaction = new Transaction(tranID, name, amount, date, getCategoryById(catID).getUser(), getCategoryById(catID));
+                transactionsToUpdate.add(transaction);
+                cursor.moveToNext();
+            }
+            while (cursor.isAfterLast() == false);
+        }cursor.close();
+
+        for (Transaction transaction:transactionsToUpdate){
+            editTransaction(contentValues,transaction.getTran_id());
+        }
+
+
+        return db.delete(CAT_TABLE,CAT_ID+" = ?", new String[] { "" + id })>0;
 
     }
 
@@ -360,7 +394,7 @@ public class Dao extends SQLiteOpenHelper {
         contentValues.put(TRAN_AMOUNT,0);
 
         editTransaction(contentValues,id);
-        db.delete(REP_TABLE,TRAN_ID+" = ?", new String[] { "" + id });
+
         return db.delete(TRAN_TABLE,TRAN_ID+" = ?", new String[] { "" + id })>0;
 
     }

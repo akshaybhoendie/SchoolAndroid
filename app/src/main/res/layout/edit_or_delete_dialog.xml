@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/textView"
-            android:onClick="editTran"
+            android:onClick="editTransaction"
             android:textAlignment="center" />
     </RelativeLayout>
     <RelativeLayout
@@ -31,7 +31,7 @@
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             android:id="@+id/textView2"
-            android:onClick="deleteTran"
+            android:onClick="deleteTransaction"
             android:textAlignment="center" />
     </RelativeLayout>
 
