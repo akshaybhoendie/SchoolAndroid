@@ -11,13 +11,10 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.List;
-
 import sr.unasat.financialapp.R;
+import sr.unasat.financialapp.activities.main.fragments.AddCategoryDialog;
 import sr.unasat.financialapp.activities.main.fragments.AddTransactionDialog;
 import sr.unasat.financialapp.activities.main.fragments.BalanceFragment;
 import sr.unasat.financialapp.activities.main.fragments.BudgetsFragment;
@@ -27,10 +24,8 @@ import sr.unasat.financialapp.activities.main.fragments.EditOrDeleteFragment;
 import sr.unasat.financialapp.activities.main.fragments.OverviewFragment;
 import sr.unasat.financialapp.activities.main.fragments.ReportsFragment;
 import sr.unasat.financialapp.activities.main.fragments.SettingsFragment;
-import sr.unasat.financialapp.arrayadapters.TransactionExpendableAdapter;
 import sr.unasat.financialapp.db.dao.Dao;
-
-import static sr.unasat.financialapp.R.id.transactions;
+import sr.unasat.financialapp.dto.Category;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -41,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     static public AddTransactionDialog addTransactionDialog;
     static public EditOrDeleteFragment editOrDeleteFragment;
     ConfirmFragment confirmFragment;
+    public AddCategoryDialog addCategoryDialog;
 
 
     @Override
@@ -119,10 +115,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+
     public void balance_floatingButtonEvent(View view){
         addTransactionDialog = new AddTransactionDialog();
         addTransactionDialog.show(getSupportFragmentManager(),"add_tran_diag");
     }
+
+    public void category_floatingButtonEvent(View view){
+        addCategoryDialog=new AddCategoryDialog();
+        addCategoryDialog.show(getSupportFragmentManager(),"add category dialog");
+    }
+
 
     public void cancelTransactionEvent(View view){
         addTransactionDialog.getDialog().dismiss();
@@ -139,6 +142,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setTitle(getResources().getString(R.string.balance));
 
     }
+
+    public void okCategoryEvent(View view){
+
+        addCategoryDialog.addCategory();
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_container, new CategoriesFragment()).commit();
+
+        getSupportActionBar().setTitle(getResources().getString(R.string.categories));
+
+    }
+
+
 
     public void editTran(View view){
 
@@ -170,9 +185,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void cancelDelete(View view){
         confirmFragment.dismiss();
     }
+
     public void cardReportEvent(View view){
         Toast.makeText(this, "report selected", Toast.LENGTH_SHORT).show();
 
 
     }
+
+    public void editCat(View view){
+
+
+        //addCategoryDialog=new AddCategoryDialog();
+        //addCategoryDialog.show(getSupportFragmentManager(),"add category dialog");
+        //dao.editCategory(,category.getId());
+
+
+    }
+
+    public void cancelCategoryEvent(View view){
+        addCategoryDialog.dismiss();
+    }
+
+
+
+    public void deleteCat(View view){
+
+    }
+
 }

@@ -7,7 +7,7 @@
     tools:context="sr.unasat.financialapp.activities.main.fragments.AddTransactionDialog">
 
     <ScrollView
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
         android:layout_height="260dp"
         android:layout_marginBottom="10dp">
     <RelativeLayout
@@ -76,20 +76,8 @@
     </ScrollView>
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
         android:layout_height="wrap_content">
-
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            app:srcCompat="@drawable/x"
-            android:id="@+id/cancel_button"
-            android:onClick="cancelTransactionEvent"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="86dp"
-            android:layout_marginStart="86dp" />
 
         <ImageView
             android:layout_width="40dp"
@@ -97,11 +85,23 @@
             app:srcCompat="@drawable/v"
             android:id="@+id/ok_button"
             android:onClick="okTransactionEvent"
-            android:layout_marginRight="91dp"
-            android:layout_marginEnd="91dp"
+            android:layout_marginRight="36dp"
+            android:layout_marginEnd="36dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:srcCompat="@drawable/x"
+            android:id="@+id/cancel_button"
+            android:onClick="cancelTransactionEvent"
+            android:layout_marginLeft="41dp"
+            android:layout_marginStart="41dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
 
     </RelativeLayout>

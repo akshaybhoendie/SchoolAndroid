@@ -47,6 +47,7 @@ public class BalanceFragment extends Fragment {
         final String spinnerItem1 ="this month";
         final String spinnerItem2 ="last month";
         final String spinnerItem3 ="choose month";
+        final String spinnerItem4 ="choose date range";
 
         Spinner spinner = (Spinner)view.findViewById(R.id.balance_month_spinner);
         final String[] items = {spinnerItem1,spinnerItem2,spinnerItem3};
@@ -80,6 +81,9 @@ public class BalanceFragment extends Fragment {
 
                         break;
 
+                    case spinnerItem4:
+
+                        break;
 
                 }
 

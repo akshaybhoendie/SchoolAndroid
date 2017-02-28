@@ -106,11 +106,11 @@ public class Dao extends SQLiteOpenHelper {
 
     private void setDefaultCategories(SQLiteDatabase db){
 
-        insertCategory(db,"no category",null,0);
-        insertCategory(db,"income","all income",0);
-        insertCategory(db,"food","food expenses",300);
-        insertCategory(db,"clothing","clothing expenses",300);
-        insertCategory(db,"entertainment","entertainment expenses",300);
+        defaultCategories(db,"no category",null,0);
+        defaultCategories(db,"income","all income",0);
+        defaultCategories(db,"food","food expenses",300);
+        defaultCategories(db,"clothing","clothing expenses",300);
+        defaultCategories(db,"entertainment","entertainment expenses",300);
 
 
 
@@ -178,9 +178,21 @@ public class Dao extends SQLiteOpenHelper {
         return user;
     }
 
+    private void defaultCategories(SQLiteDatabase db,String name, String descr, double budget){
 
-    private boolean insertCategory(SQLiteDatabase db,String name, String descr, double budget){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(CAT_NAME,name);
+        contentValues.put(CAT_DESCR,descr);
+        contentValues.put(BUDGET,budget);
+        contentValues.put(USER_ID,1);
 
+         db.insert(CAT_TABLE, null, contentValues);
+
+    }
+
+    public boolean insertCategory(String name, String descr, double budget){
+
+        SQLiteDatabase db=getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(CAT_NAME,name);
         contentValues.put(CAT_DESCR,descr);
@@ -259,6 +271,20 @@ public class Dao extends SQLiteOpenHelper {
         return list;
 
     }
+
+    public boolean editCategory(String name, String descr, double budget){
+
+        SQLiteDatabase db=getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(CAT_NAME,name);
+        contentValues.put(CAT_DESCR,descr);
+        contentValues.put(BUDGET,budget);
+        contentValues.put(USER_ID,1);
+
+        return db.update(CAT_TABLE, contentValues,CAT_NAME+" = ?", new String[] { "" + name })>0;
+
+    }
+
 
 
     public boolean insertTransaction(ContentValues contentValues){

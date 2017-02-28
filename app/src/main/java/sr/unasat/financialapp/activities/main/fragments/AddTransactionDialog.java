@@ -4,7 +4,6 @@ package sr.unasat.financialapp.activities.main.fragments;
 import android.content.ContentValues;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -42,7 +40,7 @@ public class AddTransactionDialog extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_add_transaction_dialog, container, false);
+        View view = inflater.inflate(R.layout.add_or_edit_transaction, container, false);
 
         dao = new Dao(getActivity());
 

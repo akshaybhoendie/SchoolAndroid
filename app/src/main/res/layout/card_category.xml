@@ -6,7 +6,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+        >
 
 
         <ImageView
@@ -24,7 +25,7 @@
             android:text="@string/categories"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/category_name"
+            android:id="@+id/category_name_cat"
             android:textStyle="normal|bold"
             android:textSize="18sp"
             android:layout_centerVertical="true"
@@ -43,7 +44,8 @@
             android:background="@color/WhiteSmoke"
             android:layout_alignTop="@+id/edit_category"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:onClick="deleteCat"/>
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -53,9 +55,10 @@
             android:background="@color/WhiteSmoke"
             android:layout_marginRight="20dp"
             android:layout_marginEnd="20dp"
-            android:layout_alignTop="@+id/category_name"
+            android:layout_alignTop="@+id/category_name_cat"
             android:layout_toLeftOf="@+id/delete_category"
-            android:layout_toStartOf="@+id/delete_category" />
+            android:layout_toStartOf="@+id/delete_category"
+            android:onClick="editCat"/>
     </RelativeLayout>
 
     <View
