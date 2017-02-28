@@ -8,4 +8,16 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="ThemeJ" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+
+    </style>
+
+    <style name="MyTabStyle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/WhiteSmoke</item>
+
+
+    </style>
+
 </resources>

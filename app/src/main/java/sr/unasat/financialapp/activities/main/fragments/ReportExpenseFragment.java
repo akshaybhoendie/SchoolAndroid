@@ -2,9 +2,7 @@ package sr.unasat.financialapp.activities.main.fragments;
 
 
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,35 +14,20 @@ import java.util.List;
 
 import sr.unasat.financialapp.R;
 import sr.unasat.financialapp.arrayadapters.ReportRecyclerAdapter;
-import sr.unasat.financialapp.arrayadapters.ViewPagerAdapter;
 
-public class ReportsFragment extends Fragment {
+/***/
+public class ReportExpenseFragment extends Fragment {
 
-    TabLayout tabLayout;
-    ViewPager viewPager;
-    ViewPagerAdapter viewPagerAdapter;
-
+    private RecyclerView recyclerView;
+    private ReportRecyclerAdapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
-        View view= inflater.inflate(R.layout.fragment_reports, container, false);
-
-        tabLayout = (TabLayout)view.findViewById(R.id.tab_layout);
-        viewPager = (ViewPager)view.findViewById(R.id.viewpager);
-        viewPagerAdapter=new ViewPagerAdapter(getFragmentManager());
-        viewPagerAdapter.addfragments(new ReportExpenseFragment(),"expense");
-        viewPagerAdapter.addfragments(new ReportIncomeFragment(),"income");
-        viewPager.setAdapter(viewPagerAdapter);
-        tabLayout.setupWithViewPager(viewPager);
-
-        return view;
-    }
-
-}
-/*  recyclerView = (RecyclerView)view.findViewById(R.id.rep_recycler);
-        List<String>reports=new ArrayList<>();
+        View view = inflater.inflate(R.layout.fragment_report_expense, container, false);
+        recyclerView = (RecyclerView)view.findViewById(R.id.rep_recycler);
+        List<String> reports=new ArrayList<>();
         String[] reportsArr={"expense by category","daily expense","monthly expense"};
 
         for (String s:reportsArr){
@@ -56,4 +39,8 @@ public class ReportsFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
 
-        recyclerView.setAdapter(adapter);*/
+        recyclerView.setAdapter(adapter);
+        return view;
+    }
+
+}

@@ -1,14 +1,38 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".activities.main.fragments.ReportsFragment">
 
-    <android.support.v7.widget.RecyclerView
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeJ"
+        >
+
+        <android.support.design.widget.TabLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:tabMode="fixed"
+            app:tabGravity="fill"
+            android:id="@+id/tab_layout"
+            app:tabIndicatorColor="@color/AliceBlue"
+            app:tabTextAppearance="@style/MyTabStyle"
+            >
+
+        </android.support.design.widget.TabLayout>
+
+
+    </android.support.design.widget.AppBarLayout>
+    <android.support.v4.view.ViewPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/rep_recycler">
+        android:id="@+id/viewpager">
 
-    </android.support.v7.widget.RecyclerView>
 
-</RelativeLayout>
+    </android.support.v4.view.ViewPager>
+
+
+</LinearLayout>
