@@ -1,15 +1,36 @@
 package sr.unasat.financialapp.arrayadapters;
 
-import android.content.Context;
-import android.widget.ArrayAdapter;
+import android.support.v7.widget.RecyclerView;
+import android.view.ViewGroup;
+
+import java.util.ArrayList;
+
+import sr.unasat.financialapp.dto.Budget;
 
 /**
  * Created by abhoendie on 2/23/2017.
  */
 
-public class BudgetArrayAdapter extends ArrayAdapter <String> {
+public class BudgetArrayAdapter extends RecyclerView.Adapter{
 
-    public BudgetArrayAdapter(Context context, int resource) {
-        super(context, resource);
+    ArrayList <Budget> budgets = new ArrayList<Budget>();
+
+    public BudgetArrayAdapter(ArrayList <Budget> budgets) {
+       this.budgets = budgets;
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return null;
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return 0;
     }
 }
