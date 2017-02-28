@@ -27,6 +27,8 @@ import sr.unasat.financialapp.activities.main.fragments.SettingsFragment;
 import sr.unasat.financialapp.arrayadapters.CategoryRecyclerAdapter;
 import sr.unasat.financialapp.db.dao.Dao;
 
+import static sr.unasat.financialapp.activities.main.fragments.AddCategoryDialog.categoryToEditID;
+
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -39,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     static public ConfirmFragment confirmFragment;
     static public AddCategoryDialog addCategoryDialog;
     public static String fragmentAction;
-    static public Integer categoryToEditID;
 
 
     @Override
@@ -124,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         addTransactionDialog.show(getSupportFragmentManager(),"add_tran_diag");
     }
     public void category_floatingButtonEvent(View view){
+        categoryToEditID=null;
         addCategoryDialog=new AddCategoryDialog();
         addCategoryDialog.show(getSupportFragmentManager(),"add category dialog");
     }
@@ -195,6 +197,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     public void cancelDelete(View view){
         confirmFragment.dismiss();
+        categoryToEditID=null;
     }
 
 

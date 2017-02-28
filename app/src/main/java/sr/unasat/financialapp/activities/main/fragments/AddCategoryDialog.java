@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -19,10 +20,12 @@ import java.util.Date;
 import java.util.Locale;
 
 import sr.unasat.financialapp.R;
+import sr.unasat.financialapp.activities.main.MainActivity;
 import sr.unasat.financialapp.db.dao.Dao;
+import sr.unasat.financialapp.dto.Category;
 
 import static android.content.ContentValues.TAG;
-import static sr.unasat.financialapp.activities.main.MainActivity.categoryToEditID;
+
 import static sr.unasat.financialapp.activities.main.MainActivity.confirmFragment;
 import static sr.unasat.financialapp.activities.main.MainActivity.fragmentAction;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.BUDGET;
@@ -39,12 +42,25 @@ import static sr.unasat.financialapp.db.schema.Schema.SchemaTransaction.TRAN_NAM
 public class AddCategoryDialog extends DialogFragment {
 
 
-
+    static public Integer categoryToEditID;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.add_or_edit_category, container, false);
+        View view= inflater.inflate(R.layout.add_or_edit_category, container, false);
+
+        TextView catname=(TextView)view.findViewById(R.id.category_name_input);
+        TextView budget=(TextView)view.findViewById(R.id.category_budget_input);
+        if (categoryToEditID!=null){
+            Category category=new Dao(getContext()).getCategoryById(categoryToEditID);
+            catname.setText(category.getName());
+            budget.setText(String.valueOf(category.getBudget()));
+        }
+
+        return view;
+
     }
 
     public void addCategory() {
@@ -87,6 +103,7 @@ public class AddCategoryDialog extends DialogFragment {
 
         }
 
+        categoryToEditID=null;
         getDialog().dismiss();
     }
 
