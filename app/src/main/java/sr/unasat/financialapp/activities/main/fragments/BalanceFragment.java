@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import sr.unasat.financialapp.R;
+import sr.unasat.financialapp.activities.main.fragments.dialogs.AddTransactionDialog;
+import sr.unasat.financialapp.activities.main.fragments.dialogs.EditOrDeleteFragment;
 import sr.unasat.financialapp.adapters.TransactionExpendableAdapter;
 import sr.unasat.financialapp.db.dao.Dao;
 import sr.unasat.financialapp.dto.Transaction;

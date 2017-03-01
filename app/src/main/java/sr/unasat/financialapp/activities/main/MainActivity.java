@@ -13,19 +13,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 import sr.unasat.financialapp.R;
-import sr.unasat.financialapp.activities.main.fragments.AddCategoryDialog;
-import sr.unasat.financialapp.activities.main.fragments.AddTransactionDialog;
+import sr.unasat.financialapp.activities.main.fragments.dialogs.AddCategoryDialog;
+import sr.unasat.financialapp.activities.main.fragments.dialogs.AddTransactionDialog;
 import sr.unasat.financialapp.activities.main.fragments.BalanceFragment;
 import sr.unasat.financialapp.activities.main.fragments.BudgetsFragment;
 import sr.unasat.financialapp.activities.main.fragments.CategoriesFragment;
-import sr.unasat.financialapp.activities.main.fragments.ConfirmFragment;
-import sr.unasat.financialapp.activities.main.fragments.EditOrDeleteFragment;
+import sr.unasat.financialapp.activities.main.fragments.dialogs.ConfirmFragment;
+import sr.unasat.financialapp.activities.main.fragments.dialogs.EditOrDeleteFragment;
 import sr.unasat.financialapp.activities.main.fragments.OverviewFragment;
 import sr.unasat.financialapp.activities.main.fragments.report.ReportsFragment;
 import sr.unasat.financialapp.activities.main.fragments.SettingsFragment;
 import sr.unasat.financialapp.db.dao.Dao;
 
-import static sr.unasat.financialapp.activities.main.fragments.AddCategoryDialog.categoryToEditID;
+import static sr.unasat.financialapp.activities.main.fragments.dialogs.AddCategoryDialog.categoryToEditID;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {

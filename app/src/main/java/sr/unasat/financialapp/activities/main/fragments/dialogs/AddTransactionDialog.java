@@ -1,4 +1,4 @@
-package sr.unasat.financialapp.activities.main.fragments;
+package sr.unasat.financialapp.activities.main.fragments.dialogs;
 
 
 import android.content.ContentValues;
