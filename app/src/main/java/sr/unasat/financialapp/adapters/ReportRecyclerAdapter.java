@@ -15,10 +15,13 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Collections;
 import java.util.List;
 import sr.unasat.financialapp.R;
 import sr.unasat.financialapp.activities.main.MainActivity;
+import sr.unasat.financialapp.activities.main.fragments.SettingsFragment;
 import sr.unasat.financialapp.activities.main.fragments.report.BarChartFragment;
+import sr.unasat.financialapp.activities.main.fragments.report.PieChartFragment;
 import sr.unasat.financialapp.dto.Transaction;
 
 
@@ -66,27 +69,49 @@ public class ReportRecyclerAdapter extends RecyclerView.Adapter<ReportRecyclerAd
                 @Override
                 public void onClick(View v) {
                     String reportType=String.valueOf(report.getText());
-                    BarChartFragment barChartFragment=new BarChartFragment();
-                    switch (reportType){
-                        case "daily expenses":
-                            barChartFragment.bartype="daily expenses";
-                            break;
-                        case "monthly expenses":
-                            barChartFragment.bartype="monthly expenses";
-                            break;
-                        case "daily income":
-                            barChartFragment.bartype="daily income";
-                            break;
-                        case "monthly income":
-                            barChartFragment.bartype="monthly income";
-                            break;
+
+                    final String dailyExpense="daily expenses";
+                    final String dailyIncome="daily income";
+                    final String monthlyExpense="monthly expenses";
+                    final String monthlyIncome="monthly income";
+                    final String expenseCategory="expense by category";
+                    final String incomeCategory="income by category";
+
+                    if (reportType.endsWith("y")){
+                        PieChartFragment pieChartFragment= new PieChartFragment();
+                        switch (reportType){
+                            case expenseCategory:
+                                pieChartFragment.bartype=expenseCategory;
+                                break;
+
+                            case incomeCategory:
+                                pieChartFragment.bartype=incomeCategory;
+                        }
+                        ((MainActivity)context).getSupportFragmentManager().beginTransaction().
+                                replace(R.id.main_container,pieChartFragment ).addToBackStack("reportfrag").commit();
+
+                    }else{
+                        BarChartFragment barChartFragment=new BarChartFragment();
+                        switch (reportType){
+                            case dailyExpense:
+                                barChartFragment.bartype="daily expenses";
+                                break;
+                            case monthlyExpense:
+                                barChartFragment.bartype="monthly expenses";
+                                break;
+                            case dailyIncome:
+                                barChartFragment.bartype="daily income";
+                                break;
+                            case monthlyIncome:
+                                barChartFragment.bartype="monthly income";
+                                break;
+                        }
+                        ((MainActivity)context).getSupportFragmentManager().beginTransaction().
+                                replace(R.id.main_container,barChartFragment ).addToBackStack("reportfrag").commit();
 
                     }
-                    ((MainActivity)context).getSupportFragmentManager().beginTransaction().
-                            replace(R.id.main_container,barChartFragment ).addToBackStack("reportfrag").commit();
 
-
-                }
+        }
             });
 
         }

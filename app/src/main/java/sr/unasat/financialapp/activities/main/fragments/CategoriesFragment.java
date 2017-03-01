@@ -27,7 +27,7 @@ public class CategoriesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View view= inflater.inflate(R.layout.fragment_categories, container, false);
+        View view= inflater.inflate(R.layout.main_fragment_categories, container, false);
         Dao dao = new Dao(getActivity());
         List<Category>categories=dao.getCategories();
         List<String>categoriesStr = new ArrayList<>();

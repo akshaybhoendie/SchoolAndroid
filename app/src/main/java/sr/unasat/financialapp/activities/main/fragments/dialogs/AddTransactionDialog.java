@@ -40,7 +40,7 @@ public class AddTransactionDialog extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.add_or_edit_transaction, container, false);
+        View view = inflater.inflate(R.layout.dialog_add_or_edit_transaction, container, false);
 
         dao = new Dao(getActivity());
 

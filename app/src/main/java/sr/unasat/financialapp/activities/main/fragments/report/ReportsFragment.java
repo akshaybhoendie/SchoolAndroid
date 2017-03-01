@@ -21,7 +21,7 @@ public class ReportsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View view= inflater.inflate(R.layout.fragment_reports, container, false);
+        View view= inflater.inflate(R.layout.main_fragment_reports, container, false);
 
         TabLayout tabLayout = (TabLayout)view.findViewById(R.id.tab_layout);
         ViewPager viewPager = (ViewPager)view.findViewById(R.id.viewpager);

@@ -1,8 +1,6 @@
 package sr.unasat.financialapp.activities.main.fragments.report;
 
 
-import android.app.Activity;
-import android.app.FragmentManager;
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
@@ -14,7 +12,6 @@ import android.widget.Toast;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
 
 import sr.unasat.financialapp.R;
 
@@ -27,7 +24,7 @@ public class BarChartFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_bar_chart, container, false);
+        View view= inflater.inflate(R.layout.graph_barchart, container, false);
         switch (bartype){
             case "daily expenses":
                 dailyExpenses(view);

@@ -1,7 +1,6 @@
 package sr.unasat.financialapp.activities.main.fragments.dialogs;
 
 
-import android.app.Dialog;
 import android.content.ContentValues;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -14,27 +13,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-
 import sr.unasat.financialapp.R;
-import sr.unasat.financialapp.activities.main.MainActivity;
 import sr.unasat.financialapp.db.dao.Dao;
 import sr.unasat.financialapp.dto.Category;
 
 import static android.content.ContentValues.TAG;
 
-import static sr.unasat.financialapp.activities.main.MainActivity.confirmFragment;
-import static sr.unasat.financialapp.activities.main.MainActivity.fragmentAction;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.BUDGET;
-import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.CAT_ID;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.CAT_TABLE;
-import static sr.unasat.financialapp.db.schema.Schema.SchemaTransaction.DATE;
-import static sr.unasat.financialapp.db.schema.Schema.SchemaTransaction.TRAN_AMOUNT;
-import static sr.unasat.financialapp.db.schema.Schema.SchemaTransaction.TRAN_DESCR;
-import static sr.unasat.financialapp.db.schema.Schema.SchemaTransaction.TRAN_NAME;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -49,7 +35,7 @@ public class AddCategoryDialog extends DialogFragment {
 
 
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.add_or_edit_category, container, false);
+        View view= inflater.inflate(R.layout.dialog_add_or_edit_category, container, false);
 
         TextView catname=(TextView)view.findViewById(R.id.category_name_input);
         TextView budget=(TextView)view.findViewById(R.id.category_budget_input);
