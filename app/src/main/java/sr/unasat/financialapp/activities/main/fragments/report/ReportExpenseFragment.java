@@ -29,7 +29,7 @@ public class ReportExpenseFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_report_expense, container, false);
         RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.rep_recycler);
         List<String> reports=new ArrayList<>();
-        String[] reportsArr={"expense by category","daily expense","monthly expense"};
+        String[] reportsArr={"expense by category","daily expenses","monthly expenses"};
 
         Collections.addAll(reports, reportsArr);
 

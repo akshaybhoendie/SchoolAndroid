@@ -68,14 +68,22 @@ public class ReportRecyclerAdapter extends RecyclerView.Adapter<ReportRecyclerAd
                     String reportType=String.valueOf(report.getText());
                     BarChartFragment barChartFragment=new BarChartFragment();
                     switch (reportType){
-                        case "daily expense":
-                            barChartFragment.bartype="daily expense";
-                            ((MainActivity)context).getSupportFragmentManager().beginTransaction().
-                                    replace(R.id.main_container,barChartFragment ).addToBackStack("reportfrag").commit();
+                        case "daily expenses":
+                            barChartFragment.bartype="daily expenses";
                             break;
-                        default:
+                        case "monthly expenses":
+                            barChartFragment.bartype="monthly expenses";
                             break;
+                        case "daily income":
+                            barChartFragment.bartype="daily income";
+                            break;
+                        case "monthly income":
+                            barChartFragment.bartype="monthly income";
+                            break;
+
                     }
+                    ((MainActivity)context).getSupportFragmentManager().beginTransaction().
+                            replace(R.id.main_container,barChartFragment ).addToBackStack("reportfrag").commit();
 
 
                 }
