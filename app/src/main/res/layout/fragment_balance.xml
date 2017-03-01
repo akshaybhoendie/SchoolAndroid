@@ -50,34 +50,6 @@
             android:layout_alignLeft="@+id/closing_TextView"
             android:layout_alignStart="@+id/closing_TextView" />
 
-        <TextView
-            android:text="0.00"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/transactions_value"
-            android:layout_below="@+id/balance_month_spinner"
-            android:layout_alignLeft="@+id/balance_closing_value"
-            android:layout_alignStart="@+id/balance_closing_value" />
-
-        <TextView
-            android:text="0.00"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/starting_value"
-            android:layout_alignBaseline="@+id/starting_text"
-            android:layout_alignBottom="@+id/starting_text"
-            android:layout_alignLeft="@+id/transactions_value"
-            android:layout_alignStart="@+id/transactions_value" />
-
-        <TextView
-            android:text="0.00"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/balance_closing_value"
-            android:textSize="14sp"
-            android:layout_alignTop="@+id/closing_TextView"
-            android:layout_centerHorizontal="true" />
-
         <Spinner
             android:layout_height="wrap_content"
             android:id="@+id/balance_month_spinner"
@@ -87,6 +59,34 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_width="130dp" />
+
+        <TextView
+            android:text="0.00"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/starting_value"
+            android:layout_alignBaseline="@+id/starting_text"
+            android:layout_alignBottom="@+id/starting_text"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:text="0.00"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/transactions_value"
+            android:layout_centerVertical="true"
+            android:layout_alignRight="@+id/starting_value"
+            android:layout_alignEnd="@+id/starting_value" />
+
+        <TextView
+            android:text="0.00"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/balance_closing_value"
+            android:textSize="16sp"
+            android:layout_below="@+id/transactions_value"
+            android:layout_alignRight="@+id/transactions_value"
+            android:layout_alignEnd="@+id/transactions_value" />
 
 
     </RelativeLayout>

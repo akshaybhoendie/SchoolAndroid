@@ -388,14 +388,15 @@ public class Dao extends SQLiteOpenHelper {
 
     }
 
-    public boolean deleteTransaction(int id){
+    public boolean deleteTransaction(int transactionID){
         SQLiteDatabase db=getWritableDatabase();
         ContentValues contentValues=new ContentValues();
         contentValues.put(TRAN_AMOUNT,0);
 
-        editTransaction(contentValues,id);
+        editTransaction(contentValues,transactionID);
+        deleteRep(transactionID);
 
-        return db.delete(TRAN_TABLE,TRAN_ID+" = ?", new String[] { "" + id })>0;
+        return db.delete(TRAN_TABLE,TRAN_ID+" = ?", new String[] { "" + transactionID })>0;
 
     }
 
@@ -439,9 +440,11 @@ public class Dao extends SQLiteOpenHelper {
 
                 cursor.moveToNext();
 
-                list.add(transaction);
+                if (transaction!=null) {
+                    list.add(transaction);
+                }
 
-            }while (cursor.isAfterLast() == false);
+            }while (!cursor.isAfterLast());
 
         }
         cursor.close();
@@ -697,13 +700,17 @@ public class Dao extends SQLiteOpenHelper {
 
                 list.add(transaction);
 
-            }while (cursor.isAfterLast() == false);
+            }while (!cursor.isAfterLast());
+
 
         }
-
+        cursor.close();
         return list;
     }
 
 
-
+    public void deleteRep(int transactionId){
+        SQLiteDatabase db=getWritableDatabase();
+        db.delete(REP_TABLE,TRAN_ID+" = ?", new String[] { "" + transactionId });
+    }
 }

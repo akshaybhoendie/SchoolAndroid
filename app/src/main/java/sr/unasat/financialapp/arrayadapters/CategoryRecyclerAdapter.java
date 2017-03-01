@@ -1,32 +1,24 @@
 package sr.unasat.financialapp.arrayadapters;
 
-import android.app.Activity;
 import android.content.Context;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 import sr.unasat.financialapp.R;
-import sr.unasat.financialapp.activities.main.MainActivity;
 import sr.unasat.financialapp.activities.main.fragments.AddCategoryDialog;
-import sr.unasat.financialapp.activities.main.fragments.AddTransactionDialog;
 import sr.unasat.financialapp.activities.main.fragments.ConfirmFragment;
 import sr.unasat.financialapp.db.dao.Dao;
 import sr.unasat.financialapp.dto.Category;
 
 
-import static android.content.Context.BATTERY_SERVICE;
 import static sr.unasat.financialapp.activities.main.MainActivity.addCategoryDialog;
-import static sr.unasat.financialapp.activities.main.MainActivity.addTransactionDialog;
 import static sr.unasat.financialapp.activities.main.MainActivity.confirmFragment;
 import static sr.unasat.financialapp.activities.main.MainActivity.fragmentAction;
 import static sr.unasat.financialapp.activities.main.fragments.AddCategoryDialog.categoryToEditID;

@@ -115,7 +115,7 @@ public class BalanceFragment extends Fragment {
 
     public void setDays(Date date,int month,int year){
         getView().findViewById(R.id.group_listViewMain).refreshDrawableState();
-        Dao dao=new Dao(getActivity());
+        Dao dao=new Dao(getContext());
 
                 int[] dateArr = convertDate(date);
 
@@ -141,13 +141,16 @@ public class BalanceFragment extends Fragment {
                 String[] array = theDay.split("\\s");
                 int day = Integer.valueOf(array[0]);
                 tranNames = new ArrayList<>();
-                List<Transaction> list = dao.getTransactionsByDay(day, month, year);
+                List<Transaction> list = new Dao(getContext()).getTransactionsByDay(day, month, year);
                 for (Transaction transaction : list) {
 
-                    tranNames.add(String.valueOf(transaction.getTran_id()));
-                    transactions.put(theDay, tranNames);
+                        tranNames.add(String.valueOf(transaction.getTran_id()));
+                        transactions.put(theDay, tranNames);
+
+
 
                 }
+
 
                 Collections.reverse(tranNames);
 

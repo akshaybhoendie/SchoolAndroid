@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="sr.unasat.financialapp.activities.main.fragments.ConfirmFragment">
+    tools:context="sr.unasat.financialapp.activities.main.fragments.dialogs.ConfirmDialog">
 
     <RelativeLayout
         android:layout_width="250dp"

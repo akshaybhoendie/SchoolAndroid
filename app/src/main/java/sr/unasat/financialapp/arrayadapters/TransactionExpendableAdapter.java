@@ -36,7 +36,12 @@ public class TransactionExpendableAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return transactions.get(date.get(groupPosition)).size();
+
+        try {
+            return transactions.get(date.get(groupPosition)).size();
+        }catch (Exception e){
+            return 0;
+        }
     }
 
     @Override

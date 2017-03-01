@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context="sr.unasat.financialapp.activities.main.fragments.AddTransactionDialog">
+    tools:context="sr.unasat.financialapp.activities.main.fragments.dialogs.AddTransactionDialog">
 
     <ScrollView
         android:layout_width="250dp"
@@ -13,7 +13,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context="sr.unasat.financialapp.activities.main.fragments.AddTransactionDialog">
+        tools:context="sr.unasat.financialapp.activities.main.fragments.dialogs.AddTransactionDialog">
 
 
         <TextView
