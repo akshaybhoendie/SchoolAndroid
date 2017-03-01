@@ -1,20 +1,15 @@
-package sr.unasat.financialapp.arrayadapters;
+package sr.unasat.financialapp.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
 
-/**
- * Created by Jair on 2/28/2017.
- */
-
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
-    ArrayList<Fragment> fragments=new ArrayList<>();
-    ArrayList<String>tabTitles=new ArrayList<>();
+    private ArrayList<Fragment> fragments=new ArrayList<>();
+    private ArrayList<String>tabTitles=new ArrayList<>();
 
     public void addfragments(Fragment fragment,String tabTitle){
         this.fragments.add(fragment);

@@ -1,4 +1,4 @@
-package sr.unasat.financialapp.arrayadapters;
+package sr.unasat.financialapp.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,7 +8,6 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 

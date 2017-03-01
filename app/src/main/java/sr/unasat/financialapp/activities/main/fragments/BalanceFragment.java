@@ -1,6 +1,5 @@
 package sr.unasat.financialapp.activities.main.fragments;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -19,11 +18,9 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import sr.unasat.financialapp.R;
-import sr.unasat.financialapp.activities.main.MainActivity;
-import sr.unasat.financialapp.arrayadapters.TransactionExpendableAdapter;
+import sr.unasat.financialapp.adapters.TransactionExpendableAdapter;
 import sr.unasat.financialapp.db.dao.Dao;
 import sr.unasat.financialapp.dto.Transaction;
 import sr.unasat.financialapp.dto.User;

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sr.unasat.financialapp.R;
-import sr.unasat.financialapp.arrayadapters.CategoryRecyclerAdapter;
+import sr.unasat.financialapp.adapters.CategoryRecyclerAdapter;
 import sr.unasat.financialapp.db.dao.Dao;
 import sr.unasat.financialapp.dto.Category;
 

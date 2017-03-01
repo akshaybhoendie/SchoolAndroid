@@ -13,20 +13,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sr.unasat.financialapp.R;
-import sr.unasat.financialapp.arrayadapters.ReportRecyclerAdapter;
+import sr.unasat.financialapp.adapters.ReportRecyclerAdapter;
 
 /***/
 public class ReportIncomeFragment extends Fragment {
-    private RecyclerView recyclerView;
-    private ReportRecyclerAdapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_report_income, container, false);
-        recyclerView = (RecyclerView)view.findViewById(R.id.rep_recycler);
+        RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.rep_recycler);
         List<String> reports=new ArrayList<>();
         String[] reportsArr={"income by category","daily income","monthly income"};
 
@@ -34,8 +31,8 @@ public class ReportIncomeFragment extends Fragment {
             reports.add(s);
         }
 
-        adapter = new ReportRecyclerAdapter(reports);
-        layoutManager = new LinearLayoutManager(getActivity());
+        ReportRecyclerAdapter adapter = new ReportRecyclerAdapter(reports);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
 

@@ -1,4 +1,4 @@
-package sr.unasat.financialapp.arrayadapters;
+package sr.unasat.financialapp.adapters;
 
 import android.content.Context;
 import android.support.v4.app.FragmentManager;

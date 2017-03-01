@@ -5,24 +5,14 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import sr.unasat.financialapp.R;
-import sr.unasat.financialapp.arrayadapters.ReportRecyclerAdapter;
-import sr.unasat.financialapp.arrayadapters.ViewPagerAdapter;
+import sr.unasat.financialapp.adapters.ViewPagerAdapter;
 
 public class ReportsFragment extends Fragment {
-
-    TabLayout tabLayout;
-    ViewPager viewPager;
-    ViewPagerAdapter viewPagerAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,9 +21,9 @@ public class ReportsFragment extends Fragment {
 
         View view= inflater.inflate(R.layout.fragment_reports, container, false);
 
-        tabLayout = (TabLayout)view.findViewById(R.id.tab_layout);
-        viewPager = (ViewPager)view.findViewById(R.id.viewpager);
-        viewPagerAdapter=new ViewPagerAdapter(getFragmentManager());
+        TabLayout tabLayout = (TabLayout)view.findViewById(R.id.tab_layout);
+        ViewPager viewPager = (ViewPager)view.findViewById(R.id.viewpager);
+        ViewPagerAdapter viewPagerAdapter=new ViewPagerAdapter(getChildFragmentManager());
         viewPagerAdapter.addfragments(new ReportExpenseFragment(),"expense");
         viewPagerAdapter.addfragments(new ReportIncomeFragment(),"income");
         viewPager.setAdapter(viewPagerAdapter);

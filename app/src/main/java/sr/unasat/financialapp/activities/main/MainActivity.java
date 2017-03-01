@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 import sr.unasat.financialapp.R;
 import sr.unasat.financialapp.activities.main.fragments.AddCategoryDialog;
@@ -24,7 +23,6 @@ import sr.unasat.financialapp.activities.main.fragments.EditOrDeleteFragment;
 import sr.unasat.financialapp.activities.main.fragments.OverviewFragment;
 import sr.unasat.financialapp.activities.main.fragments.ReportsFragment;
 import sr.unasat.financialapp.activities.main.fragments.SettingsFragment;
-import sr.unasat.financialapp.arrayadapters.CategoryRecyclerAdapter;
 import sr.unasat.financialapp.db.dao.Dao;
 
 import static sr.unasat.financialapp.activities.main.fragments.AddCategoryDialog.categoryToEditID;
@@ -200,7 +198,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         categoryToEditID=null;
     }
 
-
     public void editTransaction(View view){
 
         editOrDeleteFragment.dismiss();
@@ -216,7 +213,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     }
-
 
 
     public void cardReportEvent(View view){

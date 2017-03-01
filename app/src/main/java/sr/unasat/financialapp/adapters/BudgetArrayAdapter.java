@@ -1,4 +1,4 @@
-package sr.unasat.financialapp.arrayadapters;
+package sr.unasat.financialapp.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
