@@ -1,17 +1,27 @@
 package sr.unasat.financialapp.activities.main.fragments.report;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
+import com.jjoe64.graphview.LabelFormatter;
+import com.jjoe64.graphview.ValueDependentColor;
+import com.jjoe64.graphview.Viewport;
+import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
+
+import java.util.Collection;
 
 import sr.unasat.financialapp.R;
 
@@ -47,16 +57,53 @@ public class BarChartFragment extends Fragment {
     public void dailyExpenses(View view){
 
         GraphView graph = (GraphView) view.findViewById(R.id.graph);
+
+        StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
+        staticLabelsFormatter.setHorizontalLabels(new String[] {"","mon", "tue", "wed","thu","fri","yesterday","today",""});
+
+
         BarGraphSeries<DataPoint> series = new BarGraphSeries<>(new DataPoint[]{
-                new DataPoint(0, 1),
-                new DataPoint(1, 5),
-                new DataPoint(2, 3),
-                new DataPoint(3, 2),
-                new DataPoint(4, 6)
+                new DataPoint(0,0),
+                new DataPoint(1, 17),
+                new DataPoint(2, 56),
+                new DataPoint(3, 34),
+                new DataPoint(4, 25),
+                new DataPoint(5, 56),
+                new DataPoint(6, 39),
+                new DataPoint(7, 120),
+                new DataPoint(8,0)
+
         });
         graph.addSeries(series);
+        series.setDrawValuesOnTop(true);
+        series.setValuesOnTopColor(Color.BLACK);
+        graph.getGridLabelRenderer().setGridStyle(GridLabelRenderer.GridStyle.NONE);// It will remove the background grids
+
+        //graph.getGridLabelRenderer().setHorizontalLabelsVisible(false);// remove horizontal x labels and line
+        graph.getGridLabelRenderer().setVerticalLabelsVisible(false);
+
+// remove vertical labels and lines
 
 
+
+        series.setValueDependentColor(new ValueDependentColor<DataPoint>() {
+            @Override
+            public int get(DataPoint data) {
+                if (data.getY()>100){
+                    return Color.RED;
+                }else if(data.getY()>50){
+                    return Color.BLUE;
+                }else{
+                    return Color.GREEN;
+                }
+            }
+        });
+
+        series.setSpacing(20);
+        graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+
+        view.findViewById(R.id.period_choise).setVisibility(View.GONE);
+        view.findViewById(R.id.period_spinner).setVisibility(View.GONE) ;
     }
 
     public void dailyIncome(View view){

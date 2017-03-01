@@ -8,6 +8,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import sr.unasat.financialapp.dto.Category;
 import sr.unasat.financialapp.dto.Currency;
@@ -564,6 +567,52 @@ public class Dao extends SQLiteOpenHelper {
         return db.update(USER_TABLE, contentValues, USER_ID+ " = " + user.getId(), null)>0;
     }
 
+    public HashMap<String,List<Transaction>> getTransactionsLast7Days(){
+
+        SQLiteDatabase db=getReadableDatabase();
+        Date date = Calendar.getInstance().getTime();
+        int[] dateArr = convertDate(date);
+        HashMap<String,List<Transaction>> days =new HashMap<>(7);
+        List<Transaction> transactions = new ArrayList<>();
+
+        Transaction transaction = null;
+        int theDay= dateArr[4];
+        int theMonth=dateArr[1];
+        int year=dateArr[0];
+        Cursor cursor;
+        for (int i = 0; i<7;i++) {
+
+            theDay --;
+            if ((theDay) == 0) {
+
+                theMonth = theMonth - 1;
+                theDay = new GregorianCalendar(year,theMonth-1,1).getActualMaximum(Calendar.DAY_OF_MONTH);
+
+            }
+                cursor = db.query(REP_TABLE, null,
+                        YEAR + " = ? and " + MONTH + " = ? and " + DAY + " = ? ", new String[]
+                                {"" + String.valueOf(year), String.valueOf(theMonth), String.valueOf(theDay)}, null, null, null);
+
+                if (cursor.moveToFirst()) {
+                    do {
+
+
+                        cursor.moveToNext();
+
+                    } while (!cursor.isAfterLast());
+
+                    transactions.add(transaction);
+                    days.put(String.valueOf(i), transactions);
+
+                }
+                cursor.close();
+
+            }
+
+
+
+        return days;
+    }
 
     public List<String> getTransactionYears(){
         SQLiteDatabase db=getReadableDatabase();
@@ -709,7 +758,7 @@ public class Dao extends SQLiteOpenHelper {
     }
 
 
-    public void deleteRep(int transactionId){
+    private void deleteRep(int transactionId){
         SQLiteDatabase db=getWritableDatabase();
         db.delete(REP_TABLE,TRAN_ID+" = ?", new String[] { "" + transactionId });
     }
