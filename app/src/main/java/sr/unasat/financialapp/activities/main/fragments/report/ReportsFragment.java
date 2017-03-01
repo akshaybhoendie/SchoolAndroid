@@ -1,6 +1,7 @@
-package sr.unasat.financialapp.activities.main.fragments;
+package sr.unasat.financialapp.activities.main.fragments.report;
 
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import sr.unasat.financialapp.adapters.ViewPagerAdapter;
 
 public class ReportsFragment extends Fragment {
 
+    public  Activity theActivity = getActivity();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

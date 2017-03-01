@@ -1,4 +1,4 @@
-package sr.unasat.financialapp.activities.main.fragments;
+package sr.unasat.financialapp.activities.main.fragments.report;
 
 
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import sr.unasat.financialapp.R;
@@ -30,11 +31,9 @@ public class ReportExpenseFragment extends Fragment {
         List<String> reports=new ArrayList<>();
         String[] reportsArr={"expense by category","daily expense","monthly expense"};
 
-        for (String s:reportsArr){
-            reports.add(s);
-        }
+        Collections.addAll(reports, reportsArr);
 
-        ReportRecyclerAdapter adapter = new ReportRecyclerAdapter(reports);
+        ReportRecyclerAdapter adapter = new ReportRecyclerAdapter(reports,getContext());
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);

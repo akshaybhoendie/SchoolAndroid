@@ -21,7 +21,7 @@ import sr.unasat.financialapp.activities.main.fragments.CategoriesFragment;
 import sr.unasat.financialapp.activities.main.fragments.ConfirmFragment;
 import sr.unasat.financialapp.activities.main.fragments.EditOrDeleteFragment;
 import sr.unasat.financialapp.activities.main.fragments.OverviewFragment;
-import sr.unasat.financialapp.activities.main.fragments.ReportsFragment;
+import sr.unasat.financialapp.activities.main.fragments.report.ReportsFragment;
 import sr.unasat.financialapp.activities.main.fragments.SettingsFragment;
 import sr.unasat.financialapp.db.dao.Dao;
 
@@ -215,11 +215,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    public void cardReportEvent(View view){
-        Toast.makeText(this, "report selected", Toast.LENGTH_SHORT).show();
-
-
-    }
 
 
 

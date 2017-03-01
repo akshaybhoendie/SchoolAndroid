@@ -97,6 +97,8 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
                     addCategoryDialog = new AddCategoryDialog();
                     addCategoryDialog.show(fragmentManager,"add");
 
+
+
                 }
             });
 
@@ -109,8 +111,6 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
 
 
          }
-
-
      }
 
 }
