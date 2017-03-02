@@ -51,6 +51,7 @@ public class TransactionExpendableAdapter extends BaseExpandableListAdapter {
     @Override
     public Object getChild(int groupPosition, int childPosition) {
         return transactions.get(date.get(groupPosition)).get(childPosition);
+
     }
 
     @Override
@@ -107,6 +108,7 @@ public class TransactionExpendableAdapter extends BaseExpandableListAdapter {
         tranDescr.setText(transaction.getCategory().getName());
         tranVal.setText(String.valueOf(transaction.getTran_amount()));
         tranID.setText(String.valueOf(transactionID));
+
 
         return convertView;
     }

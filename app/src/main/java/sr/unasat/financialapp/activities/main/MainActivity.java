@@ -12,7 +12,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import sr.unasat.financialapp.R;
+import sr.unasat.financialapp.activities.main.fragments.dialogs.AddBudgetDialog;
 import sr.unasat.financialapp.activities.main.fragments.dialogs.AddCategoryDialog;
 import sr.unasat.financialapp.activities.main.fragments.dialogs.AddTransactionDialog;
 import sr.unasat.financialapp.activities.main.fragments.BalanceFragment;
@@ -24,6 +29,7 @@ import sr.unasat.financialapp.activities.main.fragments.OverviewFragment;
 import sr.unasat.financialapp.activities.main.fragments.report.ReportsFragment;
 import sr.unasat.financialapp.activities.main.fragments.SettingsFragment;
 import sr.unasat.financialapp.db.dao.Dao;
+import sr.unasat.financialapp.dto.Category;
 
 import static sr.unasat.financialapp.activities.main.fragments.dialogs.AddCategoryDialog.categoryToEditID;
 
@@ -38,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     static public EditOrDeleteFragment editOrDeleteFragment;
     static public ConfirmFragment confirmFragment;
     static public AddCategoryDialog addCategoryDialog;
+    static public AddBudgetDialog addBudgetDialog;
     public static String fragmentAction;
 
 
@@ -127,6 +134,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         addCategoryDialog=new AddCategoryDialog();
         addCategoryDialog.show(getSupportFragmentManager(),"add category dialog");
     }
+    public void budget_floatingButtonEvent(View view){
+
+        Dao dao = new Dao(this);
+
+        List<Category> categories = dao.getCategories();
+        List<String>categorynames = new ArrayList<>();
+        for (Category category:categories){
+
+            if (category.getBudget()==0){
+                categorynames.add(category.getName());
+            }
+        }
+        categorynames.remove("no category");
+        categorynames.remove("income");
+
+        if (categorynames.isEmpty()){
+            Toast.makeText(this, "all categories have budgets", Toast.LENGTH_SHORT).show();
+
+
+        }else {
+            addBudgetDialog = new AddBudgetDialog();
+            addBudgetDialog.show(getSupportFragmentManager(), "add budget dialog");
+        }
+    }
 
 
     public void okTransactionDialogEvent(View view) {
@@ -147,6 +178,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setTitle(getResources().getString(R.string.categories));
 
     }
+    public void okBudgetDialogEvent(View view){
+
+
+        addBudgetDialog.addBudget();
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_container, new BudgetsFragment()).commit();
+
+        getSupportActionBar().setTitle(getResources().getString(R.string.budgets));
+    }
 
 
     public void cancelTransactionDialogEvent(View view){
@@ -156,6 +196,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     public void cancelCategoryDialogEvent(View view){
         addCategoryDialog.dismiss();Toast.makeText(this, "no category added", Toast.LENGTH_SHORT).show();
+    }
+    public void cancelBudgetDialogEvent(View view){
+
+        addBudgetDialog.dismiss();Toast.makeText(this, "no budget added", Toast.LENGTH_SHORT).show();
+
     }
 
     public void confirmDelete(View view){

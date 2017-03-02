@@ -288,6 +288,13 @@ public class Dao extends SQLiteOpenHelper {
 
     }
 
+    public boolean editCategory(ContentValues contentValues,int id){
+
+        SQLiteDatabase db=getWritableDatabase();
+
+        return db.update(CAT_TABLE, contentValues,CAT_ID+" = ?", new String[] { "" + id })>0;
+
+    }
     public boolean deleteCategory(int id) {
         List<Transaction> transactionsToUpdate = new ArrayList<>();
         SQLiteDatabase db = getWritableDatabase();

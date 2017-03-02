@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 import sr.unasat.financialapp.R;
@@ -42,7 +43,7 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.card_category,parent,false);
-        return new RecyclerViewHolder(view,fragmentManager);
+        return new RecyclerViewHolder(view,context,fragmentManager);
 
     }
 
@@ -66,10 +67,12 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
 
          TextView category;
          TextView category_id;
+         Context context;
 
 
-        public RecyclerViewHolder(View itemView, final FragmentManager fragmentManager) {
+        public RecyclerViewHolder(View itemView,Context context, final FragmentManager fragmentManager) {
             super(itemView);
+            this.context=context;
             itemView.setOnClickListener(this);
             category= (TextView)itemView.findViewById(R.id.budget_category_name_cat);
 
@@ -99,6 +102,7 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
 
 
 
+
                 }
             });
 
@@ -109,6 +113,7 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
          public void onClick(View v) {
 
 
+             Toast.makeText(context, "see transactions by category", Toast.LENGTH_SHORT).show();
 
          }
      }

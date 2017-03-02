@@ -9,15 +9,22 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import sr.unasat.financialapp.R;
+import sr.unasat.financialapp.activities.main.fragments.dialogs.AddBudgetDialog;
 import sr.unasat.financialapp.db.dao.Dao;
 import sr.unasat.financialapp.dto.Category;
+
+import static sr.unasat.financialapp.activities.main.MainActivity.addBudgetDialog;
 
 
 public class BudgetRecyclerAdapter extends RecyclerView.Adapter<BudgetRecyclerAdapter.RecyclerViewHolder> {
@@ -45,7 +52,7 @@ public class BudgetRecyclerAdapter extends RecyclerView.Adapter<BudgetRecyclerAd
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.card_budget,parent,false);
-        return new RecyclerViewHolder(view,fragmentManager);
+        return new RecyclerViewHolder(view,context,fragmentManager);
     }
 
     @Override
@@ -56,6 +63,7 @@ public class BudgetRecyclerAdapter extends RecyclerView.Adapter<BudgetRecyclerAd
         holder.categoryNameView.setText(categories.get(position).getName());
         double remaining =budget-used;
         holder.budgetView.setText(String.valueOf(remaining));
+        holder.categoryID.setText(String.valueOf(categories.get(position).getId()));
 
         int percentage = Integer.valueOf(String.valueOf(Math.round((used/budget)*100)));
 
@@ -81,21 +89,50 @@ public class BudgetRecyclerAdapter extends RecyclerView.Adapter<BudgetRecyclerAd
         return categories.size();
     }
 
-    public static class RecyclerViewHolder extends RecyclerView.ViewHolder{
+    public static class RecyclerViewHolder extends RecyclerView.ViewHolder  implements AdapterView.OnClickListener{
 
         TextView categoryNameView;
         TextView budgetView;
         ProgressBar progressBar;
         TextView progressText;
-        public RecyclerViewHolder(View itemView,FragmentManager fragmentManager) {
+        Context context;
+        TextView categoryID;
+        public RecyclerViewHolder(View itemView,final Context context,final FragmentManager fragmentManager) {
             super(itemView);
+            this.context=context;
 
 
             categoryNameView= (TextView)itemView.findViewById(R.id.budget_category_name_cat);
             budgetView= (TextView)itemView.findViewById(R.id.budget_remaining_value);
             progressBar = (ProgressBar)itemView.findViewById(R.id.progressBar);
             progressText = (TextView)itemView.findViewById(R.id.progresstext);
+            categoryID = (TextView)itemView.findViewById(R.id.budget_cat_id);
+            ImageButton edit =(ImageButton)itemView.findViewById(R.id.edit_budget);
+            ImageButton delete = (ImageButton)itemView.findViewById(R.id.delete_budget);
 
+
+            edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context, "edit budget!!!", Toast.LENGTH_SHORT).show();
+                    addBudgetDialog = new AddBudgetDialog();
+                    addBudgetDialog.categoryToEdit = Integer.valueOf(String.valueOf(categoryID.getText()));
+                    addBudgetDialog.show(fragmentManager,"add budget");
+                }
+            });
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context, "delete budget!!!", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }
+
+
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(context, "see transactions!!!", Toast.LENGTH_SHORT).show();
         }
     }
 }

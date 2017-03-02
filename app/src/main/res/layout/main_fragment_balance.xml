@@ -4,12 +4,14 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.main.fragments.BalanceFragment">
+    tools:context=".activities.main.fragments.BalanceFragment"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="vertical"
-        android:layout_height="90dp">
+        android:layout_height="90dp"
+        android:background="@color/GhostWhite">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -105,11 +107,14 @@
         >
 
         <ExpandableListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/group_listViewMain"
-        style="@style/Widget.AppCompat.ListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/group_listViewMain"
+            style="@style/Widget.AppCompat.ListView"
+            android:background="@color/WhiteSmoke"
+            android:padding="15dp"
             android:groupIndicator="@null"
+
 
         />
         <android.support.design.widget.FloatingActionButton

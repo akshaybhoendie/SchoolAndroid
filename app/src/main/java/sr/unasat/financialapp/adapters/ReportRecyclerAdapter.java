@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,59 +60,25 @@ public class ReportRecyclerAdapter extends RecyclerView.Adapter<ReportRecyclerAd
 
     static class RecyclerViewHolder extends RecyclerView.ViewHolder implements AdapterView.OnClickListener{
 
-        TextView report;FragmentManager fragmentManager;
+        TextView report;Context context;
 
         public RecyclerViewHolder(View itemView, final Context context) {
             super(itemView);
             report = (TextView)itemView.findViewById(R.id.report_text);
+            ImageView img = (ImageView)itemView.findViewById(R.id.report_icon);
+            this.context=context;
 
             report.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String reportType=String.valueOf(report.getText());
-
-                    final String dailyExpense="daily expenses";
-                    final String dailyIncome="daily income";
-                    final String monthlyExpense="monthly expenses";
-                    final String monthlyIncome="monthly income";
-                    final String expenseCategory="expense by category";
-                    final String incomeCategory="income by category";
-
-                    if (reportType.endsWith("y")){
-                        PieChartFragment pieChartFragment= new PieChartFragment();
-                        switch (reportType){
-                            case expenseCategory:
-                                pieChartFragment.bartype=expenseCategory;
-                                break;
-
-                            case incomeCategory:
-                                pieChartFragment.bartype=incomeCategory;
-                        }
-                        ((MainActivity)context).getSupportFragmentManager().beginTransaction().
-                                replace(R.id.main_container,pieChartFragment ).addToBackStack("reportfrag").commit();
-
-                    }else{
-                        BarChartFragment barChartFragment=new BarChartFragment();
-                        switch (reportType){
-                            case dailyExpense:
-                                barChartFragment.bartype="daily expenses";
-                                break;
-                            case monthlyExpense:
-                                barChartFragment.bartype="monthly expenses";
-                                break;
-                            case dailyIncome:
-                                barChartFragment.bartype="daily income";
-                                break;
-                            case monthlyIncome:
-                                barChartFragment.bartype="monthly income";
-                                break;
-                        }
-                        ((MainActivity)context).getSupportFragmentManager().beginTransaction().
-                                replace(R.id.main_container,barChartFragment ).addToBackStack("reportfrag").commit();
-
-                    }
-
+                   onClickCustom();
         }
+            });
+            img.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onClickCustom();
+                }
             });
 
         }
@@ -120,7 +87,50 @@ public class ReportRecyclerAdapter extends RecyclerView.Adapter<ReportRecyclerAd
         public void onClick(View v) {
             //typeReport= String.valueOf(report.getText());
 
+        }
+        public void onClickCustom(){
+            String reportType=String.valueOf(report.getText());
 
+            final String dailyExpense="daily expenses";
+            final String dailyIncome="daily income";
+            final String monthlyExpense="monthly expenses";
+            final String monthlyIncome="monthly income";
+            final String expenseCategory="expense by category";
+            final String incomeCategory="income by category";
+
+            if (reportType.endsWith("y")){
+                PieChartFragment pieChartFragment= new PieChartFragment();
+                switch (reportType){
+                    case expenseCategory:
+                        pieChartFragment.bartype=expenseCategory;
+                        break;
+
+                    case incomeCategory:
+                        pieChartFragment.bartype=incomeCategory;
+                }
+                ((MainActivity)context).getSupportFragmentManager().beginTransaction().
+                        replace(R.id.main_container,pieChartFragment ).addToBackStack("reportfrag").commit();
+
+            }else{
+                BarChartFragment barChartFragment=new BarChartFragment();
+                switch (reportType){
+                    case dailyExpense:
+                        barChartFragment.bartype="daily expenses";
+                        break;
+                    case monthlyExpense:
+                        barChartFragment.bartype="monthly expenses";
+                        break;
+                    case dailyIncome:
+                        barChartFragment.bartype="daily income";
+                        break;
+                    case monthlyIncome:
+                        barChartFragment.bartype="monthly income";
+                        break;
+                }
+                ((MainActivity)context).getSupportFragmentManager().beginTransaction().
+                        replace(R.id.main_container,barChartFragment ).addToBackStack("reportfrag").commit();
+
+            }
 
         }
     }

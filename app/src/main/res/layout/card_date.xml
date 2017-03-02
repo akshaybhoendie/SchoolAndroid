@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical" android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/WhiteSmoke" >
+    android:background="@color/White"
+    android:layout_margin="@dimen/cardview_compat_inset_shadow"
+    >
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/Gray">
     <TextView
         android:text="date"
         android:layout_width="wrap_content"
         android:layout_height="25dp"
         android:id="@+id/tran_date_onCard3"
         android:textSize="16sp"
-        android:textColor="@color/Black"
+        android:textColor="@color/White"
         android:layout_marginLeft="34dp"
         android:layout_marginStart="34dp"
         />
@@ -18,13 +24,16 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="@color/LightGrey"/>
-
+    </RelativeLayout>
     <ExpandableListView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/transactions_list"
         style="@style/Widget.AppCompat.ListView"
         android:groupIndicator="@null"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:layout_margin="5dp"
 
         />
 
