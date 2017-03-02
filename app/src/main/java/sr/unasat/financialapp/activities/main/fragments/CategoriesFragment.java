@@ -19,9 +19,6 @@ import sr.unasat.financialapp.dto.Category;
 
 public class CategoriesFragment extends Fragment {
 
-    private RecyclerView recyclerView;
-    private CategoryRecyclerAdapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -37,9 +34,9 @@ public class CategoriesFragment extends Fragment {
 
         }
 
-        recyclerView = (RecyclerView)view.findViewById(R.id.cat_recycler);
-        adapter = new CategoryRecyclerAdapter(categoriesStr,getContext(),getFragmentManager());
-        layoutManager = new LinearLayoutManager(getActivity());
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.cat_recycler);
+        CategoryRecyclerAdapter adapter = new CategoryRecyclerAdapter(categoriesStr, getContext(), getFragmentManager());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
 

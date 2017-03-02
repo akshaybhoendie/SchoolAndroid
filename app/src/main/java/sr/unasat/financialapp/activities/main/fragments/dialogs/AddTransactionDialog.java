@@ -105,6 +105,9 @@ public class AddTransactionDialog extends DialogFragment {
             EditText transactionDescrView = (EditText) view.findViewById(R.id.transaction_descr);
 
             String transactionName= String.valueOf(transactionNameView.getText());
+            if (String.valueOf(transactionAmountView.getText()).equals("")){
+                transactionAmountView.setText("0");
+            }
             double transactionAmount = Double.valueOf(String.valueOf(transactionAmountView.getText()));
             String transactionDescr= String.valueOf(transactionDescrView.getText());
 

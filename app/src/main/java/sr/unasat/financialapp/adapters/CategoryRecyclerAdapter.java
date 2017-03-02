@@ -32,11 +32,11 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
 
     public CategoryRecyclerAdapter(List<String> category_names,Context context,FragmentManager fragmentManager){
 
-        this.category_names=category_names;
         this.context=context;
         category_names.remove("no category");
+        category_names.remove("income");
         this.fragmentManager=fragmentManager;
-
+        this.category_names=category_names;
     }
 
     @Override
@@ -64,14 +64,14 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
 
      public static class RecyclerViewHolder extends RecyclerView.ViewHolder implements AdapterView.OnClickListener{
 
-        TextView category;
+         TextView category;
          TextView category_id;
 
 
         public RecyclerViewHolder(View itemView, final FragmentManager fragmentManager) {
             super(itemView);
             itemView.setOnClickListener(this);
-            category= (TextView)itemView.findViewById(R.id.category_name_cat);
+            category= (TextView)itemView.findViewById(R.id.budget_category_name_cat);
 
             category_id=(TextView)itemView.findViewById(R.id.category_id);
 

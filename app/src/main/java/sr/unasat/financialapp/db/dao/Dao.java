@@ -266,7 +266,7 @@ public class Dao extends SQLiteOpenHelper {
 
                 list.add(category);
 
-            }while (cursor.isAfterLast() == false);
+            }while (!cursor.isAfterLast());
 
         }
         cursor.close();
@@ -582,10 +582,14 @@ public class Dao extends SQLiteOpenHelper {
         Cursor cursor;
         for (int i = 0; i<7;i++) {
 
-            theDay --;
+            theDay = theDay-i;
             if ((theDay) == 0) {
 
                 theMonth = theMonth - 1;
+                if (theMonth==0){
+                    theMonth=12;
+                    year--;
+                }
                 theDay = new GregorianCalendar(year,theMonth-1,1).getActualMaximum(Calendar.DAY_OF_MONTH);
 
             }
@@ -596,21 +600,18 @@ public class Dao extends SQLiteOpenHelper {
                 if (cursor.moveToFirst()) {
                     do {
 
-
+                        int tranID=cursor.getInt(cursor.getColumnIndex(TRAN_ID));
+                        transaction = getTransactionByID(tranID);
                         cursor.moveToNext();
 
+                        transactions.add(transaction);
+                        days.put(String.valueOf(i), transactions);
                     } while (!cursor.isAfterLast());
-
-                    transactions.add(transaction);
-                    days.put(String.valueOf(i), transactions);
 
                 }
                 cursor.close();
 
             }
-
-
-
         return days;
     }
 
@@ -761,5 +762,33 @@ public class Dao extends SQLiteOpenHelper {
     private void deleteRep(int transactionId){
         SQLiteDatabase db=getWritableDatabase();
         db.delete(REP_TABLE,TRAN_ID+" = ?", new String[] { "" + transactionId });
+    }
+
+    public double getAmountUsedByCategoryCurrentMonth(Category category){
+        SQLiteDatabase db=getReadableDatabase();
+        Date date=Calendar.getInstance().getTime();
+        Transaction transaction;
+        int[] dayArr = convertDate(date);
+        double used=0;
+
+        Cursor cursor = db.query(
+                REP_TABLE,null,
+                YEAR+" = ? and "+MONTH+" = ? and "+CAT_ID+" = ?",
+                new String[] { "" + String.valueOf(dayArr[0]),String.valueOf(dayArr[1]),String.valueOf(category.getId())},null,null,null);
+        if (cursor .moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndex(TRAN_ID));
+                transaction = getTransactionByID(id);
+
+                cursor.moveToNext();
+
+                used = used+transaction.getTran_amount();
+
+            }while (!cursor.isAfterLast());
+
+            cursor.close();
+        }
+
+        return used;
     }
 }

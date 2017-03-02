@@ -2,10 +2,6 @@ package sr.unasat.financialapp.util;
 
 import java.util.Date;
 
-/**
- * Created by Jair on 2/9/2017.
- */
-
 public class DateUtil {
     private static int ordinal;
 
@@ -179,6 +175,40 @@ public class DateUtil {
 
              }
          }
+        weekYear =(int) Math.round((((ordinal + day) - weekday) + 10)/7);
+
+        return new int[] {year,month,weekYear,weekday,day};
+    }
+
+    public static int[] convertDate(String date){
+        //for example : fri feb 10 04.32.27 est 2017
+
+        String[] array = date.split("\\s");
+
+        int weekday = day_to_int(array[0]);
+        int month = month_to_int(array[1]);
+        int day = Integer.valueOf(array[2]);
+        int year = Integer.valueOf(array[5]);
+        int weekYear;
+        //Ordinal day: 244 + 26 = 270
+        //Weekday: Friday = 5
+        //270 − 5 + 10 = 275
+        //275 / 7 = 39.28…
+        //Result: Week 39
+
+        //int theDay = ordinal + day;
+        //int vat = theDay - weekday;
+        //int vat2 = vat + 10;
+        //double result = vat2/7;
+        if (year % 4 == 0){
+
+            if (month == 1 || month == 2){
+                weekYear =(int) Math.round((((ordinal + day) - weekday) + 10)/7);
+            }else{
+                ordinal++;
+
+            }
+        }
         weekYear =(int) Math.round((((ordinal + day) - weekday) + 10)/7);
 
         return new int[] {year,month,weekYear,weekday,day};

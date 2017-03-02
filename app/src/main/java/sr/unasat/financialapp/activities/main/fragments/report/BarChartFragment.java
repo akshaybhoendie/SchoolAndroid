@@ -21,9 +21,16 @@ import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 
 import sr.unasat.financialapp.R;
+import sr.unasat.financialapp.db.dao.Dao;
+import sr.unasat.financialapp.dto.Transaction;
+
+import static sr.unasat.financialapp.util.DateUtil.convertDate;
 
 /**
  */
@@ -57,8 +64,13 @@ public class BarChartFragment extends Fragment {
     public void dailyExpenses(View view){
 
         GraphView graph = (GraphView) view.findViewById(R.id.graph);
-
+        HashMap<String,List<Transaction>> days= new Dao(getContext()).getTransactionsLast7Days();
         StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
+        String[] dayArr=new String[7];
+        List<Transaction> nullTransactions=new ArrayList<>();
+
+
+
         staticLabelsFormatter.setHorizontalLabels(new String[] {"","mon", "tue", "wed","thu","fri","yesterday","today",""});
 
 
@@ -104,6 +116,8 @@ public class BarChartFragment extends Fragment {
 
         view.findViewById(R.id.period_choise).setVisibility(View.GONE);
         view.findViewById(R.id.period_spinner).setVisibility(View.GONE) ;
+
+        days.clone();
     }
 
     public void dailyIncome(View view){

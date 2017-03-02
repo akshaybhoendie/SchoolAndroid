@@ -20,6 +20,7 @@ import sr.unasat.financialapp.dto.Category;
 import static android.content.ContentValues.TAG;
 
 import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.BUDGET;
+import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.CAT_NAME;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.CAT_TABLE;
 
 /**
@@ -57,10 +58,13 @@ public class AddCategoryDialog extends DialogFragment {
             EditText budgetView = (EditText) view.findViewById(R.id.category_budget_input);
 
             String categorynName = String.valueOf(categoryNameView.getText());
+            if (String.valueOf(budgetView.getText()).equals("")){
+                budgetView.setText("0");
+            }
             double budget = Double.valueOf(String.valueOf(budgetView.getText()));
 
             ContentValues contentValues = new ContentValues();
-            contentValues.put(CAT_TABLE, categorynName);
+            contentValues.put(CAT_NAME, categorynName);
             contentValues.put(BUDGET, budget);
             Dao dao=new Dao(getActivity());
 
