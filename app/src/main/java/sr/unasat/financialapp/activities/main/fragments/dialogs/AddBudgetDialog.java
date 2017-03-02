@@ -4,7 +4,6 @@ package sr.unasat.financialapp.activities.main.fragments.dialogs;
 import android.content.ContentValues;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +27,7 @@ import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.BUDGET;
 public class AddBudgetDialog extends DialogFragment {
 
 
-    Dao dao;Category category;public Integer categoryToEdit;
+    Dao dao;Category category;public Integer budgetCategoryToEdit;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,8 +50,8 @@ public class AddBudgetDialog extends DialogFragment {
         categorynames.remove("income");
         Spinner spinner = (Spinner)view.findViewById(R.id.budget_cat_spinner);
 
-        if (categoryToEdit!=null){
-            category = dao.getCategoryById(categoryToEdit);
+        if (budgetCategoryToEdit !=null){
+            category = dao.getCategoryById(budgetCategoryToEdit);
             EditText budget=(EditText)view.findViewById(R.id.budget_dialog_input);
             budget.setText(String.valueOf(category.getBudget()));
 

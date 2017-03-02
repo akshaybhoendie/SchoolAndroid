@@ -22,7 +22,7 @@ import sr.unasat.financialapp.dto.Category;
 import static sr.unasat.financialapp.activities.main.MainActivity.addCategoryDialog;
 import static sr.unasat.financialapp.activities.main.MainActivity.confirmFragment;
 import static sr.unasat.financialapp.activities.main.MainActivity.fragmentAction;
-import static sr.unasat.financialapp.activities.main.fragments.dialogs.AddCategoryDialog.categoryToEditID;
+
 
 public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecyclerAdapter.RecyclerViewHolder> {
 
@@ -84,7 +84,8 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
                 public void onClick(View v) {
 
 
-                    categoryToEditID = Integer.valueOf(String.valueOf(category_id.getText()));
+                    addCategoryDialog=new AddCategoryDialog();
+                    addCategoryDialog.categoryToEditID = Integer.valueOf(String.valueOf(category_id.getText()));
                     confirmFragment = new ConfirmFragment();
                     confirmFragment.show(fragmentManager,"confirm");
                     fragmentAction = "category";
@@ -96,7 +97,7 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
             editButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    categoryToEditID = Integer.valueOf(String.valueOf(category_id.getText()));
+                    addCategoryDialog.categoryToEditID = Integer.valueOf(String.valueOf(category_id.getText()));
                     addCategoryDialog = new AddCategoryDialog();
                     addCategoryDialog.show(fragmentManager,"add");
 

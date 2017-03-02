@@ -3,14 +3,12 @@ package sr.unasat.financialapp.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -21,10 +19,13 @@ import java.util.List;
 
 import sr.unasat.financialapp.R;
 import sr.unasat.financialapp.activities.main.fragments.dialogs.AddBudgetDialog;
+import sr.unasat.financialapp.activities.main.fragments.dialogs.ConfirmFragment;
 import sr.unasat.financialapp.db.dao.Dao;
 import sr.unasat.financialapp.dto.Category;
 
 import static sr.unasat.financialapp.activities.main.MainActivity.addBudgetDialog;
+import static sr.unasat.financialapp.activities.main.MainActivity.confirmFragment;
+import static sr.unasat.financialapp.activities.main.MainActivity.fragmentAction;
 
 
 public class BudgetRecyclerAdapter extends RecyclerView.Adapter<BudgetRecyclerAdapter.RecyclerViewHolder> {
@@ -116,7 +117,7 @@ public class BudgetRecyclerAdapter extends RecyclerView.Adapter<BudgetRecyclerAd
                 public void onClick(View v) {
                     Toast.makeText(context, "edit budget!!!", Toast.LENGTH_SHORT).show();
                     addBudgetDialog = new AddBudgetDialog();
-                    addBudgetDialog.categoryToEdit = Integer.valueOf(String.valueOf(categoryID.getText()));
+                    addBudgetDialog.budgetCategoryToEdit = Integer.valueOf(String.valueOf(categoryID.getText()));
                     addBudgetDialog.show(fragmentManager,"add budget");
                 }
             });
@@ -124,6 +125,11 @@ public class BudgetRecyclerAdapter extends RecyclerView.Adapter<BudgetRecyclerAd
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(context, "delete budget!!!", Toast.LENGTH_SHORT).show();
+                    addBudgetDialog = new AddBudgetDialog();
+                    confirmFragment=new ConfirmFragment();
+                    addBudgetDialog.budgetCategoryToEdit = Integer.valueOf(String.valueOf(categoryID.getText()));
+                    confirmFragment.show(fragmentManager,"confirm budget delete");
+                    fragmentAction="budget";
                 }
             });
 

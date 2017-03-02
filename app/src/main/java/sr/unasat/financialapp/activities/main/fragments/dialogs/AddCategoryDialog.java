@@ -29,7 +29,7 @@ import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.CAT_TABLE;
 public class AddCategoryDialog extends DialogFragment {
 
 
-    static public Integer categoryToEditID;
+    public Integer categoryToEditID;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

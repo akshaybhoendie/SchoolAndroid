@@ -1,5 +1,6 @@
 package sr.unasat.financialapp.activities.main;
 
+import android.content.ContentValues;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -31,7 +32,7 @@ import sr.unasat.financialapp.activities.main.fragments.SettingsFragment;
 import sr.unasat.financialapp.db.dao.Dao;
 import sr.unasat.financialapp.dto.Category;
 
-import static sr.unasat.financialapp.activities.main.fragments.dialogs.AddCategoryDialog.categoryToEditID;
+import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.BUDGET;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -130,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         addTransactionDialog.show(getSupportFragmentManager(),"add_tran_diag");
     }
     public void category_floatingButtonEvent(View view){
-        categoryToEditID=null;
+        addCategoryDialog.categoryToEditID=null;
         addCategoryDialog=new AddCategoryDialog();
         addCategoryDialog.show(getSupportFragmentManager(),"add category dialog");
     }
@@ -221,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             case "category":
 
-                if (dao.deleteCategory(categoryToEditID)){
+                if (dao.deleteCategory(addCategoryDialog.categoryToEditID)){
                     Toast.makeText(this, "delete succesful", Toast.LENGTH_SHORT).show();
                 }else{
                     Toast.makeText(this, "delete unsuccesful", Toast.LENGTH_SHORT).show();
@@ -232,15 +233,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 getSupportActionBar().setTitle(getResources().getString(R.string.categories));
                 fragmentAction=null;
-                categoryToEditID=null;
+                addCategoryDialog.categoryToEditID=null;
                 break;
+
+            case "budget":
+                ContentValues contentValues=new ContentValues();
+                contentValues.put(BUDGET,0);
+                if (dao.editCategory(contentValues,addBudgetDialog.budgetCategoryToEdit)){
+                    Toast.makeText(this, "budget removed", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(this, "budget not removed", Toast.LENGTH_SHORT).show();
+                }
+                confirmFragment.dismiss();
+                getSupportFragmentManager().beginTransaction().replace(R.id.main_container, new BudgetsFragment()).commit();
+
+                getSupportActionBar().setTitle(getResources().getString(R.string.budgets));
+                fragmentAction=null;
+                addBudgetDialog.budgetCategoryToEdit=null;
+                break;
+
 
         }
 
     }
     public void cancelDelete(View view){
         confirmFragment.dismiss();
-        categoryToEditID=null;
+        addCategoryDialog.categoryToEditID=null;
+        addBudgetDialog.budgetCategoryToEdit=null;
+        addTransactionDialog.transactionToEditID=null;
+        fragmentAction=null;
     }
 
     public void editTransaction(View view){
