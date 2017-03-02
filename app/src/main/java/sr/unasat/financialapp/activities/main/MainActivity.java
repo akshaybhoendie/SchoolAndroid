@@ -131,7 +131,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         addTransactionDialog.show(getSupportFragmentManager(),"add_tran_diag");
     }
     public void category_floatingButtonEvent(View view){
-        addCategoryDialog.categoryToEditID=null;
         addCategoryDialog=new AddCategoryDialog();
         addCategoryDialog.show(getSupportFragmentManager(),"add category dialog");
     }
@@ -258,9 +257,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     public void cancelDelete(View view){
         confirmFragment.dismiss();
-        addCategoryDialog.categoryToEditID=null;
-        addBudgetDialog.budgetCategoryToEdit=null;
-        addTransactionDialog.transactionToEditID=null;
+        if (addCategoryDialog!=null) {
+            addCategoryDialog.categoryToEditID = null;
+        }
+        if (addBudgetDialog!=null) {
+            addBudgetDialog.budgetCategoryToEdit=null;
+        }
+        if (addTransactionDialog!=null) {
+            addTransactionDialog.transactionToEditID=null;
+        }
         fragmentAction=null;
     }
 

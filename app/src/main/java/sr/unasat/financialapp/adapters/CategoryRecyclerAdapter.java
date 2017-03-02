@@ -84,7 +84,7 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
                 public void onClick(View v) {
 
 
-                    addCategoryDialog=new AddCategoryDialog();
+
                     addCategoryDialog.categoryToEditID = Integer.valueOf(String.valueOf(category_id.getText()));
                     confirmFragment = new ConfirmFragment();
                     confirmFragment.show(fragmentManager,"confirm");
@@ -97,8 +97,8 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
             editButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    addCategoryDialog=new AddCategoryDialog();
                     addCategoryDialog.categoryToEditID = Integer.valueOf(String.valueOf(category_id.getText()));
-                    addCategoryDialog = new AddCategoryDialog();
                     addCategoryDialog.show(fragmentManager,"add");
 
 
