@@ -85,6 +85,52 @@ public class DateUtil {
         return monthStr;
     }
 
+    public static String int_to_monthShort(int month){
+        String monthStr ;
+        switch (month){
+            case 1:
+                monthStr = "jan";
+                break;
+            case 2:
+                monthStr = "feb";
+                break;
+            case 3:
+                monthStr = "mar";
+                break;
+            case 4:
+                monthStr = "apr";
+                break;
+            case 5:
+                monthStr = "may";
+                break;
+            case 6:
+                monthStr = "jun";
+                break;
+            case 7:
+                monthStr = "jul";
+                break;
+            case 8:
+                monthStr = "aug";
+                break;
+            case 9:
+                monthStr = "sep";
+                break;
+            case 10:
+                monthStr = "oct";
+                break;
+            case 11:
+                monthStr = "nov";
+                break;
+            case 12:
+                monthStr = "dec";
+                break;
+            default:
+                monthStr=null;
+        }
+
+
+        return monthStr;
+    }
 
     private static int month_to_int(String monthStr){
 

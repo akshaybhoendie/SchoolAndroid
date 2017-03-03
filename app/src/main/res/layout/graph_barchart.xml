@@ -58,12 +58,16 @@
 
     <com.jjoe64.graphview.GraphView
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:id="@+id/graph"/>
+        android:layout_height="227dp"
+        android:layout_margin="20dp"
+        android:id="@+id/graph"
+        android:padding="10dp"
+        />
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="310dp"
+            android:padding="10dp"
             >
 
         </android.support.v7.widget.RecyclerView>

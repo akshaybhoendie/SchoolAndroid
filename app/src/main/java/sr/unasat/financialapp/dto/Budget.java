@@ -1,9 +1,5 @@
 package sr.unasat.financialapp.dto;
 
-/**
- * Created by abhoendie on 2/28/2017.
- */
-
 public class Budget {
 
     private String budgetAmount;

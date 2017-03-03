@@ -65,6 +65,7 @@ import static sr.unasat.financialapp.db.schema.Schema.SchemaUser.USER_ID;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaUser.USER_TABLE;
 import static sr.unasat.financialapp.util.DateUtil.convertDate;
 import static sr.unasat.financialapp.util.DateUtil.int_to_month;
+import static sr.unasat.financialapp.util.DateUtil.int_to_monthShort;
 
 public class Dao extends SQLiteOpenHelper {
 
@@ -295,6 +296,7 @@ public class Dao extends SQLiteOpenHelper {
         return db.update(CAT_TABLE, contentValues,CAT_ID+" = ?", new String[] { "" + id })>0;
 
     }
+
     public boolean deleteCategory(int id) {
         List<Transaction> transactionsToUpdate = new ArrayList<>();
         SQLiteDatabase db = getWritableDatabase();
@@ -328,8 +330,6 @@ public class Dao extends SQLiteOpenHelper {
         return db.delete(CAT_TABLE,CAT_ID+" = ?", new String[] { "" + id })>0;
 
     }
-
-
 
     public boolean insertTransaction(ContentValues contentValues){
 
@@ -410,8 +410,6 @@ public class Dao extends SQLiteOpenHelper {
 
     }
 
-
-
     private Transaction getLastTransaction(){
         Transaction transaction = null;
         Cursor cursor = null;
@@ -433,7 +431,6 @@ public class Dao extends SQLiteOpenHelper {
         cursor.close();
         return transaction;
     }
-
 
     public List<Transaction> getTransactionsByDay(int day,int month, int year){
         List<Transaction> list = new ArrayList<>();
@@ -460,8 +457,6 @@ public class Dao extends SQLiteOpenHelper {
         cursor.close();
         return list;
     }
-
-
 
     private boolean insertReport(ContentValues contentValues){
 
@@ -636,6 +631,108 @@ public class Dao extends SQLiteOpenHelper {
         return days;
     }
 
+    public HashMap<String,List<Transaction>> getTransactionsLast12Months() {
+
+        SQLiteDatabase db = getReadableDatabase();
+        Date date = Calendar.getInstance().getTime();
+        int[] dateArr = convertDate(date);
+        HashMap<String, List<Transaction>> months = new HashMap<>(12);
+
+        Transaction transaction = null;
+        //int theDay= dateArr[4];
+        int theMonth = dateArr[1];
+        int year = dateArr[0];
+        Cursor cursor;
+        for (int i = 0; i < 12; i++) {
+            List<Transaction> transactions;
+            List<Transaction> nullTransactions = new ArrayList<>();
+
+            if (i != 0) {
+                theMonth--;
+            }
+
+            if (theMonth == 0) {
+                theMonth = 12;
+                year--;
+            }
+
+            transactions = getTransactionsByMonth(year,theMonth);
+
+            if (transactions.isEmpty()){
+                Transaction nulltransaction= new Transaction();
+
+                nulltransaction.setTran_date(int_to_monthShort(theMonth));
+                nulltransaction.setTran_amount(0);
+                transactions.add(nulltransaction);
+                months.put(String.valueOf(i),transactions);
+
+            }else {
+
+                transactions.get(0).setTran_date(int_to_monthShort(theMonth));
+                months.put(String.valueOf(i), transactions);
+            }
+        }
+        return months;
+    }
+
+    public List<Transaction> getTransactionsByMonth(int year, int month){
+        List<Transaction> list = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Transaction transaction;
+
+        Cursor cursor = db.query(
+                REP_TABLE,null,
+                MONTH+" = ? and "+YEAR+" = ?", new String[] { "" + String.valueOf(month),String.valueOf(year)},null,null,null);
+        if (cursor .moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndex(TRAN_ID));
+                transaction = getTransactionByID(id);
+
+                cursor.moveToNext();
+
+                list.add(transaction);
+
+            }while (!cursor.isAfterLast());
+
+            cursor.close();
+        }
+
+        return list;
+    }
+
+    private void deleteRep(int transactionId){
+        SQLiteDatabase db=getWritableDatabase();
+        db.delete(REP_TABLE,TRAN_ID+" = ?", new String[] { "" + transactionId });
+    }
+
+    public double getAmountUsedByCategoryCurrentMonth(Category category){
+        SQLiteDatabase db=getReadableDatabase();
+        Date date=Calendar.getInstance().getTime();
+        Transaction transaction;
+        int[] dayArr = convertDate(date);
+        double used=0;
+
+        Cursor cursor = db.query(
+                REP_TABLE,null,
+                YEAR+" = ? and "+MONTH+" = ? and "+CAT_ID+" = ?",
+                new String[] { "" + String.valueOf(dayArr[0]),String.valueOf(dayArr[1]),String.valueOf(category.getId())},null,null,null);
+        if (cursor .moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndex(TRAN_ID));
+                transaction = getTransactionByID(id);
+
+                cursor.moveToNext();
+
+                used = used+transaction.getTran_amount();
+
+            }while (!cursor.isAfterLast());
+
+            cursor.close();
+        }
+
+        return used;
+    }
+
     public List<String> getTransactionYears(){
         SQLiteDatabase db=getReadableDatabase();
         Cursor cursor = null;
@@ -705,30 +802,6 @@ public class Dao extends SQLiteOpenHelper {
         return months;
     }
 
-    public List<Transaction> getTransactionsByMonth(int month, int year){
-        List<Transaction> list = new ArrayList<>();
-        SQLiteDatabase db = getReadableDatabase();
-        Transaction transaction;
-
-        Cursor cursor = db.query(
-                REP_TABLE,null,
-                MONTH+" = ? and "+YEAR+" = ?", new String[] { "" + String.valueOf(month),String.valueOf(year)},null,null,null);
-        if (cursor .moveToFirst()) {
-            do {
-                int id = cursor.getInt(cursor.getColumnIndex(TRAN_ID));
-                transaction = getTransactionByID(id);
-
-                cursor.moveToNext();
-
-                list.add(transaction);
-
-            }while (cursor.isAfterLast() == false);
-
-        }
-
-        return list;
-    }
-
     public Transaction getTransactionByName( String name ){
         Transaction transaction=null;
 
@@ -777,39 +850,5 @@ public class Dao extends SQLiteOpenHelper {
         }
         cursor.close();
         return list;
-    }
-
-
-    private void deleteRep(int transactionId){
-        SQLiteDatabase db=getWritableDatabase();
-        db.delete(REP_TABLE,TRAN_ID+" = ?", new String[] { "" + transactionId });
-    }
-
-    public double getAmountUsedByCategoryCurrentMonth(Category category){
-        SQLiteDatabase db=getReadableDatabase();
-        Date date=Calendar.getInstance().getTime();
-        Transaction transaction;
-        int[] dayArr = convertDate(date);
-        double used=0;
-
-        Cursor cursor = db.query(
-                REP_TABLE,null,
-                YEAR+" = ? and "+MONTH+" = ? and "+CAT_ID+" = ?",
-                new String[] { "" + String.valueOf(dayArr[0]),String.valueOf(dayArr[1]),String.valueOf(category.getId())},null,null,null);
-        if (cursor .moveToFirst()) {
-            do {
-                int id = cursor.getInt(cursor.getColumnIndex(TRAN_ID));
-                transaction = getTransactionByID(id);
-
-                cursor.moveToNext();
-
-                used = used+transaction.getTran_amount();
-
-            }while (!cursor.isAfterLast());
-
-            cursor.close();
-        }
-
-        return used;
     }
 }
