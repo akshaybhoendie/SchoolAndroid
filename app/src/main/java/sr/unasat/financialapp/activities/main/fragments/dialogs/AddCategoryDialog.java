@@ -13,6 +13,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import sr.unasat.financialapp.R;
 import sr.unasat.financialapp.db.dao.Dao;
 import sr.unasat.financialapp.dto.Category;
@@ -79,11 +83,22 @@ public class AddCategoryDialog extends DialogFragment {
 
             }else{
 
-                if(dao.insertCategory(categorynName,null,budget)){
-                    Toast.makeText(getActivity(), "category added", Toast.LENGTH_SHORT).show();
-
+                List<String>names=new ArrayList<>();
+                for (Category category:dao.getCategories()){
+                    names.add(category.getName());
+                }
+                if (names.contains(categorynName)){
+                    Toast.makeText(getContext(), "this category already exists, please choose another name", Toast.LENGTH_SHORT).show();
+                    return;
                 }else{
-                    Toast.makeText(getActivity(), "category not added", Toast.LENGTH_SHORT).show();
+
+                    if(dao.insertCategory(categorynName,null,budget)){
+                        Toast.makeText(getActivity(), "category added", Toast.LENGTH_SHORT).show();
+
+                    }else{
+                        Toast.makeText(getActivity(), "category not added", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
 
             }

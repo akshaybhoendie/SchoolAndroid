@@ -580,7 +580,7 @@ public class Dao extends SQLiteOpenHelper {
         Date date = Calendar.getInstance().getTime();
         int[] dateArr = convertDate(date);
         HashMap<String,List<Transaction>> days =new HashMap<>(7);
-        List<Transaction> transactions = new ArrayList<>();
+
 
         Transaction transaction = null;
         int theDay= dateArr[4];
@@ -588,8 +588,12 @@ public class Dao extends SQLiteOpenHelper {
         int year=dateArr[0];
         Cursor cursor;
         for (int i = 0; i<7;i++) {
+            List<Transaction> transactions = new ArrayList<>();
+            List<Transaction> nullTransactions =new ArrayList<>();
 
-            theDay = theDay-i;
+            if (i!=0){
+                theDay--;
+            }
             if ((theDay) == 0) {
 
                 theMonth = theMonth - 1;
@@ -611,10 +615,20 @@ public class Dao extends SQLiteOpenHelper {
                         transaction = getTransactionByID(tranID);
                         cursor.moveToNext();
 
+
+                        transaction.setTran_date(String.valueOf(theDay));
                         transactions.add(transaction);
                         days.put(String.valueOf(i), transactions);
+
                     } while (!cursor.isAfterLast());
 
+                }else{
+                    transaction=new Transaction();
+                    transaction.setTran_amount(0);
+                    transaction.setTran_id(0);
+                    transaction.setTran_date(String.valueOf(theDay));
+                    nullTransactions.add(transaction);
+                    days.put(String.valueOf(i),nullTransactions);
                 }
                 cursor.close();
 

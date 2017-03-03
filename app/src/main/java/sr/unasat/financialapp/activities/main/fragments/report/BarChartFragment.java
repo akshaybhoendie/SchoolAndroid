@@ -23,6 +23,7 @@ import com.jjoe64.graphview.series.DataPoint;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -66,23 +67,45 @@ public class BarChartFragment extends Fragment {
         GraphView graph = (GraphView) view.findViewById(R.id.graph);
         HashMap<String,List<Transaction>> days= new Dao(getContext()).getTransactionsLast7Days();
         StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
-        String[] dayArr=new String[7];
-        List<Transaction> nullTransactions=new ArrayList<>();
+        String[] dayArr=new String[9];
+        List<String>daysList=new ArrayList<>();
+        double[] dayAmount=new double[9];
+
+        for (String s:days.keySet()){
+            daysList.add(s);
+        }
+
+        Collections.sort(daysList);
+        Collections.reverse(daysList);
 
 
+        for(int i = 1; i <8 ; i++){
+            Transaction transaction=days.get(daysList.get(i-1)).get(0);
 
-        staticLabelsFormatter.setHorizontalLabels(new String[] {"","mon", "tue", "wed","thu","fri","yesterday","today",""});
+            dayArr[i] = transaction.getTran_date();
+            double dayTotalAmount=0;
+            for (Transaction transaction1: days.get(daysList.get(i-1))){
+                dayTotalAmount=dayTotalAmount+transaction1.getTran_amount();
+            }
+            dayAmount[i] = dayTotalAmount;
 
+        }
+
+        dayArr[0]="0";dayArr[8]="0";
+        dayAmount[0]=0;dayAmount[8]=0;
+
+
+        staticLabelsFormatter.setHorizontalLabels(dayArr);
 
         BarGraphSeries<DataPoint> series = new BarGraphSeries<>(new DataPoint[]{
                 new DataPoint(0,0),
-                new DataPoint(1, 17),
-                new DataPoint(2, 56),
-                new DataPoint(3, 34),
-                new DataPoint(4, 25),
-                new DataPoint(5, 56),
-                new DataPoint(6, 39),
-                new DataPoint(7, 120),
+                new DataPoint(1, dayAmount[1]),
+                new DataPoint(2, dayAmount[2]),
+                new DataPoint(3, dayAmount[3]),
+                new DataPoint(4, dayAmount[4]),
+                new DataPoint(5, dayAmount[5]),
+                new DataPoint(6, dayAmount[6]),
+                new DataPoint(7, dayAmount[7]),
                 new DataPoint(8,0)
 
         });
