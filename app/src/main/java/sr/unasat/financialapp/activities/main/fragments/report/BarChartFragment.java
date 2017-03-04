@@ -177,13 +177,18 @@ public class BarChartFragment extends Fragment {
         double[] monthAmount = new double[12];
         HashMap<String,List<Transaction>>months=dao.getTransactionsLast12Months();
         List<String>monthList=new ArrayList<>();
+        List<Integer>monthListInt=new ArrayList<>();
 
         for (String s:months.keySet()){
-            monthList.add(s);
+            monthListInt.add(Integer.valueOf(s));
         }
 
-        Collections.sort(monthList);
-        Collections.reverse(monthList);
+        Collections.sort(monthListInt);
+        Collections.reverse(monthListInt);
+
+        for (int i:monthListInt){
+            monthList.add(String.valueOf(i));
+        }
 
 
         for (int i =0;i<12;i++){

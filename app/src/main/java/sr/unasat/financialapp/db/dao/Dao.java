@@ -638,14 +638,12 @@ public class Dao extends SQLiteOpenHelper {
         int[] dateArr = convertDate(date);
         HashMap<String, List<Transaction>> months = new HashMap<>(12);
 
-        Transaction transaction = null;
         //int theDay= dateArr[4];
         int theMonth = dateArr[1];
         int year = dateArr[0];
         Cursor cursor;
         for (int i = 0; i < 12; i++) {
             List<Transaction> transactions;
-            List<Transaction> nullTransactions = new ArrayList<>();
 
             if (i != 0) {
                 theMonth--;
