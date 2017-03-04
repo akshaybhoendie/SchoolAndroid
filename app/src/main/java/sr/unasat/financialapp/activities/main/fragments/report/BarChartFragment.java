@@ -8,6 +8,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,17 +46,28 @@ import static sr.unasat.financialapp.util.DateUtil.convertDate;
 public class BarChartFragment extends Fragment {
 
     public String bartype;
+    final String spinnerItem1 ="last 6 months";
+    final String spinnerItem2 ="last 12 months";
+    final String spinnerItem3 ="last year";
+    final String spinnerItem4 ="choose year";
+    View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.graph_barchart, container, false);
+        this.view=view;
+        TextView typeBar =(TextView)view.findViewById(R.id.type_bar);
         switch (bartype){
             case "daily expenses":
+
+                typeBar.setText("daily expenses");
                 dailyExpenses(view);
                 break;
             case "monthly expenses":
-                monthlyExpenses(view);
+
+                typeBar.setText("monthly expenses");
+                monthlyExpensesChoise(view);
                 break;
             case "daily income":
                 dailyIncome(view);
@@ -68,12 +81,12 @@ public class BarChartFragment extends Fragment {
 
         return view;
     }
+
     public void dailyExpenses(View view){
 
-        TextView typeBar =(TextView)view.findViewById(R.id.type_bar);
-        typeBar.setText("daily expenses");
 
         GraphView graph = (GraphView) view.findViewById(R.id.graph);
+        graph.removeAllSeries();
         HashMap<String,List<Transaction>> days= new Dao(getContext()).getTransactionsLast7Days();
         StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
         String[] dayArr=new String[7];
@@ -99,9 +112,6 @@ public class BarChartFragment extends Fragment {
             dayAmount[i] = dayTotalAmount;
 
         }
-
-
-
 
         staticLabelsFormatter.setHorizontalLabels(dayArr);
 
@@ -163,18 +173,19 @@ public class BarChartFragment extends Fragment {
         Toast.makeText(view.getContext(), "daily income", Toast.LENGTH_SHORT).show();
     }
 
-    private void monthlyExpenses(View view) {
-        TextView typeBar =(TextView)view.findViewById(R.id.type_bar);
-        typeBar.setText("monthly expenses");
+    private void monthlyExpenses(int range) {
+
 
         GraphView graph = (GraphView) view.findViewById(R.id.graph);
+        graph.removeAllSeries();
+
         StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
 
         Toast.makeText(view.getContext(), "monthly expense", Toast.LENGTH_SHORT).show();
         Dao dao=new Dao(getContext());
-        Date date= Calendar.getInstance().getTime();
-        String[] monthArr =new String[12];
-        double[] monthAmount = new double[12];
+
+        String[] monthArr =new String[range];
+        double[] monthAmount = new double[range];
         HashMap<String,List<Transaction>>months=dao.getTransactionsLast12Months();
         List<String>monthList=new ArrayList<>();
         List<Integer>monthListInt=new ArrayList<>();
@@ -190,37 +201,38 @@ public class BarChartFragment extends Fragment {
             monthList.add(String.valueOf(i));
         }
 
-
+        int a=0;
         for (int i =0;i<12;i++){
             Transaction transaction = months.get(monthList.get(i)).get(0);
-            monthArr[i] = transaction.getTran_date();
+
+            if (i>=range&&range==6) {
+                monthArr[a] = transaction.getTran_date();
+            }else if(range!=6){
+                monthArr[i] = transaction.getTran_date();
+            }
             double monthTotalAmount=0;
             for (Transaction transaction1: months.get(monthList.get(i))){
                 monthTotalAmount=monthTotalAmount+transaction1.getTran_amount();
             }
-            monthAmount[i]= monthTotalAmount;
-
+            if (i>=range&&range==6) {
+                monthAmount[a] = monthTotalAmount;
+                a++;
+            }else if (range!=6){
+                monthAmount[i] = monthTotalAmount;
+            }
         }
 
         staticLabelsFormatter.setHorizontalLabels(monthArr);
 
-        BarGraphSeries<DataPoint> series = new BarGraphSeries<>(new DataPoint[]{
+        DataPoint[] dataPoints=new DataPoint[range];
 
-                new DataPoint(0, monthAmount[0]),
-                new DataPoint(1, monthAmount[1]),
-                new DataPoint(2, monthAmount[2]),
-                new DataPoint(3, monthAmount[3]),
-                new DataPoint(4, monthAmount[4]),
-                new DataPoint(5, monthAmount[5]),
-                new DataPoint(6, monthAmount[6]),
-                new DataPoint(7, monthAmount[7]),
-                new DataPoint(8, monthAmount[8]),
-                new DataPoint(9, monthAmount[9]),
-                new DataPoint(10, monthAmount[10]),
-                new DataPoint(11, monthAmount[11])
+        for (int i=0;i<range;i++){
 
+            dataPoints[i]=new DataPoint(i,monthAmount[i]);
 
-        });
+        }
+
+        BarGraphSeries<DataPoint> series = new BarGraphSeries<>(dataPoints);
         graph.addSeries(series);
         series.setDrawValuesOnTop(true);
         series.setValuesOnTopColor(Color.BLACK);
@@ -264,5 +276,45 @@ public class BarChartFragment extends Fragment {
         Toast.makeText(view.getContext(), "monthly income", Toast.LENGTH_SHORT).show();
     }
 
+    private void monthlyExpensesChoise(View view){
 
+        Spinner spinner=(Spinner)view.findViewById(R.id.period_spinner);
+
+
+        final String[] items = {spinnerItem1,spinnerItem2,spinnerItem3};
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getActivity(),R.layout.spinner_layout,R.id.spinner_item, items);
+
+        spinner.setAdapter(spinnerAdapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                switch (String.valueOf(parent.getItemAtPosition(position))){
+
+                    case spinnerItem1:
+
+                        monthlyExpenses(6);
+                        Toast.makeText(getContext(), spinnerItem1, Toast.LENGTH_SHORT).show();
+                        break;
+                    case spinnerItem2:
+
+                        monthlyExpenses(12);
+                        break;
+                    case spinnerItem3:
+                        break;
+                    case spinnerItem4:
+                        break;
+
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+
+        });
+    }
 }
