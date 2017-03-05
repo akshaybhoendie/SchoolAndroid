@@ -19,17 +19,6 @@
         >
 
 
-        <Spinner
-            android:layout_height="wrap_content"
-            android:id="@+id/period_spinner"
-            android:layout_width="200dp"
-            android:layout_marginBottom="13dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginRight="12dp"
-            android:layout_marginEnd="12dp" />
-
         <TextView
             android:text="type Data"
             android:layout_width="wrap_content"
@@ -37,23 +26,48 @@
             android:id="@+id/type_bar"
             android:textSize="18sp"
             android:textStyle="normal|bold"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             android:layout_marginLeft="26dp"
             android:layout_marginStart="26dp"
-            android:layout_marginTop="19dp" />
+            android:layout_marginTop="11dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <Spinner
+            android:layout_height="wrap_content"
+            android:id="@+id/period_spinner"
+            android:layout_width="200dp"
+            android:layout_below="@+id/period_choise"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
         <TextView
             android:text="choose period"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="48dp"
-            android:layout_marginStart="48dp"
             android:id="@+id/period_choise"
-            android:layout_below="@+id/type_bar"
+            android:layout_alignParentTop="true"
             android:layout_alignLeft="@+id/period_spinner"
             android:layout_alignStart="@+id/period_spinner" />
+
+        <Spinner
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/year_spinner"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:text="choose year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/choose_year"
+            android:layout_centerVertical="true"
+            android:layout_alignLeft="@+id/type_bar"
+            android:layout_alignStart="@+id/type_bar"
+            android:layout_marginLeft="40dp"
+            android:layout_marginStart="40dp" />
     </RelativeLayout>
 
     <com.jjoe64.graphview.GraphView

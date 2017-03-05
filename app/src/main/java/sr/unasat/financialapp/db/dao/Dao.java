@@ -631,7 +631,7 @@ public class Dao extends SQLiteOpenHelper {
         return days;
     }
 
-    public HashMap<String,List<Transaction>> getTransactionsLast12Months() {
+    public HashMap<String,List<Transaction>> getTransactions12Months(int year) {
 
         SQLiteDatabase db = getReadableDatabase();
         Date date = Calendar.getInstance().getTime();
@@ -640,7 +640,6 @@ public class Dao extends SQLiteOpenHelper {
 
         //int theDay= dateArr[4];
         int theMonth = dateArr[1];
-        int year = dateArr[0];
         Cursor cursor;
         for (int i = 0; i < 12; i++) {
             List<Transaction> transactions;

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,7 +66,6 @@ public class BarChartFragment extends Fragment {
                 dailyExpenses(view);
                 break;
             case "monthly expenses":
-
                 typeBar.setText("monthly expenses");
                 monthlyExpensesChoise(view);
                 break;
@@ -173,7 +173,18 @@ public class BarChartFragment extends Fragment {
         Toast.makeText(view.getContext(), "daily income", Toast.LENGTH_SHORT).show();
     }
 
-    private void monthlyExpenses(int range) {
+    private void monthlyExpenses(int range,int year) {
+
+        if (year==0){
+            view.findViewById(R.id.choose_year).setVisibility(View.GONE);
+            view.findViewById(R.id.year_spinner).setVisibility(View.GONE);
+            year=convertDate(Calendar.getInstance().getTime())[0];
+        }
+        if (year==-1){
+            view.findViewById(R.id.choose_year).setVisibility(View.GONE);
+            view.findViewById(R.id.year_spinner).setVisibility(View.GONE);
+            year=convertDate(Calendar.getInstance().getTime())[0]-1;
+        }
 
 
         GraphView graph = (GraphView) view.findViewById(R.id.graph);
@@ -186,7 +197,7 @@ public class BarChartFragment extends Fragment {
 
         String[] monthArr =new String[range];
         double[] monthAmount = new double[range];
-        HashMap<String,List<Transaction>>months=dao.getTransactionsLast12Months();
+        HashMap<String,List<Transaction>>months=dao.getTransactions12Months(year);
         List<String>monthList=new ArrayList<>();
         List<Integer>monthListInt=new ArrayList<>();
 
@@ -281,7 +292,7 @@ public class BarChartFragment extends Fragment {
         Spinner spinner=(Spinner)view.findViewById(R.id.period_spinner);
 
 
-        final String[] items = {spinnerItem1,spinnerItem2,spinnerItem3};
+        final String[] items = {spinnerItem1,spinnerItem2,spinnerItem3,spinnerItem4};
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getActivity(),R.layout.spinner_layout,R.id.spinner_item, items);
 
         spinner.setAdapter(spinnerAdapter);
@@ -294,16 +305,18 @@ public class BarChartFragment extends Fragment {
 
                     case spinnerItem1:
 
-                        monthlyExpenses(6);
+                        monthlyExpenses(6,0);
                         Toast.makeText(getContext(), spinnerItem1, Toast.LENGTH_SHORT).show();
                         break;
                     case spinnerItem2:
 
-                        monthlyExpenses(12);
+                        monthlyExpenses(12,0);
                         break;
                     case spinnerItem3:
+                        monthlyExpenses(12,-1);
                         break;
                     case spinnerItem4:
+                        monthlyExpenseByYear();
                         break;
 
 
@@ -317,4 +330,37 @@ public class BarChartFragment extends Fragment {
 
         });
     }
+
+    private void monthlyExpenseByYear(){
+        int year=convertDate(Calendar.getInstance().getTime())[0];
+        TextView chooseYear=(TextView)view.findViewById(R.id.choose_year);
+        chooseYear.setVisibility(View.VISIBLE);
+
+        Spinner spinner=(Spinner)view.findViewById(R.id.year_spinner);
+        String[] years= new String[5];
+
+        for (int i = 0; i<5;i++){
+
+            years[i] = String.valueOf(convertDate(Calendar.getInstance().getTime())[0]-i);
+
+        }
+        ArrayAdapter<String> adapter=new ArrayAdapter<String>
+                (getContext(),R.layout.spinner_layout,R.id.spinner_item,years);
+        spinner.setAdapter(adapter);
+        spinner.setVisibility(View.VISIBLE);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                monthlyExpenses(12,Integer.valueOf(String.valueOf(parent.getItemAtPosition(position))));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+    }
+
 }
