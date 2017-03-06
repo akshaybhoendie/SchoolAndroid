@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="sr.unasat.financialapp.activities.main.fragments.report.PieChartFragment">
+    tools:context="sr.unasat.financialapp.activities.main.fragments.report.PieChartFragment"
+    android:background="@color/WhiteSmoke">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -67,6 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/pie_listview"
+            android:background="@color/WhiteSmoke"
             >
 
         </android.support.v7.widget.RecyclerView>
