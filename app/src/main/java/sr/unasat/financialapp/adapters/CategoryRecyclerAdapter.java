@@ -37,7 +37,7 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
         category_names.remove("no category");
         category_names.remove("income");
         this.fragmentManager=fragmentManager;
-        this.category_names=category_names;
+        this . category_names=category_names;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
 
-        String name=category_names.get(position);
+        String name= category_names.get(position);
         Category category=new Dao(context).getCategoryByName(name);
         String id=String.valueOf(category.getId());
         holder.category.setText(name);

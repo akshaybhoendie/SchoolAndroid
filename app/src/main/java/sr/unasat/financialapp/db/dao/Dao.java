@@ -730,6 +730,36 @@ public class Dao extends SQLiteOpenHelper {
         return used;
     }
 
+    public double getCategoryValuesToDay(Category category){
+
+        SQLiteDatabase db=getReadableDatabase();
+        Date date=Calendar.getInstance().getTime();
+        Transaction transaction;
+        int[] dayArr = convertDate(date);
+        double used=0;
+
+        Cursor cursor = db.query(
+                REP_TABLE,null,
+                YEAR+" = ? and "+MONTH+" = ? and "+DAY+" = ? and "+CAT_ID+" = ?",
+                new String[] { "" + String.valueOf(dayArr[0]),String.valueOf(dayArr[1]),String.valueOf(dayArr[4]),String.valueOf(category.getId())},null,null,null);
+        if (cursor .moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndex(TRAN_ID));
+                transaction = getTransactionByID(id);
+
+                cursor.moveToNext();
+
+                used = used+transaction.getTran_amount();
+
+            }while (!cursor.isAfterLast());
+
+            cursor.close();
+        }
+
+        return used;
+
+    }
+
     public List<String> getTransactionYears(){
         SQLiteDatabase db=getReadableDatabase();
         Cursor cursor = null;

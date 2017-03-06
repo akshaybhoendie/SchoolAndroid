@@ -36,14 +36,14 @@
         android:layout_height="wrap_content"
         android:id="@+id/transaction_descr"
             android:layout_alignBottom="@+id/category_icon"
-            android:layout_alignLeft="@+id/category_name"
-            android:layout_alignStart="@+id/category_name" />
+            android:layout_alignLeft="@+id/tran_name"
+            android:layout_alignStart="@+id/tran_name" />
 
         <TextView
             android:text="tran_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/category_name"
+            android:id="@+id/tran_name"
             android:textStyle="normal|bold"
             android:textSize="14sp"
             android:layout_marginLeft="35dp"

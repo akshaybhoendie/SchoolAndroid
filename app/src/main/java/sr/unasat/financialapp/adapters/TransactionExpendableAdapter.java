@@ -98,7 +98,7 @@ public class TransactionExpendableAdapter extends BaseExpandableListAdapter {
             convertView =   inflater.inflate(R.layout.card_transaction,null);
         }
 
-        TextView tranName = (TextView)convertView.findViewById(R.id.category_name);
+        TextView tranName = (TextView)convertView.findViewById(R.id.tran_name);
         TextView tranDescr = (TextView) convertView.findViewById(R.id.transaction_descr);
         TextView tranVal = (TextView) convertView.findViewById(R.id.transaction_value);
         TextView tranID = (TextView) convertView.findViewById(R.id.transaction_id_onCard);

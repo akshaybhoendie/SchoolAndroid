@@ -1,24 +1,74 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="sr.unasat.financialapp.activities.main.fragments.report.PieChartFragment">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="4">
+        android:layout_height="100dp"
+        >
 
 
+        <TextView
+            android:text="Pie Chart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="18dp"
+            android:id="@+id/piechart_title"
+            android:textSize="18sp"
+            android:textStyle="normal|bold" />
+
+        <Spinner
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner_piechart"
+            android:layout_width="200dp"
+            android:layout_below="@+id/piechart_title"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginTop="18dp" />
+
+        <TextView
+            android:text="choose period"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/spinner_piechart"
+            android:layout_alignLeft="@+id/spinner_piechart"
+            android:layout_alignStart="@+id/spinner_piechart"
+            android:layout_marginLeft="67dp"
+            android:layout_marginStart="67dp"
+            android:id="@+id/textView8" />
     </RelativeLayout>
 
 
-    <com.github.mikephil.charting.charts.PieChart
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
+        <com.github.mikephil.charting.charts.PieChart
+            android:layout_width="250dp"
+            android:layout_height="300dp"
+            android:id="@+id/piechart"
+            android:layout_margin="20dp"
+            android:layout_gravity="center"
+            >
 
-    </com.github.mikephil.charting.charts.PieChart>
+        </com.github.mikephil.charting.charts.PieChart>
 
-</LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+        </android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
+</ScrollView>

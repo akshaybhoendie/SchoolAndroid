@@ -5,11 +5,14 @@ import android.graphics.Color;
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ExpandableListView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
@@ -37,6 +40,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import sr.unasat.financialapp.R;
+import sr.unasat.financialapp.adapters.TransactionExpendableAdapter;
+import sr.unasat.financialapp.adapters.TransactionRecycledAdapter;
 import sr.unasat.financialapp.db.dao.Dao;
 import sr.unasat.financialapp.dto.Transaction;
 
@@ -82,12 +87,14 @@ public class BarChartFragment extends Fragment {
         return view;
     }
 
-    public void dailyExpenses(View view){
+    public void dailyExpenses(final View view){
 
+        view.findViewById(R.id.choose_year).setVisibility(View.GONE);
+        view.findViewById(R.id.year_spinner).setVisibility(View.GONE);
 
         GraphView graph = (GraphView) view.findViewById(R.id.graph);
         graph.removeAllSeries();
-        HashMap<String,List<Transaction>> days= new Dao(getContext()).getTransactionsLast7Days();
+        final HashMap<String,List<Transaction>> days= new Dao(getContext()).getTransactionsLast7Days();
         StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
         String[] dayArr=new String[7];
         List<String>daysList=new ArrayList<>();
@@ -155,7 +162,29 @@ public class BarChartFragment extends Fragment {
         series.setOnDataPointTapListener(new OnDataPointTapListener() {
             @Override
             public void onTap(Series series, DataPointInterface dataPoint) {
-                Toast.makeText(getContext(), "$"+String.valueOf(dataPoint.getY()), Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(getContext(), " $ " +String.valueOf(dataPoint.getY()), Toast.LENGTH_SHORT).show();
+
+                RecyclerView recyclerView =(RecyclerView)view.findViewById(R.id.bar_list);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                recyclerView.setHasFixedSize(true);
+                int choise=(int)Math.round(dataPoint.getX());
+
+                List<Integer> revertList=new ArrayList<Integer>();
+                for(int i =0;i<7;i++){
+                    revertList.add(i);
+                }
+                for (int i:revertList){
+                    if (i==choise){
+                        Collections.reverse(revertList);
+                        choise=revertList.get(i);
+                    }
+                }
+
+                TransactionRecycledAdapter adapter = new TransactionRecycledAdapter(days.get(String.valueOf(choise)),getContext());
+
+                recyclerView.setAdapter(adapter);
+
             }
         });
 
@@ -169,7 +198,8 @@ public class BarChartFragment extends Fragment {
     }
 
     public void dailyIncome(View view){
-
+        view.findViewById(R.id.choose_year).setVisibility(View.GONE);
+        view.findViewById(R.id.year_spinner).setVisibility(View.GONE);
         Toast.makeText(view.getContext(), "daily income", Toast.LENGTH_SHORT).show();
     }
 
