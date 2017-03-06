@@ -1,0 +1,91 @@
+package sr.unasat.financialapp.adapters;
+
+import android.content.Context;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import java.util.List;
+
+import sr.unasat.financialapp.R;
+import sr.unasat.financialapp.db.dao.Dao;
+import sr.unasat.financialapp.dto.Category;
+
+/**
+ * Created by Jair on 3/6/2017.
+ */
+
+public class CategoryRecyclerAdapterWithBar extends RecyclerView.Adapter<CategoryRecyclerAdapterWithBar.RecyclerViewHolder>  {
+    private List<Category> categories;
+    double totalValue;
+    Context context;
+    FragmentManager fragmentManager;
+    String period;
+
+    public CategoryRecyclerAdapterWithBar(List<Category> categories, double totalValue,String period, Context context, FragmentManager fragmentManager) {
+        this.categories = categories;
+        this.totalValue = totalValue;
+        this.context = context;
+        this.fragmentManager = fragmentManager;
+        this.period=period;
+    }
+
+    @Override
+    public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.card_category_piechart,parent,false);
+        return new RecyclerViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerViewHolder holder, int position) {
+
+        Dao dao=new Dao(context);
+        Category category = categories.get(position);
+        double value;
+        switch (period){
+            case "today":
+                 value = dao.getCategoryValuesToDay(category);
+
+                break;
+            case "this month":
+                value = dao.getAmountUsedByCategoryCurrentMonth(category);
+
+                break;
+            case "choose month":
+                value = dao.getCategoryValuesToDay(category);
+                break;
+            case "all past transactions":
+                value = dao.getCategoryValues(category);
+                break;
+            default:value=0;
+        }
+
+        int percentage = (int)Math.round((value/totalValue)*100);
+
+        holder.categorynameWithPercentage.setText(category.getName()+" ("+percentage+" % )");
+        holder.categoryUsed.setText(String.valueOf(value));
+        holder.categoryPercentageBar.setProgress(percentage);
+    }
+
+    @Override
+    public int getItemCount() {
+        return categories.size();
+    }
+
+    public static class RecyclerViewHolder extends RecyclerView.ViewHolder{
+
+        TextView categorynameWithPercentage, categoryUsed;
+        ProgressBar categoryPercentageBar;
+        public RecyclerViewHolder(View itemView) {
+            super(itemView);
+            categorynameWithPercentage=(TextView)itemView.findViewById(R.id.categoryname_with_percentage);
+            categoryUsed=(TextView)itemView.findViewById(R.id.spend_category_value);
+            categoryPercentageBar=(ProgressBar)itemView.findViewById(R.id.progressbar_category_percent);
+            categoryPercentageBar.setMax(100);
+        }
+    }
+}

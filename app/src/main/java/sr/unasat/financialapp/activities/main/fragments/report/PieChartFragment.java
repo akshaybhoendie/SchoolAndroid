@@ -4,9 +4,12 @@ package sr.unasat.financialapp.activities.main.fragments.report;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -21,29 +24,34 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import sr.unasat.financialapp.R;
+import sr.unasat.financialapp.adapters.CategoryRecyclerAdapterWithBar;
 import sr.unasat.financialapp.db.dao.Dao;
 import sr.unasat.financialapp.dto.Category;
-import sr.unasat.financialapp.dto.Transaction;
 
 public class PieChartFragment extends Fragment {
 
     public String bartype;
+    private String period="today";
+    PieChart pieChart;
+    View theView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.graph_piechart, container, false);
+        theView = inflater.inflate(R.layout.graph_piechart, container, false);
 
+        pieChart=(PieChart) theView.findViewById(R.id.piechart);
         String[] items = {"today","this month","choose month","all past transactions"};
         ArrayAdapter adapter= new ArrayAdapter(getContext(),R.layout.spinner_layout,R.id.spinner_item,items);
-        Spinner spinner= (Spinner)view.findViewById(R.id.spinner_piechart);
+        Spinner spinner= (Spinner) theView.findViewById(R.id.spinner_piechart);
         spinner.setAdapter(adapter);
 
-        PieChart pieChart=(PieChart)view.findViewById(R.id.piechart);
+
         pieChart.setUsePercentValues(true);
         pieChart.setHoleColor(Color.WHITE);
         pieChart.setHoleRadius(80f);
@@ -55,16 +63,46 @@ public class PieChartFragment extends Fragment {
         legend.setForm(Legend.LegendForm.SQUARE);
         legend.setPosition(Legend.LegendPosition.LEFT_OF_CHART);
 
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent,View view, int position, long id) {
+                switch (String.valueOf(parent.getItemAtPosition(position))) {
+
+                    case "today":
+                        period = "today";
+                        expenseByCategory(theView,pieChart);
+                        break;
+                    case "this month":
+                        period = "this month";
+                        expenseByCategory(theView,pieChart);
+                        break;
+                    case "choose month":
+                        period = "choose month";
+                        expenseByCategory(theView,pieChart);
+                        break;
+                    case "all past transactions":
+                        period = "all past transactions";
+                        expenseByCategory(theView,pieChart);
+                        break;
+                }
+                }
+
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         switch (bartype){
             case "expense by category":
-                expenseByCategory(view,pieChart);
+                expenseByCategory(theView,pieChart);
                 break;
             case "income by category":
-                incomeByCategory(view,pieChart);
+                incomeByCategory(theView,pieChart);
                 break;
         }
 
-        return view;
+        return theView;
     }
 
     private void incomeByCategory(View view,PieChart pieChart) {
@@ -73,30 +111,77 @@ public class PieChartFragment extends Fragment {
 
     private void expenseByCategory(View view,PieChart pieChart) {
 
-
         Dao dao=new Dao(getContext());
         ArrayList<PieEntry> yentries= new ArrayList<>();
         ArrayList<String> xEntries =new ArrayList<>();
         List<Category>categories=dao.getCategories();
         float[] data=new float[categories.size()];
         String[] xdata=new String[categories.size()];
+        List<Category>categoriesWithValues=new ArrayList<>();
         double totalValue=0;
-        for (int i = 0;i<categories.size();i++ ){
 
-            double value=dao.getCategoryValuesToDay(categories.get(i));
-            data[i]=(float)value;
-            xdata[i]= categories.get(i).getName();
-            totalValue=totalValue+value;
+        switch (period){
+            case "today":
+                for (int i = 0;i<categories.size();i++ ){
+
+                    double value=dao.getCategoryValuesToDay(categories.get(i));
+                    data[i]=(float)value;
+                    xdata[i]= categories.get(i).getName();
+                    totalValue=totalValue+value;
+                    if(value!=0){
+                        categoriesWithValues.add(categories.get(i));
+                    }
+                }
+
+
+                break;
+            case "this month":
+                for (int i = 0;i<categories.size();i++ ){
+
+                    double value=dao.getAmountUsedByCategoryCurrentMonth(categories.get(i));
+                    data[i]=(float)value;
+                    xdata[i]= categories.get(i).getName();
+                    totalValue=totalValue+value;
+                    if(value!=0){
+                        categoriesWithValues.add(categories.get(i));
+                    }
+                }
+
+                break;
+            case "choose month":
+                for (int i = 0;i<categories.size();i++ ){
+
+                    double value=dao.getCategoryValuesToDay(categories.get(i));
+                    data[i]=(float)value;
+                    xdata[i]= categories.get(i).getName();
+                    totalValue=totalValue+value;
+                    if(value!=0){
+                        categoriesWithValues.add(categories.get(i));
+                    }
+                }
+                Toast.makeText(getContext(), "showing you todays pie", Toast.LENGTH_SHORT).show();
+                break;
+            case "all past transactions":
+                for (int i = 0;i<categories.size();i++ ){
+
+                    double value=dao.getCategoryValues(categories.get(i));
+                    data[i]=(float)value;
+                    xdata[i]= categories.get(i).getName();
+                    totalValue=totalValue+value;
+                    if(value!=0){
+                        categoriesWithValues.add(categories.get(i));
+                    }
+                }
+
+                break;
         }
-
 
 
         for (int i=0;i<data.length;i++){
             yentries.add(new PieEntry(data[i],i));
         }
-        for (int i=0;i<xdata.length;i++){
-            xEntries.add(xdata[i]);
-        }
+        Collections.addAll(xEntries, xdata);
+
         ArrayList<Integer>colors=new ArrayList<>();
         colors.add(Color.BLUE);
         colors.add(Color.RED);
@@ -124,6 +209,15 @@ public class PieChartFragment extends Fragment {
         pieChart.setData(piedata);
         pieChart.setCenterText("total expenses:\n"+String.valueOf(totalValue));
         pieChart.invalidate();
+
+        RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.pie_listview);
+        CategoryRecyclerAdapterWithBar adapterWithBar=new CategoryRecyclerAdapterWithBar
+                (categoriesWithValues,totalValue,period,getContext(),getFragmentManager());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
+
+        recyclerView.setAdapter(adapterWithBar);
 
         pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override

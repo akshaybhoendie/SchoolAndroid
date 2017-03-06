@@ -35,7 +35,7 @@ public class ReportsFragment extends Fragment {
     }
 
 }
-/*  recyclerView = (RecyclerView)view.findViewById(R.id.rep_recycler);
+/*  recyclerView = (RecyclerView)theView.findViewById(R.id.rep_recycler);
         List<String>reports=new ArrayList<>();
         String[] reportsArr={"expense by category","daily expense","monthly expense"};
 

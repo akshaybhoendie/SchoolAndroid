@@ -760,6 +760,64 @@ public class Dao extends SQLiteOpenHelper {
 
     }
 
+    public double getAllCategoryValues(){
+
+        SQLiteDatabase db=getReadableDatabase();
+
+        Transaction transaction;
+
+        double used=0;
+
+        Cursor cursor = db.query(REP_TABLE,null,null,null,null,null,null);
+        if (cursor .moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndex(TRAN_ID));
+                transaction = getTransactionByID(id);
+
+                cursor.moveToNext();
+
+                used = used+transaction.getTran_amount();
+
+            }while (!cursor.isAfterLast());
+
+            cursor.close();
+        }
+
+        return used;
+
+    }
+
+    public double getCategoryValues(Category category){
+
+        SQLiteDatabase db=getReadableDatabase();
+
+        Transaction transaction;
+
+        double used=0;
+
+        Cursor cursor = db.query(
+                REP_TABLE,null,
+                CAT_ID+" = ?",
+                new String[] { "" + String.valueOf(category.getId())},null,null,null);
+        if (cursor .moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndex(TRAN_ID));
+                transaction = getTransactionByID(id);
+
+                cursor.moveToNext();
+
+                used = used+transaction.getTran_amount();
+
+            }while (!cursor.isAfterLast());
+
+            cursor.close();
+        }
+
+        return used;
+
+    }
+
+
     public List<String> getTransactionYears(){
         SQLiteDatabase db=getReadableDatabase();
         Cursor cursor = null;
