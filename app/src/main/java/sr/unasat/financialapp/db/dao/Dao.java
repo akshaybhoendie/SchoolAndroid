@@ -182,6 +182,8 @@ public class Dao extends SQLiteOpenHelper {
         return user;
     }
 
+
+
     private void defaultCategories(SQLiteDatabase db,String name, String descr, double budget){
 
         ContentValues contentValues = new ContentValues();
@@ -331,11 +333,14 @@ public class Dao extends SQLiteOpenHelper {
 
     }
 
+
+
     public boolean insertTransaction(ContentValues contentValues){
 
         SQLiteDatabase db = getWritableDatabase();
 
         //String date = String.valueOf(contentValues.get(DATE));
+
 
         if (db.insert(TRAN_TABLE, null, contentValues)>0){
 
@@ -486,6 +491,8 @@ public class Dao extends SQLiteOpenHelper {
         return list;
     }
 
+
+
     private boolean insertReport(ContentValues contentValues){
 
         return getWritableDatabase().insert(REP_TABLE, null, contentValues)>0;
@@ -495,6 +502,8 @@ public class Dao extends SQLiteOpenHelper {
         return getWritableDatabase().update(REP_TABLE,contentValues,
                 TRAN_ID+" = ?", new String[] { "" + id })>0;
     }
+
+
 
     public List<String> getDays(int month,int year){
         SQLiteDatabase db = getReadableDatabase();
@@ -544,6 +553,8 @@ public class Dao extends SQLiteOpenHelper {
         return days;
     }
 
+
+
     private boolean reportTrigger(Transaction transaction){
 
         ContentValues contentValues=new ContentValues();
@@ -579,13 +590,16 @@ public class Dao extends SQLiteOpenHelper {
     private boolean balanceTrigger(Transaction transaction){
 
         double amount = transaction.getTran_amount();
+        if (transaction.getCategory().getId()!=2){
+            amount=-1*amount;
+        }
         User user = transaction.getUser();
 
         double transactionsValue = user.getTransactions();
         double opening = user.getOpening();
 
         double newValue = transactionsValue+amount;
-        double closing = opening-newValue;
+        double closing = opening+newValue;
 
         ContentValues contentValues =new ContentValues();
 
@@ -603,12 +617,15 @@ public class Dao extends SQLiteOpenHelper {
         double oldAmount = transactionold.getTran_amount();
         double amount = transaction.getTran_amount();
         User user = transaction.getUser();
+        if (transaction.getCategory().getId()!=2){
+            amount=-1*amount;
+        }
 
         double transactionsValue = user.getTransactions();
         double opening = user.getOpening();
 
         double newValue = transactionsValue-oldAmount+amount;
-        double closing = opening-newValue;
+        double closing = opening+newValue;
 
         ContentValues contentValues =new ContentValues();
 
@@ -620,6 +637,8 @@ public class Dao extends SQLiteOpenHelper {
 
         return db.update(USER_TABLE, contentValues, USER_ID+ " = " + user.getId(), null)>0;
     }
+
+
 
     public HashMap<String,List<Transaction>> getTransactionsLast7Days(){
 
@@ -748,6 +767,8 @@ public class Dao extends SQLiteOpenHelper {
 
         return list;
     }
+
+
 
     private void deleteRep(int transactionId){
         SQLiteDatabase db=getWritableDatabase();

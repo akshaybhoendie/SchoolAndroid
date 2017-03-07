@@ -78,7 +78,7 @@ public class BarChartFragment extends Fragment {
                 dailyIncome(view);
                 break;
             case "monthly income":
-                monthlyIncome(view);
+                monthlyIncomeChoise(view);
                 break;
             default:
                 break;
@@ -113,8 +113,142 @@ public class BarChartFragment extends Fragment {
 
             dayArr[i] = transaction.getTran_date();
             double dayTotalAmount=0;
+
+
             for (Transaction transaction1: days.get(daysList.get(i))){
-                dayTotalAmount=dayTotalAmount+transaction1.getTran_amount();
+                if (transaction1.getCategory()!=null) {
+                    if (transaction1.getCategory().getId() != 2) {
+                        dayTotalAmount = dayTotalAmount + transaction1.getTran_amount();
+                    }
+                }else{
+                    dayTotalAmount = dayTotalAmount + transaction1.getTran_amount();
+                }
+
+        }
+            dayAmount[i] = dayTotalAmount;
+
+        }
+
+        staticLabelsFormatter.setHorizontalLabels(dayArr);
+
+        BarGraphSeries<DataPoint> series = new BarGraphSeries<>(new DataPoint[]{
+
+                new DataPoint(0, dayAmount[0]),
+                new DataPoint(1, dayAmount[1]),
+                new DataPoint(2, dayAmount[2]),
+                new DataPoint(3, dayAmount[3]),
+                new DataPoint(4, dayAmount[4]),
+                new DataPoint(5, dayAmount[5]),
+                new DataPoint(6, dayAmount[6]),
+
+        });
+        graph.addSeries(series);
+        series.setDrawValuesOnTop(true);
+        series.setValuesOnTopColor(Color.BLACK);
+
+        graph.getGridLabelRenderer().setGridStyle(GridLabelRenderer.GridStyle.NONE);// It will remove the background grids
+
+        graph.getGridLabelRenderer().setHorizontalLabelsVisible(true);// remove horizontal x labels and line
+        graph.getGridLabelRenderer().setVerticalLabelsVisible(false);
+
+// remove vertical labels and lines
+
+
+
+        series.setValueDependentColor(new ValueDependentColor<DataPoint>() {
+            @Override
+            public int get(DataPoint data) {
+                if (data.getY()>100){
+                    return Color.RED;
+                }else if(data.getY()>50){
+                    return Color.BLUE;
+                }else{
+                    return Color.GREEN;
+                }
+            }
+        });
+
+        series.setOnDataPointTapListener(new OnDataPointTapListener() {
+            @Override
+            public void onTap(Series series, DataPointInterface dataPoint) {
+
+                Toast.makeText(getContext(), " $ " +String.valueOf(dataPoint.getY()), Toast.LENGTH_SHORT).show();
+
+                RecyclerView recyclerView =(RecyclerView)view.findViewById(R.id.bar_list);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                recyclerView.setHasFixedSize(true);
+                int choise=(int)Math.round(dataPoint.getX());
+
+                List<Integer> revertList=new ArrayList<Integer>();
+                for(int i =0;i<7;i++){
+                    revertList.add(i);
+                }
+                for (int i:revertList){
+                    if (i==choise){
+                        Collections.reverse(revertList);
+                        choise=revertList.get(i);
+                    }
+                }
+                List<Transaction>transactions=days.get(String.valueOf(choise));
+                for (int i =0;i<transactions.size();i++){
+                    if (transactions.get(i).getCategory().getId()==2){
+                        transactions.remove(i);
+                        i=0;
+                    }
+                }
+
+                TransactionRecycledAdapter adapter = new TransactionRecycledAdapter(transactions,getContext());
+
+                recyclerView.setAdapter(adapter);
+
+            }
+        });
+
+        series.setSpacing(20);
+        graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+
+        view.findViewById(R.id.period_choise).setVisibility(View.GONE);
+        view.findViewById(R.id.period_spinner).setVisibility(View.GONE) ;
+
+
+    }
+
+    public void dailyIncome(final View view){
+        view.findViewById(R.id.choose_year).setVisibility(View.GONE);
+        view.findViewById(R.id.year_spinner).setVisibility(View.GONE);
+
+        GraphView graph = (GraphView) view.findViewById(R.id.graph);
+        graph.removeAllSeries();
+        final HashMap<String,List<Transaction>> days= new Dao(getContext()).getTransactionsLast7Days();
+        StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
+        String[] dayArr=new String[7];
+        List<String>daysList=new ArrayList<>();
+        double[] dayAmount=new double[7];
+
+        for (String s:days.keySet()){
+            daysList.add(s);
+        }
+
+        Collections.sort(daysList);
+        Collections.reverse(daysList);
+
+
+        for(int i = 0; i <7 ; i++){
+            Transaction transaction=days.get(daysList.get(i)).get(0);
+
+            dayArr[i] = transaction.getTran_date();
+            double dayTotalAmount=0;
+
+
+            for (Transaction transaction1: days.get(daysList.get(i))){
+                if (transaction1.getCategory()!=null) {
+                    if (transaction1.getCategory().getId() == 2) {
+                        dayTotalAmount = dayTotalAmount + transaction1.getTran_amount();
+                    }
+                }else{
+                    dayTotalAmount = dayTotalAmount + transaction1.getTran_amount();
+                }
+
             }
             dayAmount[i] = dayTotalAmount;
 
@@ -180,8 +314,15 @@ public class BarChartFragment extends Fragment {
                         choise=revertList.get(i);
                     }
                 }
+                List<Transaction>transactions=new ArrayList<Transaction>();
+                for (int i =0;i<days.get(String.valueOf(choise)).size();i++){
+                    if (days.get(String.valueOf(choise)).get(i).getCategory().getId()==2){
+                        transactions.add(days.get(String.valueOf(choise)).get(i));
 
-                TransactionRecycledAdapter adapter = new TransactionRecycledAdapter(days.get(String.valueOf(choise)),getContext());
+                    }
+                }
+
+                TransactionRecycledAdapter adapter = new TransactionRecycledAdapter(transactions,getContext());
 
                 recyclerView.setAdapter(adapter);
 
@@ -195,12 +336,6 @@ public class BarChartFragment extends Fragment {
         view.findViewById(R.id.period_spinner).setVisibility(View.GONE) ;
 
 
-    }
-
-    public void dailyIncome(View view){
-        view.findViewById(R.id.choose_year).setVisibility(View.GONE);
-        view.findViewById(R.id.year_spinner).setVisibility(View.GONE);
-        Toast.makeText(view.getContext(), "daily income", Toast.LENGTH_SHORT).show();
     }
 
     private void monthlyExpenses(int range,int year) {
@@ -253,7 +388,12 @@ public class BarChartFragment extends Fragment {
             }
             double monthTotalAmount=0;
             for (Transaction transaction1: months.get(monthList.get(i))){
-                monthTotalAmount=monthTotalAmount+transaction1.getTran_amount();
+                if (transaction1.getCategory()!=null){
+                    if (transaction1.getCategory().getId()!=2){
+                        monthTotalAmount=monthTotalAmount+transaction1.getTran_amount();
+                    }
+                }
+
             }
             if (i>=range&&range==6) {
                 monthAmount[a] = monthTotalAmount;
@@ -261,6 +401,7 @@ public class BarChartFragment extends Fragment {
             }else if (range!=6){
                 monthAmount[i] = monthTotalAmount;
             }
+
         }
 
         staticLabelsFormatter.setHorizontalLabels(monthArr);
@@ -312,9 +453,120 @@ public class BarChartFragment extends Fragment {
 
     }
 
-    private void monthlyIncome(View view) {
+    private void monthlyIncome(int range,int year) {
 
-        Toast.makeText(view.getContext(), "monthly income", Toast.LENGTH_SHORT).show();
+        if (year==0){
+            view.findViewById(R.id.choose_year).setVisibility(View.GONE);
+            view.findViewById(R.id.year_spinner).setVisibility(View.GONE);
+            year=convertDate(Calendar.getInstance().getTime())[0];
+        }
+        if (year==-1){
+            view.findViewById(R.id.choose_year).setVisibility(View.GONE);
+            view.findViewById(R.id.year_spinner).setVisibility(View.GONE);
+            year=convertDate(Calendar.getInstance().getTime())[0]-1;
+        }
+
+
+        GraphView graph = (GraphView) view.findViewById(R.id.graph);
+        graph.removeAllSeries();
+
+        StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
+
+        Toast.makeText(view.getContext(), "monthly expense", Toast.LENGTH_SHORT).show();
+        Dao dao=new Dao(getContext());
+
+        String[] monthArr =new String[range];
+        double[] monthAmount = new double[range];
+        HashMap<String,List<Transaction>>months=dao.getTransactions12Months(year);
+        List<String>monthList=new ArrayList<>();
+        List<Integer>monthListInt=new ArrayList<>();
+
+        for (String s:months.keySet()){
+            monthListInt.add(Integer.valueOf(s));
+        }
+
+        Collections.sort(monthListInt);
+        Collections.reverse(monthListInt);
+
+        for (int i:monthListInt){
+            monthList.add(String.valueOf(i));
+        }
+
+        int a=0;
+        for (int i =0;i<12;i++){
+            Transaction transaction = months.get(monthList.get(i)).get(0);
+
+
+                    if (i>=range&&range==6) {
+                        monthArr[a] = transaction.getTran_date();
+                    }else if(range!=6){
+                        monthArr[i] = transaction.getTran_date();
+                    }
+                    double monthTotalAmount=0;
+                    for (Transaction transaction1: months.get(monthList.get(i))){
+                        if (transaction1.getCategory()!=null){
+                            if (transaction1.getCategory().getId()==2){
+                                monthTotalAmount=monthTotalAmount+transaction1.getTran_amount();
+                            }
+                        }
+
+                    }
+                    if (i>=range&&range==6) {
+                        monthAmount[a] = monthTotalAmount;
+                        a++;
+                    }else if (range!=6){
+                        monthAmount[i] = monthTotalAmount;
+                    }
+                }
+
+
+        staticLabelsFormatter.setHorizontalLabels(monthArr);
+
+        DataPoint[] dataPoints=new DataPoint[range];
+
+        for (int i=0;i<range;i++){
+
+            dataPoints[i]=new DataPoint(i,monthAmount[i]);
+
+        }
+
+        BarGraphSeries<DataPoint> series = new BarGraphSeries<>(dataPoints);
+        graph.addSeries(series);
+        series.setDrawValuesOnTop(true);
+        series.setValuesOnTopColor(Color.BLACK);
+
+        graph.getGridLabelRenderer().setGridStyle(GridLabelRenderer.GridStyle.NONE);// It will remove the background grids
+
+        graph.getGridLabelRenderer().setHorizontalLabelsVisible(true);// remove horizontal x labels and line
+        graph.getGridLabelRenderer().setVerticalLabelsVisible(false);
+
+// remove vertical labels and lines
+
+
+
+        series.setValueDependentColor(new ValueDependentColor<DataPoint>() {
+            @Override
+            public int get(DataPoint data) {
+                if (data.getY()>100){
+                    return Color.RED;
+                }else if(data.getY()>50){
+                    return Color.BLUE;
+                }else{
+                    return Color.GREEN;
+                }
+            }
+        });
+
+        series.setOnDataPointTapListener(new OnDataPointTapListener() {
+            @Override
+            public void onTap(Series series, DataPointInterface dataPoint) {
+                Toast.makeText(getContext(), "$"+String.valueOf(dataPoint.getY()), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        series.setSpacing(40);
+        graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+
     }
 
     private void monthlyExpensesChoise(View view){
@@ -361,6 +613,51 @@ public class BarChartFragment extends Fragment {
         });
     }
 
+    private void monthlyIncomeChoise(View view){
+
+        Spinner spinner=(Spinner)view.findViewById(R.id.period_spinner);
+
+
+        final String[] items = {spinnerItem1,spinnerItem2,spinnerItem3,spinnerItem4};
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getActivity(),R.layout.spinner_layout,R.id.spinner_item, items);
+
+        spinner.setAdapter(spinnerAdapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                switch (String.valueOf(parent.getItemAtPosition(position))){
+
+                    case spinnerItem1:
+
+                        monthlyIncome(6,0);
+                        Toast.makeText(getContext(), spinnerItem1, Toast.LENGTH_SHORT).show();
+                        break;
+                    case spinnerItem2:
+
+                        monthlyIncome(12,0);
+                        break;
+                    case spinnerItem3:
+                        monthlyIncome(12,-1);
+                        break;
+                    case spinnerItem4:
+                        monthlyIncomeByYear();
+                        break;
+
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+
+        });
+    }
+
+
     private void monthlyExpenseByYear(){
         int year=convertDate(Calendar.getInstance().getTime())[0];
         TextView chooseYear=(TextView)view.findViewById(R.id.choose_year);
@@ -382,6 +679,38 @@ public class BarChartFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 monthlyExpenses(12,Integer.valueOf(String.valueOf(parent.getItemAtPosition(position))));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+    }
+
+    private void monthlyIncomeByYear(){
+        int year=convertDate(Calendar.getInstance().getTime())[0];
+        TextView chooseYear=(TextView)view.findViewById(R.id.choose_year);
+        chooseYear.setVisibility(View.VISIBLE);
+
+        Spinner spinner=(Spinner)view.findViewById(R.id.year_spinner);
+        String[] years= new String[5];
+
+        for (int i = 0; i<5;i++){
+
+            years[i] = String.valueOf(convertDate(Calendar.getInstance().getTime())[0]-i);
+
+        }
+        ArrayAdapter<String> adapter=new ArrayAdapter<String>
+                (getContext(),R.layout.spinner_layout,R.id.spinner_item,years);
+        spinner.setAdapter(adapter);
+        spinner.setVisibility(View.VISIBLE);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                monthlyIncome(12,Integer.valueOf(String.valueOf(parent.getItemAtPosition(position))));
             }
 
             @Override

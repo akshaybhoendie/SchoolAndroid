@@ -70,19 +70,38 @@ public class PieChartFragment extends Fragment {
 
                     case "today":
                         period = "today";
-                        expenseByCategory(theView,pieChart);
+                        if (bartype.equals("expense by category")) {
+                            expenseByCategory(theView, pieChart);
+                        }else {
+                            incomeByCategory(theView,pieChart);
+                        }
                         break;
                     case "this month":
                         period = "this month";
-                        expenseByCategory(theView,pieChart);
+
+                        if (bartype.equals("expense by category")) {
+                            expenseByCategory(theView, pieChart);
+                        }else {
+                            incomeByCategory(theView,pieChart);
+                        }
                         break;
                     case "choose month":
                         period = "choose month";
-                        expenseByCategory(theView,pieChart);
+
+                        if (bartype.equals("expense by category")) {
+                            expenseByCategory(theView, pieChart);
+                        }else {
+                            incomeByCategory(theView,pieChart);
+                        }
                         break;
                     case "all past transactions":
                         period = "all past transactions";
-                        expenseByCategory(theView,pieChart);
+
+                        if (bartype.equals("expense by category")) {
+                            expenseByCategory(theView, pieChart);
+                        }else {
+                            incomeByCategory(theView,pieChart);
+                        }
                         break;
                 }
                 }
@@ -106,7 +125,121 @@ public class PieChartFragment extends Fragment {
     }
 
     private void incomeByCategory(View view,PieChart pieChart) {
-        Toast.makeText(view.getContext(), "income cat", Toast.LENGTH_SHORT).show();
+        Dao dao=new Dao(getContext());
+        ArrayList<PieEntry> yentries= new ArrayList<>();
+        ArrayList<String> xEntries =new ArrayList<>();
+        List<Category>categories=dao.getCategories();
+        for (int i=0;i<categories.size();i++){
+            if (categories.get(i).getId()!=2){
+                categories.remove(i);
+                i=0;
+            }
+        }
+        float[] data=new float[categories.size()];
+        String[] xdata=new String[categories.size()];
+        List<Category>categoriesWithValues=new ArrayList<>();
+        double totalValue=0;
+
+        switch (period){
+            case "today":
+                for (int i = 0;i<categories.size();i++ ){
+
+                    double value=dao.getCategoryValuesToDay(categories.get(i));
+                    data[i]=(float)value;
+                    xdata[i]= categories.get(i).getName();
+                    totalValue=totalValue+value;
+                    if(value!=0){
+                        categoriesWithValues.add(categories.get(i));
+                    }
+                }
+
+
+                break;
+            case "this month":
+                for (int i = 0;i<categories.size();i++ ){
+
+                    double value=dao.getAmountUsedByCategoryCurrentMonth(categories.get(i));
+                    data[i]=(float)value;
+                    xdata[i]= categories.get(i).getName();
+                    totalValue=totalValue+value;
+                    if(value!=0){
+                        categoriesWithValues.add(categories.get(i));
+                    }
+                }
+
+                break;
+            case "choose month":
+                for (int i = 0;i<categories.size();i++ ){
+
+                    double value=dao.getCategoryValuesToDay(categories.get(i));
+                    data[i]=(float)value;
+                    xdata[i]= categories.get(i).getName();
+                    totalValue=totalValue+value;
+                    if(value!=0){
+                        categoriesWithValues.add(categories.get(i));
+                    }
+                }
+                Toast.makeText(getContext(), "showing you todays pie", Toast.LENGTH_SHORT).show();
+                break;
+            case "all past transactions":
+                for (int i = 0;i<categories.size();i++ ){
+
+                    double value=dao.getCategoryValues(categories.get(i));
+                    data[i]=(float)value;
+                    xdata[i]= categories.get(i).getName();
+                    totalValue=totalValue+value;
+                    if(value!=0){
+                        categoriesWithValues.add(categories.get(i));
+                    }
+                }
+
+                break;
+        }
+
+
+        for (int i=0;i<data.length;i++){
+            yentries.add(new PieEntry(data[i],i));
+        }
+        Collections.addAll(xEntries, xdata);
+
+        ArrayList<Integer>colors=new ArrayList<>();
+        colors.add(Color.GREEN);
+
+
+        PieDataSet set=new PieDataSet(yentries,"first pie");
+
+        set.setColors(colors);
+        set.setSliceSpace(4f);
+        set.setValueTextSize(0);
+
+        PieData piedata = new PieData(set);
+        pieChart.setData(piedata);
+        pieChart.setCenterText("total expenses:\n"+String.valueOf(totalValue));
+        pieChart.invalidate();
+
+        RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.pie_listview);
+        CategoryRecyclerAdapterWithBar adapterWithBar=new CategoryRecyclerAdapterWithBar
+                (categoriesWithValues,totalValue,period,getContext(),getFragmentManager());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
+
+        recyclerView.setAdapter(adapterWithBar);
+
+        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                //Toast.makeText(getContext(), String.valueOf(e.getX()), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
+
+
+    Toast.makeText(view.getContext(), "income cat", Toast.LENGTH_SHORT).show();
     }
 
     private void expenseByCategory(View view,PieChart pieChart) {
@@ -115,6 +248,12 @@ public class PieChartFragment extends Fragment {
         ArrayList<PieEntry> yentries= new ArrayList<>();
         ArrayList<String> xEntries =new ArrayList<>();
         List<Category>categories=dao.getCategories();
+        for (int i=0;i<categories.size();i++){
+            if (categories.get(i).getId()==2){
+                categories.remove(i);
+                i=0;
+            }
+        }
         float[] data=new float[categories.size()];
         String[] xdata=new String[categories.size()];
         List<Category>categoriesWithValues=new ArrayList<>();
