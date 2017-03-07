@@ -8,10 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
 import sr.unasat.financialapp.R;
+import sr.unasat.financialapp.activities.main.fragments.BalanceFragment;
 import sr.unasat.financialapp.db.dao.Dao;
 import sr.unasat.financialapp.dto.Category;
 
@@ -37,7 +39,7 @@ public class CategoryRecyclerAdapterWithBar extends RecyclerView.Adapter<Categor
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.card_category_piechart,parent,false);
-        return new RecyclerViewHolder(view);
+        return new RecyclerViewHolder(view,context,fragmentManager);
     }
 
     @Override
@@ -69,6 +71,7 @@ public class CategoryRecyclerAdapterWithBar extends RecyclerView.Adapter<Categor
         holder.categorynameWithPercentage.setText(category.getName()+" ("+percentage+" % )");
         holder.categoryUsed.setText(String.valueOf(value));
         holder.categoryPercentageBar.setProgress(percentage);
+        holder.category=category;
     }
 
     @Override
@@ -76,16 +79,35 @@ public class CategoryRecyclerAdapterWithBar extends RecyclerView.Adapter<Categor
         return categories.size();
     }
 
-    public static class RecyclerViewHolder extends RecyclerView.ViewHolder{
+    public static class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        TextView categorynameWithPercentage, categoryUsed;
-        ProgressBar categoryPercentageBar;
-        public RecyclerViewHolder(View itemView) {
+        TextView categorynameWithPercentage, categoryUsed;Category category;
+        ProgressBar categoryPercentageBar;Context context1;FragmentManager fragmentManagerThis;
+        public RecyclerViewHolder(View itemView,Context context,FragmentManager fragmentManager) {
             super(itemView);
+            this.context1=context;
+            this.fragmentManagerThis=fragmentManager;
             categorynameWithPercentage=(TextView)itemView.findViewById(R.id.categoryname_with_percentage);
             categoryUsed=(TextView)itemView.findViewById(R.id.spend_category_value);
             categoryPercentageBar=(ProgressBar)itemView.findViewById(R.id.progressbar_category_percent);
             categoryPercentageBar.setMax(100);
+            categoryPercentageBar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    BalanceFragment fragment=new BalanceFragment();
+                    fragment.category=category;
+                    fragmentManagerThis.beginTransaction().replace(R.id.main_container, fragment).addToBackStack("see trans by cat").commit();
+
+                    Toast.makeText(context1, "see transactions by category", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+        @Override
+        public void onClick(View v) {
+
+
         }
     }
 }

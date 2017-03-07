@@ -458,6 +458,34 @@ public class Dao extends SQLiteOpenHelper {
         return list;
     }
 
+    public List<Transaction> getTransactionsByDayAndCategory(int day,int month, int year,Category category){
+        List<Transaction> list = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Transaction transaction;
+
+        Cursor cursor = db.query(
+                REP_TABLE,null,
+                DAY+" = ? and "+MONTH+" = ? and "+YEAR+" = ? and "+CAT_ID+" = ? ",
+                new String[] { "" + String.valueOf(day),String.valueOf(month),String.valueOf(year),String.valueOf(category.getId())}
+                ,null,null,null);
+        if (cursor .moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndex(TRAN_ID));
+                transaction = getTransactionByID(id);
+
+                cursor.moveToNext();
+
+                if (transaction!=null) {
+                    list.add(transaction);
+                }
+
+            }while (!cursor.isAfterLast());
+
+        }
+        cursor.close();
+        return list;
+    }
+
     private boolean insertReport(ContentValues contentValues){
 
         return getWritableDatabase().insert(REP_TABLE, null, contentValues)>0;
@@ -474,6 +502,30 @@ public class Dao extends SQLiteOpenHelper {
         Cursor cursor = db.query(
                 REP_TABLE,new String[]{DAY},
                 MONTH+" = ? and "+YEAR+" = ?", new String[] { "" + String.valueOf(month),String.valueOf(year)},null,null,null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                String day=String.valueOf(cursor.getInt(cursor.getColumnIndex(DAY)));
+
+                if (!days.contains(day+" "+int_to_month(month)+" "+year)){
+                    String date = day+" "+int_to_month(month)+" "+year;
+                    days.add(date);
+                }
+
+                cursor.moveToNext();
+
+            }while(!cursor.isAfterLast());
+        }
+        cursor.close();
+        return days;
+    }
+
+    public List<String> getDaysByCategory(int month,int year,Category category){
+        SQLiteDatabase db = getReadableDatabase();
+        List<String> days=new ArrayList<>();
+        Cursor cursor = db.query(
+                REP_TABLE,new String[]{DAY},
+                MONTH+" = ? and "+YEAR+" = ? and "+CAT_ID+" = ? ", new String[] { "" + String.valueOf(month),String.valueOf(year),String.valueOf(category.getId())},null,null,null);
 
         if (cursor.moveToFirst()) {
             do {
@@ -817,6 +869,80 @@ public class Dao extends SQLiteOpenHelper {
 
     }
 
+    public List<Transaction>getTransactionsByCategory(Category category){
+        SQLiteDatabase db=getReadableDatabase();
+
+        Transaction transaction;
+        List<Transaction>transactions=new ArrayList<>();
+
+
+        Cursor cursor = db.query(
+                REP_TABLE,null,
+                CAT_ID+" = ?",
+                new String[] { "" + String.valueOf(category.getId())},null,null,null);
+        if (cursor .moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndex(TRAN_ID));
+                transaction = getTransactionByID(id);
+
+                cursor.moveToNext();
+                transactions.add(transaction);
+
+            }while (!cursor.isAfterLast());
+
+            cursor.close();
+        }
+
+        return transactions;
+    }
+
+    public List<Integer> getTransactionMonthsByYear(int year){
+        SQLiteDatabase db = getReadableDatabase();
+        List<Integer> months=new ArrayList<>();
+        Cursor cursor = db.query(
+                REP_TABLE,new String[]{MONTH},
+                YEAR+" = ?", new String[] { "" +year},null,null,null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                int month=cursor.getInt(cursor.getColumnIndex(MONTH));
+
+                if (!months.contains(month)){
+                    months.add(month);
+                }
+
+                cursor.moveToNext();
+
+            }while(!cursor.isAfterLast());
+        }
+        cursor.close();
+        return months;
+    }
+
+    public List<Integer> getTransactionDaysByMonth(int year,int month){
+        SQLiteDatabase db = getReadableDatabase();
+        List<Integer> days=new ArrayList<>();
+        Cursor cursor = db.query(
+                REP_TABLE,new String[]{DAY},
+                YEAR+" = ? and "+MONTH+" = ? ", new String[] { "" +year,String.valueOf(month),},null,null,null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                int day=cursor.getInt(cursor.getColumnIndex(DAY));
+
+                if (!days.contains(day)){
+                    days.add(day);
+                }
+
+                cursor.moveToNext();
+
+            }while(!cursor.isAfterLast());
+        }
+        cursor.close();
+        return days;
+    }
+
+
 
     public List<String> getTransactionYears(){
         SQLiteDatabase db=getReadableDatabase();
@@ -841,28 +967,6 @@ public class Dao extends SQLiteOpenHelper {
         return list;
     }
 
-    public List<String> getTransactionMonthsByYear(int year){
-        SQLiteDatabase db = getReadableDatabase();
-        List<String> months=new ArrayList<>();
-        Cursor cursor = db.query(
-                REP_TABLE,new String[]{MONTH},
-                YEAR+" = ?", new String[] { "" +year},null,null,null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                String month=String.valueOf(cursor.getInt(cursor.getColumnIndex(MONTH)));
-
-                if (!months.contains(month)){
-                    months.add(month);
-                }
-
-                cursor.moveToNext();
-
-            }while(!cursor.isAfterLast());
-        }
-        cursor.close();
-        return months;
-    }
 
     public List<String> getTransactionMonthsByYearInt(int year){
         SQLiteDatabase db = getReadableDatabase();
@@ -910,6 +1014,24 @@ public class Dao extends SQLiteOpenHelper {
         }
 
         return transaction;
+    }
+
+    public List<Integer>getYearsWithTransactions(){
+        SQLiteDatabase db = getReadableDatabase();
+        List<Integer> years=new ArrayList<>();
+        Cursor cursor = db.query(REP_TABLE,new String[]{YEAR},null,null,null,null,null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                int year=cursor.getInt(cursor.getColumnIndex(YEAR));
+
+                years.add(year);
+                cursor.moveToNext();
+
+            }while(!cursor.isAfterLast());
+        }cursor.close();
+
+        return years;
     }
 
     public List<Transaction> getTransactions(){

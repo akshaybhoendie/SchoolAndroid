@@ -24,6 +24,7 @@ import sr.unasat.financialapp.activities.main.fragments.dialogs.AddTransactionDi
 import sr.unasat.financialapp.activities.main.fragments.dialogs.EditOrDeleteFragment;
 import sr.unasat.financialapp.adapters.TransactionExpendableAdapter;
 import sr.unasat.financialapp.db.dao.Dao;
+import sr.unasat.financialapp.dto.Category;
 import sr.unasat.financialapp.dto.Transaction;
 import sr.unasat.financialapp.dto.User;
 
@@ -34,7 +35,8 @@ import static sr.unasat.financialapp.util.DateUtil.convertDate;
 public class BalanceFragment extends Fragment {
 
     Date date ;
-
+    public Category category;
+    Spinner spinner;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,7 +50,7 @@ public class BalanceFragment extends Fragment {
         final String spinnerItem3 ="choose month";
         final String spinnerItem4 ="choose date range";
 
-        Spinner spinner = (Spinner)view.findViewById(R.id.balance_month_spinner);
+        spinner = (Spinner)view.findViewById(R.id.balance_month_spinner);
         final String[] items = {spinnerItem1,spinnerItem2,spinnerItem3};
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getActivity(),R.layout.spinner_layout,R.id.spinner_item, items);
 
@@ -124,7 +126,14 @@ public class BalanceFragment extends Fragment {
             }
 
         year = dateArr[0];
-            List<String> days = dao.getDays(month, year);
+        List<String> days;
+        if (category!=null){
+            days = dao.getDaysByCategory(month, year,category);
+            spinner.setVisibility(View.GONE);
+
+        }else{
+            days = dao.getDays(month, year);
+        }
 
 
             //day+" "+int_to_month(month)+" "+year;
@@ -140,7 +149,12 @@ public class BalanceFragment extends Fragment {
                 String[] array = theDay.split("\\s");
                 int day = Integer.valueOf(array[0]);
                 tranNames = new ArrayList<>();
-                List<Transaction> list = new Dao(getContext()).getTransactionsByDay(day, month, year);
+                List<Transaction>list;
+                if (category!=null){
+                    list=dao.getTransactionsByDayAndCategory(day, month, year,category);
+                }else {
+                    list = dao.getTransactionsByDay(day, month, year);
+                }
                 for (Transaction transaction : list) {
 
                         tranNames.add(String.valueOf(transaction.getTran_id()));

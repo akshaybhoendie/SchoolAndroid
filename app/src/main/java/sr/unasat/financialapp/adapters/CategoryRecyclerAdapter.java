@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import java.util.List;
 import sr.unasat.financialapp.R;
+import sr.unasat.financialapp.activities.main.fragments.BalanceFragment;
+import sr.unasat.financialapp.activities.main.fragments.CategoriesFragment;
 import sr.unasat.financialapp.activities.main.fragments.dialogs.AddCategoryDialog;
 import sr.unasat.financialapp.activities.main.fragments.dialogs.ConfirmFragment;
 import sr.unasat.financialapp.db.dao.Dao;
@@ -68,10 +70,12 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
          TextView category;
          TextView category_id;
          Context context;
+         FragmentManager fragmentManagerthis;
 
 
-        public RecyclerViewHolder(View itemView,Context context, final FragmentManager fragmentManager) {
+        public RecyclerViewHolder(View itemView, Context context, FragmentManager fragmentManager) {
             super(itemView);
+            this.fragmentManagerthis=fragmentManager;
             this.context=context;
             itemView.setOnClickListener(this);
             category= (TextView)itemView.findViewById(R.id.budget_category_name_cat);
@@ -87,7 +91,7 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
 
                     addCategoryDialog.categoryToEditID = Integer.valueOf(String.valueOf(category_id.getText()));
                     confirmFragment = new ConfirmFragment();
-                    confirmFragment.show(fragmentManager,"confirm");
+                    confirmFragment.show(fragmentManagerthis,"confirm");
                     fragmentAction = "category";
 
                 }
@@ -99,7 +103,7 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
                 public void onClick(View v) {
                     addCategoryDialog=new AddCategoryDialog();
                     addCategoryDialog.categoryToEditID = Integer.valueOf(String.valueOf(category_id.getText()));
-                    addCategoryDialog.show(fragmentManager,"add");
+                    addCategoryDialog.show(fragmentManagerthis,"add");
 
 
 
@@ -113,6 +117,10 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
          @Override
          public void onClick(View v) {
 
+             Dao dao=new Dao(context);
+             BalanceFragment fragment=new BalanceFragment();
+             fragment.category=dao.getCategoryByName(String.valueOf(category.getText()));
+             fragmentManagerthis.beginTransaction().replace(R.id.main_container, fragment).addToBackStack("see trans by cat").commit();
 
              Toast.makeText(context, "see transactions by category", Toast.LENGTH_SHORT).show();
 
