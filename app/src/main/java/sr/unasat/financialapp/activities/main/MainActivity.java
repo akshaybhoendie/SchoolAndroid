@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.NumberPicker;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -26,7 +27,8 @@ import sr.unasat.financialapp.activities.main.fragments.BudgetsFragment;
 import sr.unasat.financialapp.activities.main.fragments.CategoriesFragment;
 import sr.unasat.financialapp.activities.main.fragments.dialogs.ConfirmFragment;
 import sr.unasat.financialapp.activities.main.fragments.dialogs.EditOrDeleteFragment;
-import sr.unasat.financialapp.activities.main.fragments.OverviewFragment;
+import sr.unasat.financialapp.activities.main.fragments.dialogs.MonthPickerDialog;
+import sr.unasat.financialapp.activities.main.fragments.overview.OverviewFragment;
 import sr.unasat.financialapp.activities.main.fragments.report.ReportsFragment;
 import sr.unasat.financialapp.activities.main.fragments.SettingsFragment;
 import sr.unasat.financialapp.db.dao.Dao;
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     static public AddCategoryDialog addCategoryDialog;
     static public AddBudgetDialog addBudgetDialog;
     public static String fragmentAction;
+    static public MonthPickerDialog monthPickerDialog;
 
 
     @Override
@@ -282,6 +285,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         editOrDeleteFragment.dismiss();
         fragmentAction="transaction";
 
+
+    }
+
+    public void monthPickerOk(View view){
+
+        monthPickerDialog.showData(getSupportFragmentManager());
+        monthPickerDialog.dismiss();
+
+    }
+    public void monthPickerCancel(View view){
+
+        monthPickerDialog.dismiss();
 
     }
 

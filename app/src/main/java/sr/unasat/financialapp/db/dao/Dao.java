@@ -803,6 +803,32 @@ public class Dao extends SQLiteOpenHelper {
         return used;
     }
 
+    public double getCategoryValuesByMonth(Category category,int year,int month){
+        SQLiteDatabase db=getReadableDatabase();
+        Transaction transaction;
+        double used=0;
+
+        Cursor cursor = db.query(
+                REP_TABLE,null,
+                YEAR+" = ? and "+MONTH+" = ? and "+CAT_ID+" = ?",
+                new String[] { "" + String.valueOf(year),String.valueOf(month),String.valueOf(category.getId())},null,null,null);
+        if (cursor .moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndex(TRAN_ID));
+                transaction = getTransactionByID(id);
+
+                cursor.moveToNext();
+
+                used = used+transaction.getTran_amount();
+
+            }while (!cursor.isAfterLast());
+
+            cursor.close();
+        }
+
+        return used;
+    }
+
     public double getCategoryValuesToDay(Category category){
 
         SQLiteDatabase db=getReadableDatabase();

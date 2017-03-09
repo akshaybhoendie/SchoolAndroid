@@ -1,0 +1,86 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context="sr.unasat.financialapp.activities.main.fragments.dialogs.MonthPickerDialog">
+
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <TextView
+        android:text="year"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView6"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:textSize="24sp"
+        android:textAlignment="center" />
+
+    <TextView
+        android:text="month"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView5"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:textSize="24sp"
+        android:textAlignment="center" />
+
+</LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+
+
+        <NumberPicker
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/year_picker"
+            android:layout_weight="0.66" />
+
+        <NumberPicker
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/month_picker"
+            android:layout_weight="0.66" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button2"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="34dp"
+            android:layout_marginEnd="34dp"
+            android:text="OK"
+            android:onClick="monthPickerOk"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="47dp"
+            android:layout_marginStart="47dp"
+            android:id="@+id/button3"
+            android:text="Cancel"
+            android:onClick="monthPickerCancel"/>
+    </RelativeLayout>
+
+
+</LinearLayout>

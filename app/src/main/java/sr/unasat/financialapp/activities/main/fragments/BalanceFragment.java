@@ -22,6 +22,7 @@ import java.util.List;
 import sr.unasat.financialapp.R;
 import sr.unasat.financialapp.activities.main.fragments.dialogs.AddTransactionDialog;
 import sr.unasat.financialapp.activities.main.fragments.dialogs.EditOrDeleteFragment;
+import sr.unasat.financialapp.activities.main.fragments.dialogs.MonthPickerDialog;
 import sr.unasat.financialapp.adapters.TransactionExpendableAdapter;
 import sr.unasat.financialapp.db.dao.Dao;
 import sr.unasat.financialapp.dto.Category;
@@ -30,6 +31,7 @@ import sr.unasat.financialapp.dto.User;
 
 import static sr.unasat.financialapp.activities.main.MainActivity.addTransactionDialog;
 import static sr.unasat.financialapp.activities.main.MainActivity.editOrDeleteFragment;
+import static sr.unasat.financialapp.activities.main.MainActivity.monthPickerDialog;
 import static sr.unasat.financialapp.util.DateUtil.convertDate;
 
 public class BalanceFragment extends Fragment {
@@ -37,18 +39,21 @@ public class BalanceFragment extends Fragment {
     Date date ;
     public Category category;
     Spinner spinner;
+    View view;
+    Bundle bundle;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view= inflater.inflate(R.layout.main_fragment_balance, container, false);
+        view = inflater.inflate(R.layout.main_fragment_balance, container, false);
+
+        bundle = getArguments();
 
         Dao dao = new Dao(getActivity());
         final String spinnerItem1 ="this month";
         final String spinnerItem2 ="last month";
         final String spinnerItem3 ="choose month";
-        final String spinnerItem4 ="choose date range";
 
         spinner = (Spinner)view.findViewById(R.id.balance_month_spinner);
         final String[] items = {spinnerItem1,spinnerItem2,spinnerItem3};
@@ -67,7 +72,14 @@ public class BalanceFragment extends Fragment {
                 switch (String.valueOf(parent.getItemAtPosition(position))){
 
                     case spinnerItem1:
-                        setDays(date,0,0);
+
+                        if (bundle!=null){
+                            int month = (int) bundle.get("month");
+                            int year = (int) bundle.get("year");
+                            setDays(date,month,year);
+                        }else{
+                            setDays(date,0,0);
+                        }
                         break;
                     case spinnerItem2:
                         int month=convertDate(date)[1];
@@ -79,12 +91,14 @@ public class BalanceFragment extends Fragment {
                         break;
 
                     case spinnerItem3:
+                        monthPickerDialog=new MonthPickerDialog();
+                        monthPickerDialog.pickMonthFor="balance";
+                        monthPickerDialog.show(getActivity().getFragmentManager(),"monthpicker");
+
 
                         break;
 
-                    case spinnerItem4:
 
-                        break;
 
                 }
 
@@ -111,11 +125,12 @@ public class BalanceFragment extends Fragment {
         openingView.setText(String.valueOf(user.getOpening()));
 
 
+
         return view;
     }
 
     public void setDays(Date date,int month,int year){
-        getView().findViewById(R.id.group_listViewMain).refreshDrawableState();
+        view.findViewById(R.id.group_listViewMain).refreshDrawableState();
         Dao dao=new Dao(getContext());
 
                 int[] dateArr = convertDate(date);
@@ -125,7 +140,12 @@ public class BalanceFragment extends Fragment {
 
             }
 
-        year = dateArr[0];
+        if (year==0){
+            year = dateArr[0];
+        }
+
+
+
         List<String> days;
         if (category!=null){
             days = dao.getDaysByCategory(month, year,category);
@@ -173,7 +193,7 @@ public class BalanceFragment extends Fragment {
 
 
         Collections.reverse(days);
-        ExpandableListView groupListView = (ExpandableListView) getView().findViewById(R.id.group_listViewMain);
+        ExpandableListView groupListView = (ExpandableListView) view.findViewById(R.id.group_listViewMain);
         TransactionExpendableAdapter adapter = new TransactionExpendableAdapter(days, transactions, getContext());
 
         groupListView.setAdapter(adapter);

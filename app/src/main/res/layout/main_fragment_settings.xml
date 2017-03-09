@@ -4,13 +4,13 @@
     android:layout_height="match_parent"
     tools:context=".activities.main.fragments.SettingsFragment">
 
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/settings_recycler">
 
-    <TextView
-        android:text="@string/settings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/textView5"
-        android:textSize="36sp" />
+
+
+    </android.support.v7.widget.RecyclerView>
+
 </RelativeLayout>

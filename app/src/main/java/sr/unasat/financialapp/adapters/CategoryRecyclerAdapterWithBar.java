@@ -27,13 +27,16 @@ public class CategoryRecyclerAdapterWithBar extends RecyclerView.Adapter<Categor
     Context context;
     FragmentManager fragmentManager;
     String period;
+    int year,month;
 
-    public CategoryRecyclerAdapterWithBar(List<Category> categories, double totalValue,String period, Context context, FragmentManager fragmentManager) {
+    public CategoryRecyclerAdapterWithBar(List<Category> categories, double totalValue,String period,int year,int month, Context context, FragmentManager fragmentManager) {
         this.categories = categories;
         this.totalValue = totalValue;
         this.context = context;
         this.fragmentManager = fragmentManager;
         this.period=period;
+        this.year=year;
+        this.month=month;
     }
 
     @Override
@@ -58,7 +61,7 @@ public class CategoryRecyclerAdapterWithBar extends RecyclerView.Adapter<Categor
 
                 break;
             case "choose month":
-                value = dao.getCategoryValuesToDay(category);
+                value = dao.getCategoryValuesByMonth(category,year,month);
                 break;
             case "all past transactions":
                 value = dao.getCategoryValues(category);

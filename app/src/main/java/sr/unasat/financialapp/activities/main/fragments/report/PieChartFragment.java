@@ -28,9 +28,13 @@ import java.util.Collections;
 import java.util.List;
 
 import sr.unasat.financialapp.R;
+import sr.unasat.financialapp.activities.main.fragments.dialogs.MonthPickerDialog;
 import sr.unasat.financialapp.adapters.CategoryRecyclerAdapterWithBar;
 import sr.unasat.financialapp.db.dao.Dao;
 import sr.unasat.financialapp.dto.Category;
+
+import static sr.unasat.financialapp.activities.main.MainActivity.monthPickerDialog;
+import static sr.unasat.financialapp.activities.main.fragments.dialogs.MonthPickerDialog.pieGraphType;
 
 public class PieChartFragment extends Fragment {
 
@@ -38,6 +42,7 @@ public class PieChartFragment extends Fragment {
     private String period="today";
     PieChart pieChart;
     View theView;
+    Bundle bundle;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,6 +50,7 @@ public class PieChartFragment extends Fragment {
         // Inflate the layout for this fragment
         theView = inflater.inflate(R.layout.graph_piechart, container, false);
 
+        bundle = getArguments();
         pieChart=(PieChart) theView.findViewById(R.id.piechart);
         String[] items = {"today","this month","choose month","all past transactions"};
         ArrayAdapter adapter= new ArrayAdapter(getContext(),R.layout.spinner_layout,R.id.spinner_item,items);
@@ -88,11 +94,11 @@ public class PieChartFragment extends Fragment {
                     case "choose month":
                         period = "choose month";
 
-                        if (bartype.equals("expense by category")) {
-                            expenseByCategory(theView, pieChart);
-                        }else {
-                            incomeByCategory(theView,pieChart);
-                        }
+                            pieGraphType=bartype;
+                            monthPickerDialog=new MonthPickerDialog();
+                            monthPickerDialog.pickMonthFor="pieChart";
+                            monthPickerDialog.show(getActivity().getFragmentManager(),"monthpicker");
+
                         break;
                     case "all past transactions":
                         period = "all past transactions";
@@ -126,6 +132,8 @@ public class PieChartFragment extends Fragment {
 
     private void incomeByCategory(View view,PieChart pieChart) {
         Dao dao=new Dao(getContext());
+        int month=0;
+        int year=0;
         ArrayList<PieEntry> yentries= new ArrayList<>();
         ArrayList<String> xEntries =new ArrayList<>();
         List<Category>categories=dao.getCategories();
@@ -143,8 +151,17 @@ public class PieChartFragment extends Fragment {
         switch (period){
             case "today":
                 for (int i = 0;i<categories.size();i++ ){
+                    double value=0;
+                    if (bundle!=null){
+                        period="choose month";
+                        month=bundle.getInt("month");
+                        year=bundle.getInt("year");
+                        value=dao.getCategoryValuesByMonth(categories.get(i),year,month);
 
-                    double value=dao.getCategoryValuesToDay(categories.get(i));
+                    }else {
+                        value = dao.getCategoryValuesToDay(categories.get(i));
+                    }
+
                     data[i]=(float)value;
                     xdata[i]= categories.get(i).getName();
                     totalValue=totalValue+value;
@@ -219,7 +236,7 @@ public class PieChartFragment extends Fragment {
 
         RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.pie_listview);
         CategoryRecyclerAdapterWithBar adapterWithBar=new CategoryRecyclerAdapterWithBar
-                (categoriesWithValues,totalValue,period,getContext(),getFragmentManager());
+                (categoriesWithValues,totalValue,period,year,month,getContext(),getFragmentManager());
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
@@ -245,6 +262,8 @@ public class PieChartFragment extends Fragment {
     private void expenseByCategory(View view,PieChart pieChart) {
 
         Dao dao=new Dao(getContext());
+        int month=0;
+        int year=0;
         ArrayList<PieEntry> yentries= new ArrayList<>();
         ArrayList<String> xEntries =new ArrayList<>();
         List<Category>categories=dao.getCategories();
@@ -261,9 +280,18 @@ public class PieChartFragment extends Fragment {
 
         switch (period){
             case "today":
-                for (int i = 0;i<categories.size();i++ ){
 
-                    double value=dao.getCategoryValuesToDay(categories.get(i));
+                for (int i = 0;i<categories.size();i++ ){
+                    double value;
+                    if (bundle!=null){
+                        period="choose month";
+                        month=bundle.getInt("month");
+                        year=bundle.getInt("year");
+                        value=dao.getCategoryValuesByMonth(categories.get(i),year,month);
+
+                    }else {
+                        value = dao.getCategoryValuesToDay(categories.get(i));
+                    }
                     data[i]=(float)value;
                     xdata[i]= categories.get(i).getName();
                     totalValue=totalValue+value;
@@ -351,7 +379,7 @@ public class PieChartFragment extends Fragment {
 
         RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.pie_listview);
         CategoryRecyclerAdapterWithBar adapterWithBar=new CategoryRecyclerAdapterWithBar
-                (categoriesWithValues,totalValue,period,getContext(),getFragmentManager());
+                (categoriesWithValues,totalValue,period,year,month,getContext(),getFragmentManager());
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
