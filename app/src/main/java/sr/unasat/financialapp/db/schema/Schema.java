@@ -50,6 +50,7 @@ public class Schema {
         public static final String CAT_NAME = "cat_name";
         public static final String CAT_DESCR = "cat_descr";
         public static final String BUDGET = "budget";
+        public static final String ICON = "icon";
 
         public static final String CREATE_CATTABLE =
                 "create table "+CAT_TABLE+" ( "+CAT_ID+" integer primary key, "
@@ -57,6 +58,7 @@ public class Schema {
                         + CAT_DESCR +" string , "
                         + BUDGET +" double, "
                         +USER_ID +" integer, "
+                        +ICON +" blob, "
                         +"FOREIGN KEY ("+USER_ID+") REFERENCES "+CAT_TABLE+"("+USER_ID+")); ";
 
         public static final String DROP_CATTABLE = "drop table if exists "+CAT_TABLE;

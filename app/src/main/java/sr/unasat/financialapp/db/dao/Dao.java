@@ -2,9 +2,15 @@ package sr.unasat.financialapp.db.dao;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -12,9 +18,10 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+
+import sr.unasat.financialapp.R;
 import sr.unasat.financialapp.dto.Category;
 import sr.unasat.financialapp.dto.Currency;
-import sr.unasat.financialapp.dto.Report;
 import sr.unasat.financialapp.dto.Transaction;
 import sr.unasat.financialapp.dto.User;
 import static android.content.ContentValues.TAG;
@@ -27,6 +34,7 @@ import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.CAT_NAME;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.CAT_TABLE;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.CREATE_CATTABLE;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.DROP_CATTABLE;
+import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.ICON;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaCurrency.COUNTRY;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaCurrency.CREATE_CURTABLE;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaCurrency.CURRENCY;
@@ -36,7 +44,6 @@ import static sr.unasat.financialapp.db.schema.Schema.SchemaCurrency.CUR_LOGO;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaCurrency.DROP_CURTABLE;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaReport.CREATE_REPTABLE;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaReport.DAY;
-import static sr.unasat.financialapp.db.schema.Schema.SchemaReport.REPORT_ID;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaReport.WEEKDAY;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaReport.DROP_REPTABLE;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaReport.MONTH;
@@ -66,13 +73,14 @@ import static sr.unasat.financialapp.db.schema.Schema.SchemaUser.USER_TABLE;
 import static sr.unasat.financialapp.util.DateUtil.convertDate;
 import static sr.unasat.financialapp.util.DateUtil.int_to_month;
 import static sr.unasat.financialapp.util.DateUtil.int_to_monthShort;
+import static sr.unasat.financialapp.util.IconUtil.getImageBytes;
 
 public class Dao extends SQLiteOpenHelper {
-
+    Context context;
     public Dao(Context context) {
 
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-
+        this.context=context;
     }
 
     @Override
@@ -95,26 +103,32 @@ public class Dao extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        db.execSQL(DROP_USERTABLE);
-        db.execSQL(DROP_TRANTABLE);
-        db.execSQL(DROP_CATTABLE);
-        db.execSQL(DROP_REPTABLE);
-        db.execSQL(DROP_CURTABLE);
+        if (newVersion>oldVersion){
 
-        db.execSQL(CREATE_USERTABLE);
-        db.execSQL(CREATE_TRANTABLE);
-        db.execSQL(CREATE_CATTABLE);
-        db.execSQL(CREATE_REPTABLE);
-        db.execSQL(CREATE_CURTABLE);
+            db.execSQL(DROP_USERTABLE);
+            db.execSQL(DROP_TRANTABLE);
+            db.execSQL(DROP_CATTABLE);
+            db.execSQL(DROP_REPTABLE);
+            db.execSQL(DROP_CURTABLE);
+
+            db.execSQL(CREATE_USERTABLE);
+            db.execSQL(CREATE_TRANTABLE);
+            db.execSQL(CREATE_CATTABLE);
+            db.execSQL(CREATE_REPTABLE);
+            db.execSQL(CREATE_CURTABLE);
+
+        }
     }
 
-    private void setDefaultCategories(SQLiteDatabase db){
-
-        defaultCategories(db,"no category",null,0);
-        defaultCategories(db,"income","all income",0);
-        defaultCategories(db,"food","food expenses",300);
-        defaultCategories(db,"clothing","clothing expenses",300);
-        defaultCategories(db,"entertainment","entertainment expenses",300);
+     private void setDefaultCategories(SQLiteDatabase db){
+        Drawable drawable = ContextCompat.getDrawable(context,R.drawable.food);
+        Bitmap icon = ((BitmapDrawable)drawable).getBitmap();
+        byte[] iconByte = getImageBytes(icon);
+        defaultCategories(db,"no category",null,0,null);
+        defaultCategories(db,"income","all income",0,null);
+        defaultCategories(db,"food","food expenses",300,iconByte);
+        defaultCategories(db,"clothing","clothing expenses",300,null);
+        defaultCategories(db,"entertainment","entertainment expenses",300,null);
 
 
 
@@ -184,19 +198,20 @@ public class Dao extends SQLiteOpenHelper {
 
 
 
-    private void defaultCategories(SQLiteDatabase db,String name, String descr, double budget){
+    private void defaultCategories(SQLiteDatabase db,String name, String descr, double budget,byte[] icon){
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(CAT_NAME,name);
         contentValues.put(CAT_DESCR,descr);
         contentValues.put(BUDGET,budget);
         contentValues.put(USER_ID,1);
+        contentValues.put(ICON,icon);
 
          db.insert(CAT_TABLE, null, contentValues);
 
     }
 
-    public boolean insertCategory(String name, String descr, double budget){
+    public boolean insertCategory(String name, String descr, double budget,byte[] icon){
 
         SQLiteDatabase db=getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -204,6 +219,7 @@ public class Dao extends SQLiteOpenHelper {
         contentValues.put(CAT_DESCR,descr);
         contentValues.put(BUDGET,budget);
         contentValues.put(USER_ID,1);
+        contentValues.put(ICON,icon);
 
         return db.insert(CAT_TABLE, null, contentValues)>0;
 
@@ -223,8 +239,9 @@ public class Dao extends SQLiteOpenHelper {
             String description= cursor.getString(cursor.getColumnIndex(CAT_DESCR));
             double budget = cursor.getDouble(cursor.getColumnIndex(BUDGET));
             int userID =       cursor.getInt(cursor.getColumnIndex(USER_ID));
+            byte[] icon= cursor.getBlob(cursor.getColumnIndex(ICON));
 
-            category = new Category(cat_id,name,description,budget,getUserById(userID));
+            category = new Category(cat_id,name,description,budget,icon,getUserById(userID));
 
         }
         cursor.close();
@@ -245,9 +262,9 @@ public class Dao extends SQLiteOpenHelper {
             String description= cursor.getString(cursor.getColumnIndex(CAT_DESCR));
             double budget = cursor.getDouble(cursor.getColumnIndex(BUDGET));
             int userID =       cursor.getInt(cursor.getColumnIndex(USER_ID));
+            byte[] icon= cursor.getBlob(cursor.getColumnIndex(ICON));
 
-            category = new Category(cat_id,cat_name,description,budget,getUserById(userID));
-
+            category = new Category(cat_id,name,description,budget,icon,getUserById(userID));
         }
         cursor.close();
         return category;
@@ -859,32 +876,6 @@ public class Dao extends SQLiteOpenHelper {
 
     }
 
-    public double getAllCategoryValues(){
-
-        SQLiteDatabase db=getReadableDatabase();
-
-        Transaction transaction;
-
-        double used=0;
-
-        Cursor cursor = db.query(REP_TABLE,null,null,null,null,null,null);
-        if (cursor .moveToFirst()) {
-            do {
-                int id = cursor.getInt(cursor.getColumnIndex(TRAN_ID));
-                transaction = getTransactionByID(id);
-
-                cursor.moveToNext();
-
-                used = used+transaction.getTran_amount();
-
-            }while (!cursor.isAfterLast());
-
-            cursor.close();
-        }
-
-        return used;
-
-    }
 
     public double getCategoryValues(Category category){
 
@@ -915,6 +906,65 @@ public class Dao extends SQLiteOpenHelper {
         return used;
 
     }
+
+    public List<Transaction> getTransactions(){
+        List<Transaction> list = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Transaction transaction;
+
+        Cursor cursor = null;
+        cursor = db.query(TRAN_TABLE,null,null,null,null,null,null);
+
+        if (cursor .moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndex(TRAN_ID));
+                transaction = getTransactionByID(id);
+
+                cursor.moveToNext();
+
+                list.add(transaction);
+
+            }while (!cursor.isAfterLast());
+
+
+        }
+        cursor.close();
+        return list;
+    }
+
+
+
+
+
+
+
+    public double getAllCategoryValues(){
+
+        SQLiteDatabase db=getReadableDatabase();
+
+        Transaction transaction;
+
+        double used=0;
+
+        Cursor cursor = db.query(REP_TABLE,null,null,null,null,null,null);
+        if (cursor .moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndex(TRAN_ID));
+                transaction = getTransactionByID(id);
+
+                cursor.moveToNext();
+
+                used = used+transaction.getTran_amount();
+
+            }while (!cursor.isAfterLast());
+
+            cursor.close();
+        }
+
+        return used;
+
+    }
+
 
     public List<Transaction>getTransactionsByCategory(Category category){
         SQLiteDatabase db=getReadableDatabase();
@@ -1079,30 +1129,5 @@ public class Dao extends SQLiteOpenHelper {
         }cursor.close();
 
         return years;
-    }
-
-    public List<Transaction> getTransactions(){
-        List<Transaction> list = new ArrayList<>();
-        SQLiteDatabase db = getReadableDatabase();
-        Transaction transaction;
-
-        Cursor cursor = null;
-        cursor = db.query(TRAN_TABLE,null,null,null,null,null,null);
-
-        if (cursor .moveToFirst()) {
-            do {
-                int id = cursor.getInt(cursor.getColumnIndex(TRAN_ID));
-                transaction = getTransactionByID(id);
-
-                cursor.moveToNext();
-
-                list.add(transaction);
-
-            }while (!cursor.isAfterLast());
-
-
-        }
-        cursor.close();
-        return list;
     }
 }

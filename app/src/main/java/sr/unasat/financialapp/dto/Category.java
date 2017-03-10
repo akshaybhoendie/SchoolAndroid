@@ -5,6 +5,7 @@ public class Category {
     private String name;
     private String descr;
     private double budget;
+    private byte[] icon;
     private User user;
 
     public Category(int id, String name, User user) {
@@ -18,6 +19,15 @@ public class Category {
         this.name = name;
         this.descr = descr;
         this.budget = budget;
+        this.user = user;
+    }
+
+    public Category(int id, String name, String descr, double budget, byte[] icon, User user) {
+        this.id = id;
+        this.name = name;
+        this.descr = descr;
+        this.budget = budget;
+        this.icon = icon;
         this.user = user;
     }
 
@@ -59,5 +69,13 @@ public class Category {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public byte[] getIcon() {
+        return icon;
+    }
+
+    public void setIcon(byte[] icon) {
+        this.icon = icon;
     }
 }

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ import sr.unasat.financialapp.dto.Category;
 import static sr.unasat.financialapp.activities.main.MainActivity.addCategoryDialog;
 import static sr.unasat.financialapp.activities.main.MainActivity.confirmFragment;
 import static sr.unasat.financialapp.activities.main.MainActivity.fragmentAction;
+import static sr.unasat.financialapp.util.IconUtil.getImage;
 
 
 public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecyclerAdapter.RecyclerViewHolder> {
@@ -57,6 +59,9 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
         String id=String.valueOf(category.getId());
         holder.category.setText(name);
         holder.category_id.setText(id);
+        if (category.getIcon()!=null) {
+            holder.icon.setImageBitmap(getImage(category.getIcon()));
+        }
     }
 
     @Override
@@ -71,11 +76,13 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
          TextView category_id;
          Context context;
          FragmentManager fragmentManagerthis;
+         ImageView icon;
 
 
         public RecyclerViewHolder(View itemView, Context context, FragmentManager fragmentManager) {
             super(itemView);
             this.fragmentManagerthis=fragmentManager;
+            icon=(ImageView)itemView.findViewById(R.id.category_icon);
             this.context=context;
             itemView.setOnClickListener(this);
             category= (TextView)itemView.findViewById(R.id.budget_category_name_cat);

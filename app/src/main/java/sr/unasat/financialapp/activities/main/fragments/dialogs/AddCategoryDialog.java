@@ -2,6 +2,9 @@ package sr.unasat.financialapp.activities.main.fragments.dialogs;
 
 
 import android.content.ContentValues;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -26,6 +29,7 @@ import static android.content.ContentValues.TAG;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.BUDGET;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.CAT_NAME;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.CAT_TABLE;
+import static sr.unasat.financialapp.util.IconUtil.getImageBytes;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,6 +76,7 @@ public class AddCategoryDialog extends DialogFragment {
             contentValues.put(BUDGET, budget);
             Dao dao=new Dao(getActivity());
 
+
             if (categoryToEditID!=null){
 
                 if(dao.editCategory(categorynName,null,budget, categoryToEditID)){
@@ -92,7 +97,7 @@ public class AddCategoryDialog extends DialogFragment {
                     return;
                 }else{
 
-                    if(dao.insertCategory(categorynName,null,budget)){
+                    if(dao.insertCategory(categorynName,null,budget,null)){
                         Toast.makeText(getActivity(), "category added", Toast.LENGTH_SHORT).show();
 
                     }else{
