@@ -48,8 +48,6 @@ public class BalanceFragment extends Fragment {
 
         view = inflater.inflate(R.layout.main_fragment_balance, container, false);
 
-        bundle = getArguments();
-
         Dao dao = new Dao(getActivity());
         final String spinnerItem1 ="this month";
         final String spinnerItem2 ="last month";

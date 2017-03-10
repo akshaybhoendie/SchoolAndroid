@@ -198,6 +198,7 @@ public class PieChartFragment extends Fragment {
                 }
                 Toast.makeText(getContext(), "showing you todays pie", Toast.LENGTH_SHORT).show();
                 break;
+
             case "all past transactions":
                 for (int i = 0;i<categories.size();i++ ){
 
