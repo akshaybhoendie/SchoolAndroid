@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 categorynames.add(category.getName());
             }
         }
-        categorynames.remove("no category");
+        categorynames.remove("no_category");
         categorynames.remove("income");
 
         if (categorynames.isEmpty()){
@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
     public void cancelCategoryDialogEvent(View view){
-        addCategoryDialog.dismiss();Toast.makeText(this, "no category added", Toast.LENGTH_SHORT).show();
+        addCategoryDialog.dismiss();Toast.makeText(this, "no_category added", Toast.LENGTH_SHORT).show();
     }
     public void cancelBudgetDialogEvent(View view){
 

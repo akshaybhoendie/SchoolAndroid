@@ -75,7 +75,7 @@ public class AddTransactionDialog extends DialogFragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
-                category = dao.getCategoryByName("no category");
+                category = dao.getCategoryByName("no_category");
 
             }
 

@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,6 +17,8 @@ import sr.unasat.financialapp.R;
 import sr.unasat.financialapp.activities.main.fragments.BalanceFragment;
 import sr.unasat.financialapp.db.dao.Dao;
 import sr.unasat.financialapp.dto.Category;
+
+import static sr.unasat.financialapp.util.IconUtil.getImage;
 
 /**
  * Created by Jair on 3/6/2017.
@@ -75,6 +78,7 @@ public class CategoryRecyclerAdapterWithBar extends RecyclerView.Adapter<Categor
         holder.categoryUsed.setText(String.valueOf(value));
         holder.categoryPercentageBar.setProgress(percentage);
         holder.category=category;
+        holder.icon.setImageBitmap(getImage(categories.get(position).getIcon()));
     }
 
     @Override
@@ -86,10 +90,12 @@ public class CategoryRecyclerAdapterWithBar extends RecyclerView.Adapter<Categor
 
         TextView categorynameWithPercentage, categoryUsed;Category category;
         ProgressBar categoryPercentageBar;Context context1;FragmentManager fragmentManagerThis;
+        ImageView icon;
         public RecyclerViewHolder(View itemView,Context context,FragmentManager fragmentManager) {
             super(itemView);
             this.context1=context;
             this.fragmentManagerThis=fragmentManager;
+            icon = (ImageView)itemView.findViewById(R.id.category_icon_at_pie);
             categorynameWithPercentage=(TextView)itemView.findViewById(R.id.categoryname_with_percentage);
             categoryUsed=(TextView)itemView.findViewById(R.id.spend_category_value);
             categoryPercentageBar=(ProgressBar)itemView.findViewById(R.id.progressbar_category_percent);

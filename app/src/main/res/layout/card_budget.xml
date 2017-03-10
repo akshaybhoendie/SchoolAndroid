@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@mipmap/ic_launcher"
-            android:id="@+id/category_icon"
+            android:id="@+id/budget_category_icon"
             android:layout_marginLeft="19dp"
             android:layout_marginStart="19dp"
             android:layout_centerVertical="true"
@@ -47,8 +47,8 @@
             android:layout_marginStart="18dp"
             android:layout_width="100dp"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/category_icon"
-            android:layout_toEndOf="@+id/category_icon" />
+            android:layout_toRightOf="@+id/budget_category_icon"
+            android:layout_toEndOf="@+id/budget_category_icon" />
 
         <ImageButton
             android:layout_width="wrap_content"

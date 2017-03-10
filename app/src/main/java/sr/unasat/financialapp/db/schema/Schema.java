@@ -9,7 +9,7 @@ import static sr.unasat.financialapp.db.schema.Schema.SchemaUser.USER_ID;
 
 public class Schema {
     public static final String DATABASE_NAME = "untitledBP_database.db";
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
 
 
     public class SchemaUser {
@@ -51,6 +51,7 @@ public class Schema {
         public static final String CAT_DESCR = "cat_descr";
         public static final String BUDGET = "budget";
         public static final String ICON = "icon";
+        public static final String COLOR = "color";
 
         public static final String CREATE_CATTABLE =
                 "create table "+CAT_TABLE+" ( "+CAT_ID+" integer primary key, "
@@ -59,6 +60,7 @@ public class Schema {
                         + BUDGET +" double, "
                         +USER_ID +" integer, "
                         +ICON +" blob, "
+                        +COLOR +" integer, "
                         +"FOREIGN KEY ("+USER_ID+") REFERENCES "+CAT_TABLE+"("+USER_ID+")); ";
 
         public static final String DROP_CATTABLE = "drop table if exists "+CAT_TABLE;

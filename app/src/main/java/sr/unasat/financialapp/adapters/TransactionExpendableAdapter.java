@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -14,6 +15,8 @@ import java.util.List;
 import sr.unasat.financialapp.R;
 import sr.unasat.financialapp.db.dao.Dao;
 import sr.unasat.financialapp.dto.Transaction;
+
+import static sr.unasat.financialapp.util.IconUtil.getImage;
 
 public class TransactionExpendableAdapter extends BaseExpandableListAdapter {
 
@@ -108,6 +111,7 @@ public class TransactionExpendableAdapter extends BaseExpandableListAdapter {
         tranDescr.setText(transaction.getCategory().getName());
         tranVal.setText(String.valueOf(transaction.getTran_amount()));
         tranID.setText(String.valueOf(transactionID));
+        ((ImageView)convertView.findViewById(R.id.category_icon_at_balance)).setImageBitmap(getImage(transaction.getCategory().getIcon()));
 
 
         return convertView;

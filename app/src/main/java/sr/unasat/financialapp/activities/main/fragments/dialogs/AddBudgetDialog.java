@@ -46,7 +46,7 @@ public class AddBudgetDialog extends DialogFragment {
                 categorynames.add(category.getName());
             }
         }
-        categorynames.remove("no category");
+        categorynames.remove("no_category");
         categorynames.remove("income");
         Spinner spinner = (Spinner)view.findViewById(R.id.budget_cat_spinner);
 

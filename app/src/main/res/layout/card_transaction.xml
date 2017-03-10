@@ -35,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/transaction_descr"
-            android:layout_alignBottom="@+id/category_icon"
+            android:layout_alignBottom="@+id/category_icon_at_balance"
             android:layout_alignLeft="@+id/tran_name"
             android:layout_alignStart="@+id/tran_name" />
 
@@ -48,15 +48,15 @@
             android:textSize="14sp"
             android:layout_marginLeft="35dp"
             android:layout_marginStart="35dp"
-            android:layout_alignTop="@+id/category_icon"
-            android:layout_toRightOf="@+id/category_icon"
-            android:layout_toEndOf="@+id/category_icon" />
+            android:layout_alignTop="@+id/category_icon_at_balance"
+            android:layout_toRightOf="@+id/category_icon_at_balance"
+            android:layout_toEndOf="@+id/category_icon_at_balance" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@mipmap/ic_launcher"
-            android:id="@+id/category_icon"
+            android:id="@+id/category_icon_at_balance"
             android:layout_marginLeft="19dp"
             android:layout_marginStart="19dp"
             android:layout_centerVertical="true"

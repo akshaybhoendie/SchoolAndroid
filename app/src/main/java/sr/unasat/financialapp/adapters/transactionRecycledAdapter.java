@@ -5,12 +5,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
 
 import sr.unasat.financialapp.R;
 import sr.unasat.financialapp.dto.Transaction;
+
+import static sr.unasat.financialapp.util.IconUtil.getImage;
 
 
 public class TransactionRecycledAdapter extends RecyclerView.Adapter<TransactionRecycledAdapter.RecyclerViewHolder> {
@@ -38,6 +41,7 @@ public class TransactionRecycledAdapter extends RecyclerView.Adapter<Transaction
         holder.transactionName.setText(transaction.getTran_name());
         holder.amount.setText(String.valueOf(transaction.getTran_amount()));
         holder.description.setText(transaction.getCategory().getName());
+        holder.icon.setImageBitmap(getImage(transaction.getCategory().getIcon()));
 
 
     }
@@ -52,12 +56,14 @@ public class TransactionRecycledAdapter extends RecyclerView.Adapter<Transaction
         TextView transactionName;
         TextView description;
         TextView amount;
+        ImageView icon;
 
         public RecyclerViewHolder(View itemView,Context context) {
             super(itemView);
             transactionName=(TextView)itemView.findViewById(R.id.tran_name);
             description=(TextView)itemView.findViewById(R.id.transaction_descr);
             amount=(TextView)itemView.findViewById(R.id.transaction_value);
+            icon=(ImageView)itemView.findViewById(R.id.category_icon_at_balance);
 
         }
     }

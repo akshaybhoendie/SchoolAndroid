@@ -4,12 +4,14 @@ package sr.unasat.financialapp.adapters;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +28,7 @@ import sr.unasat.financialapp.dto.Category;
 import static sr.unasat.financialapp.activities.main.MainActivity.addBudgetDialog;
 import static sr.unasat.financialapp.activities.main.MainActivity.confirmFragment;
 import static sr.unasat.financialapp.activities.main.MainActivity.fragmentAction;
+import static sr.unasat.financialapp.util.IconUtil.getImage;
 
 
 public class BudgetRecyclerAdapter extends RecyclerView.Adapter<BudgetRecyclerAdapter.RecyclerViewHolder> {
@@ -65,6 +68,7 @@ public class BudgetRecyclerAdapter extends RecyclerView.Adapter<BudgetRecyclerAd
         double remaining =budget-used;
         holder.budgetView.setText(String.valueOf(remaining));
         holder.categoryID.setText(String.valueOf(categories.get(position).getId()));
+        holder.icon.setImageBitmap(getImage(categories.get(position).getIcon()));
 
         int percentage = Integer.valueOf(String.valueOf(Math.round((used/budget)*100)));
 
@@ -98,6 +102,7 @@ public class BudgetRecyclerAdapter extends RecyclerView.Adapter<BudgetRecyclerAd
         TextView progressText;
         Context context;
         TextView categoryID;
+        ImageView icon ;
         public RecyclerViewHolder(View itemView,final Context context,final FragmentManager fragmentManager) {
             super(itemView);
             this.context=context;
@@ -110,6 +115,7 @@ public class BudgetRecyclerAdapter extends RecyclerView.Adapter<BudgetRecyclerAd
             categoryID = (TextView)itemView.findViewById(R.id.budget_cat_id);
             ImageButton edit =(ImageButton)itemView.findViewById(R.id.edit_budget);
             ImageButton delete = (ImageButton)itemView.findViewById(R.id.delete_budget);
+            icon=(ImageView)itemView.findViewById(R.id.budget_category_icon);
 
 
             edit.setOnClickListener(new View.OnClickListener() {

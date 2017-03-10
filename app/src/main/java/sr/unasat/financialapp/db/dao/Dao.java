@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
@@ -32,6 +33,7 @@ import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.CAT_DESCR;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.CAT_ID;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.CAT_NAME;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.CAT_TABLE;
+import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.COLOR;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.CREATE_CATTABLE;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.DROP_CATTABLE;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.ICON;
@@ -105,31 +107,54 @@ public class Dao extends SQLiteOpenHelper {
 
         if (newVersion>oldVersion){
 
-            db.execSQL(DROP_USERTABLE);
-            db.execSQL(DROP_TRANTABLE);
             db.execSQL(DROP_CATTABLE);
-            db.execSQL(DROP_REPTABLE);
-            db.execSQL(DROP_CURTABLE);
 
-            db.execSQL(CREATE_USERTABLE);
-            db.execSQL(CREATE_TRANTABLE);
             db.execSQL(CREATE_CATTABLE);
-            db.execSQL(CREATE_REPTABLE);
-            db.execSQL(CREATE_CURTABLE);
+            setDefaultCategories(db);
 
         }
     }
 
      private void setDefaultCategories(SQLiteDatabase db){
-        Drawable drawable = ContextCompat.getDrawable(context,R.drawable.food);
-        Bitmap icon = ((BitmapDrawable)drawable).getBitmap();
-        byte[] iconByte = getImageBytes(icon);
-        defaultCategories(db,"no category",null,0,null);
-        defaultCategories(db,"income","all income",0,null);
-        defaultCategories(db,"food","food expenses",300,iconByte);
-        defaultCategories(db,"clothing","clothing expenses",300,null);
-        defaultCategories(db,"entertainment","entertainment expenses",300,null);
 
+         int[] drawables=
+                 {
+                         R.drawable.no_category,
+                         R.drawable.income,
+                         R.drawable.food,
+                         R.drawable.shopping,
+                         R.drawable.entertainment,
+                         R.drawable.transportation,
+                         R.drawable.self_improv,
+                         R.drawable.util,
+                         R.drawable.health,
+                         R.drawable.social,
+                         R.drawable.investments,
+                         R.drawable.fee01
+
+                 };
+         Bitmap icons[]=new Bitmap[drawables.length];
+
+         for (int i=0;i<drawables.length;i++){
+
+             Drawable drawable = ContextCompat.getDrawable(context,drawables[i]);
+             icons[i] = ((BitmapDrawable)drawable).getBitmap();
+
+         }
+
+
+         defaultCategories(db,"no category",null,0,getImageBytes(icons[0]),Color.rgb(104, 98, 98));
+         defaultCategories(db,"income","all income",0,getImageBytes(icons[1]),Color.rgb(46, 221, 37));
+         defaultCategories(db,"food","food expenses",300,getImageBytes(icons[2]),Color.rgb(124, 197, 239));
+         defaultCategories(db,"shoping","clothing expenses",300,getImageBytes(icons[3]),Color.rgb(252, 241, 80));
+         defaultCategories(db,"entertainment","entertainment expenses",300,getImageBytes(icons[4]),Color.rgb(239, 165, 160));
+         defaultCategories(db,"transportation","",300,getImageBytes(icons[5]),Color.rgb(239, 197, 81));
+         defaultCategories(db,"self improvement","",300,getImageBytes(icons[6]),Color.rgb(252, 100, 204));
+         defaultCategories(db,"utilities","",300,getImageBytes(icons[7]),Color.rgb(186, 242, 184));
+         defaultCategories(db,"health","",300,getImageBytes(icons[8]),Color.rgb(219, 60, 52));
+         defaultCategories(db,"social","",300,getImageBytes(icons[9]),Color.rgb(126, 234, 213));
+         defaultCategories(db,"investents","",300,getImageBytes(icons[10]),Color.rgb(178, 78, 160));
+         defaultCategories(db,"fee","",300,getImageBytes(icons[11]),Color.RED);
 
 
     }
@@ -198,7 +223,7 @@ public class Dao extends SQLiteOpenHelper {
 
 
 
-    private void defaultCategories(SQLiteDatabase db,String name, String descr, double budget,byte[] icon){
+    private void defaultCategories(SQLiteDatabase db,String name, String descr, double budget,byte[] icon,int color){
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(CAT_NAME,name);
@@ -206,6 +231,7 @@ public class Dao extends SQLiteOpenHelper {
         contentValues.put(BUDGET,budget);
         contentValues.put(USER_ID,1);
         contentValues.put(ICON,icon);
+        contentValues.put(COLOR,color);
 
          db.insert(CAT_TABLE, null, contentValues);
 

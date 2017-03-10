@@ -38,7 +38,7 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
     public CategoryRecyclerAdapter(List<String> category_names,Context context,FragmentManager fragmentManager){
 
         this.context=context;
-        category_names.remove("no category");
+        category_names.remove("no_category");
         category_names.remove("income");
         this.fragmentManager=fragmentManager;
         this . category_names=category_names;
