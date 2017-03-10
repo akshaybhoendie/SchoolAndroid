@@ -6,11 +6,16 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -25,6 +30,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import sr.unasat.financialapp.R;
@@ -260,13 +266,13 @@ public class PieChartFragment extends Fragment {
     Toast.makeText(view.getContext(), "income cat", Toast.LENGTH_SHORT).show();
     }
 
-    private void expenseByCategory(View view,PieChart pieChart) {
+    private void expenseByCategory(final View view, PieChart pieChart) {
 
         Dao dao=new Dao(getContext());
         int month=0;
         int year=0;
         ArrayList<PieEntry> yentries= new ArrayList<>();
-        ArrayList<String> xEntries =new ArrayList<>();
+        final ArrayList<String> xEntries =new ArrayList<>();
         List<Category>categories=dao.getCategories();
         for (int i=0;i<categories.size();i++){
             if (categories.get(i).getId()==2){
@@ -346,29 +352,33 @@ public class PieChartFragment extends Fragment {
 
 
         for (int i=0;i<data.length;i++){
-            yentries.add(new PieEntry(data[i],i));
+            yentries.add(new PieEntry(data[i],categories.get(i)));
+
+
         }
         Collections.addAll(xEntries, xdata);
 
+        PieDataSet set=new PieDataSet(yentries,"first pie");
         ArrayList<Integer>colors=new ArrayList<>();
 
-        for (Category category:categoriesWithValues){
-            colors.add(category.getColor());
+
+        for (Category cat:categories){
+            colors.add(cat.getColor());
         }
 
-        PieDataSet set=new PieDataSet(yentries,"first pie");
 
         set.setColors(colors);
         set.setSliceSpace(4f);
         set.setValueTextSize(0);
+
 
         PieData piedata = new PieData(set);
         pieChart.setData(piedata);
         pieChart.setCenterText("total expenses:\n"+String.valueOf(totalValue));
         pieChart.invalidate();
 
-        RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.pie_listview);
-        CategoryRecyclerAdapterWithBar adapterWithBar=new CategoryRecyclerAdapterWithBar
+        final RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.pie_listview);
+        final CategoryRecyclerAdapterWithBar adapterWithBar=new CategoryRecyclerAdapterWithBar
                 (categoriesWithValues,totalValue,period,year,month,getContext(),getFragmentManager());
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -379,7 +389,21 @@ public class PieChartFragment extends Fragment {
         pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
-                //Toast.makeText(getContext(), String.valueOf(e.getX()), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), String.valueOf(h.getDataSetIndex()), Toast.LENGTH_SHORT).show();
+                Log.d("values of pie",String.valueOf(e.getData()));
+                Category category =(Category) e.getData();
+
+                Toast.makeText(getContext(),category.getName()+ " \n ", Toast.LENGTH_SHORT).show();
+                ImageView img = (ImageView)view.findViewWithTag(category.getId());
+                final Animation animation = new AlphaAnimation(1, 0);
+
+                animation.setInterpolator(new LinearInterpolator());
+                animation.setRepeatCount(4);
+                animation.setRepeatMode(Animation.REVERSE);
+                animation.setDuration(500);
+                img.startAnimation(animation);
+
+
             }
 
             @Override

@@ -79,6 +79,7 @@ public class CategoryRecyclerAdapterWithBar extends RecyclerView.Adapter<Categor
         holder.categoryPercentageBar.setProgress(percentage);
         holder.category=category;
         holder.icon.setImageBitmap(getImage(categories.get(position).getIcon()));
+        holder.icon.setTag(category.getId());
     }
 
     @Override
