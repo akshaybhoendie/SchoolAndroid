@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="sr.unasat.financialapp.activities.main.fragments.report.PieChartFragment"
-    android:background="@color/WhiteSmoke">
+    android:background="@color/WhiteSmoke"
+    android:id="@+id/pie_scrollview">
 
     <LinearLayout
         android:layout_width="match_parent"

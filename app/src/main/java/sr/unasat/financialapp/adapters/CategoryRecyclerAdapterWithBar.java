@@ -20,9 +20,6 @@ import sr.unasat.financialapp.dto.Category;
 
 import static sr.unasat.financialapp.util.IconUtil.getImage;
 
-/**
- * Created by Jair on 3/6/2017.
- */
 
 public class CategoryRecyclerAdapterWithBar extends RecyclerView.Adapter<CategoryRecyclerAdapterWithBar.RecyclerViewHolder>  {
     private List<Category> categories;
@@ -79,7 +76,8 @@ public class CategoryRecyclerAdapterWithBar extends RecyclerView.Adapter<Categor
         holder.categoryPercentageBar.setProgress(percentage);
         holder.category=category;
         holder.icon.setImageBitmap(getImage(categories.get(position).getIcon()));
-        holder.icon.setTag(category.getId());
+        holder.icon.setTag(category.getId()+" icon ");
+        holder.categoryPercentageBar.setTag(category.getId()+" bar ");
     }
 
     @Override

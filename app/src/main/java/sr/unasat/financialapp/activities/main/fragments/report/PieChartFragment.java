@@ -16,6 +16,8 @@ import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -49,6 +51,7 @@ public class PieChartFragment extends Fragment {
     PieChart pieChart;
     View theView;
     Bundle bundle;
+    ScrollView scrollview;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,6 +65,8 @@ public class PieChartFragment extends Fragment {
         ArrayAdapter adapter= new ArrayAdapter(getContext(),R.layout.spinner_layout,R.id.spinner_item,items);
         Spinner spinner= (Spinner) theView.findViewById(R.id.spinner_piechart);
         spinner.setAdapter(adapter);
+        scrollview=(ScrollView)theView.findViewById(R.id.pie_scrollview);
+        scrollview.setSmoothScrollingEnabled(true);
 
 
         pieChart.setUsePercentValues(true);
@@ -384,6 +389,7 @@ public class PieChartFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
 
+
         recyclerView.setAdapter(adapterWithBar);
 
         pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
@@ -394,15 +400,19 @@ public class PieChartFragment extends Fragment {
                 Category category =(Category) e.getData();
 
                 Toast.makeText(getContext(),category.getName()+ " \n ", Toast.LENGTH_SHORT).show();
-                ImageView img = (ImageView)view.findViewWithTag(category.getId());
+                ImageView img = (ImageView)view.findViewWithTag(category.getId()+" icon ");
+                ProgressBar progr =(ProgressBar)view.findViewWithTag(category.getId()+" bar ");
                 final Animation animation = new AlphaAnimation(1, 0);
 
                 animation.setInterpolator(new LinearInterpolator());
-                animation.setRepeatCount(4);
+                animation.setRepeatCount(5);
                 animation.setRepeatMode(Animation.REVERSE);
                 animation.setDuration(500);
-                img.startAnimation(animation);
 
+                img.startAnimation(animation);
+                progr.startAnimation(animation);
+
+                scrollview.scrollTo(0, (int) recyclerView.getY());
 
             }
 
