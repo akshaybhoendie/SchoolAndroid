@@ -266,8 +266,9 @@ public class Dao extends SQLiteOpenHelper {
             double budget = cursor.getDouble(cursor.getColumnIndex(BUDGET));
             int userID =       cursor.getInt(cursor.getColumnIndex(USER_ID));
             byte[] icon= cursor.getBlob(cursor.getColumnIndex(ICON));
+            int color = cursor.getInt(cursor.getColumnIndex(COLOR));
 
-            category = new Category(cat_id,name,description,budget,icon,getUserById(userID));
+            category = new Category(cat_id,name,description,budget,icon,color,getUserById(userID));
 
         }
         cursor.close();
@@ -289,8 +290,9 @@ public class Dao extends SQLiteOpenHelper {
             double budget = cursor.getDouble(cursor.getColumnIndex(BUDGET));
             int userID =       cursor.getInt(cursor.getColumnIndex(USER_ID));
             byte[] icon= cursor.getBlob(cursor.getColumnIndex(ICON));
+            int color = cursor.getInt(cursor.getColumnIndex(COLOR));
 
-            category = new Category(cat_id,name,description,budget,icon,getUserById(userID));
+            category = new Category(cat_id,name,description,budget,icon,color,getUserById(userID));
         }
         cursor.close();
         return category;

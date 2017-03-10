@@ -351,21 +351,10 @@ public class PieChartFragment extends Fragment {
         Collections.addAll(xEntries, xdata);
 
         ArrayList<Integer>colors=new ArrayList<>();
-        colors.add(Color.BLUE);
-        colors.add(Color.RED);
-        colors.add(Color.YELLOW);
-        colors.add(Color.GREEN);
-        colors.add(Color.MAGENTA);
-        colors.add(Color.BLUE);
-        colors.add(Color.RED);
-        colors.add(Color.YELLOW);
-        colors.add(Color.GREEN);
-        colors.add(Color.MAGENTA);
-        colors.add(Color.BLUE);
-        colors.add(Color.RED);
-        colors.add(Color.YELLOW);
-        colors.add(Color.GREEN);
-        colors.add(Color.MAGENTA);
+
+        for (Category category:categoriesWithValues){
+            colors.add(category.getColor());
+        }
 
         PieDataSet set=new PieDataSet(yentries,"first pie");
 
