@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:srcCompat="@mipmap/ic_launcher"
+        android:id="@+id/balance_icon"
+        android:layout_margin="20dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/balance_type"
+        android:textAlignment="center"
+
+        android:textSize="18sp"
+        android:text="type" />
+
+    <TextView
+        android:text="0.00"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/balance_type_amount"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:layout_marginTop="10dp"
+        android:textStyle="normal|bold" />
+</LinearLayout>

@@ -1,17 +1,86 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.main.fragments.overview.OverviewFragment">
+    android:background="@color/LightGrey"
+    tools:context=".activities.main.fragments.overview.OverviewFragment"
+    >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
+            android:id="@+id/balance_recycler"
+            android:background="@drawable/layout_bg"
 
 
-    <TextView
-        android:text="Overview"
+        >
+
+        </android.support.v7.widget.RecyclerView>
+
+    <com.jjoe64.graphview.GraphView
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:onClick="goToBarFrag"
+        android:id="@+id/overview_bar"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="12dp"
+
+        android:background="@drawable/layout_bg"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="60dp"
+            android:layout_gravity="center"
+            android:background="@drawable/layout_bg"
+
+            >
+
+
+        <com.github.mikephil.charting.charts.PieChart
+            android:layout_width="300dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:id="@+id/overview_pie"
+            >
+
+
+        </com.github.mikephil.charting.charts.PieChart>
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/pie_recycle_overview"
+            android:layout_gravity="center"
+            >
+
+        </android.support.v7.widget.RecyclerView>
+        </LinearLayout>
+    </LinearLayout>
+    </ScrollView>
+    <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="261dp"
-        android:id="@+id/textView3"
-        android:textSize="36sp" />
-</RelativeLayout>
+        android:layout_gravity="bottom|end"
+        android:layout_margin="30dp"
+        />
+
+
+</android.support.design.widget.CoordinatorLayout>

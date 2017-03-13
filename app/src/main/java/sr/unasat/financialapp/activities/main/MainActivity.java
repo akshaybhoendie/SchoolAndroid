@@ -34,6 +34,8 @@ import sr.unasat.financialapp.activities.main.fragments.dialogs.ConfirmFragment;
 import sr.unasat.financialapp.activities.main.fragments.dialogs.EditOrDeleteFragment;
 import sr.unasat.financialapp.activities.main.fragments.dialogs.MonthPickerDialog;
 import sr.unasat.financialapp.activities.main.fragments.overview.OverviewFragment;
+import sr.unasat.financialapp.activities.main.fragments.report.BarChartFragment;
+import sr.unasat.financialapp.activities.main.fragments.report.PieChartFragment;
 import sr.unasat.financialapp.activities.main.fragments.report.ReportsFragment;
 import sr.unasat.financialapp.activities.main.fragments.SettingsFragment;
 import sr.unasat.financialapp.db.dao.Dao;
@@ -91,6 +93,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
  }
+
+    
 
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
@@ -317,12 +321,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-
-
-
-
-
-
-
+    public void goToBarFrag(View view){
+        BarChartFragment fragment = new BarChartFragment();
+        fragment.bartype="daily expenses";
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_container,fragment).addToBackStack("ha").commit();
+    }
 
 }

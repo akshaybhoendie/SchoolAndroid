@@ -963,6 +963,17 @@ public class Dao extends SQLiteOpenHelper {
 
 
 
+    public List<Transaction>getIncome(){
+        List<Transaction>income=new ArrayList<>();
+        for (Transaction transaction:getTransactions()){
+            if (transaction.getCategory().getId()==2){
+                income.add(transaction);
+            }
+
+        }
+
+        return income;
+    }
 
 
 

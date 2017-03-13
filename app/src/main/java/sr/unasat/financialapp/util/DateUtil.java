@@ -38,6 +38,38 @@ public class DateUtil {
         return dayInt;
     }
 
+    public static String int_to_day(int dayStr){
+
+        String dayInt ;
+        switch (dayStr){
+            case 1 :
+                dayInt =  "mon";
+                break;
+            case 2:
+                dayInt = "tue";
+                break;
+            case 3:
+                dayInt = "wed";
+                break;
+            case 4:
+                dayInt = "thu";
+                break;
+            case 5:
+                dayInt = "fri";
+                break;
+            case 6:
+                dayInt = "sat";
+                break;
+            case 7:
+                dayInt = "sun";
+                break;
+            default:
+                dayInt=null;
+        }
+
+
+        return dayInt;
+    }
     public static String int_to_month(int month){
         String monthStr ;
         switch (month){

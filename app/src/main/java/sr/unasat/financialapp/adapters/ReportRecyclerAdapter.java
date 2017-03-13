@@ -3,9 +3,12 @@ package sr.unasat.financialapp.adapters;
 
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -49,6 +52,11 @@ public class ReportRecyclerAdapter extends RecyclerView.Adapter<ReportRecyclerAd
     @Override
     public void onBindViewHolder(ReportRecyclerAdapter.RecyclerViewHolder holder, int position) {
 
+        if (position==0){
+            holder.icon.setImageBitmap(((BitmapDrawable)(ContextCompat.getDrawable(context,R.drawable.pie))).getBitmap());
+        }else{
+            holder.icon.setImageBitmap(((BitmapDrawable)(ContextCompat.getDrawable(context,R.drawable.bar))).getBitmap());
+        }
         holder.report.setText(reports.get(position));
 
     }
@@ -60,12 +68,13 @@ public class ReportRecyclerAdapter extends RecyclerView.Adapter<ReportRecyclerAd
 
     static class RecyclerViewHolder extends RecyclerView.ViewHolder implements AdapterView.OnClickListener{
 
+        ImageView icon;
         TextView report;Context context;
 
         public RecyclerViewHolder(View itemView, final Context context) {
             super(itemView);
             report = (TextView)itemView.findViewById(R.id.report_text);
-            ImageView img = (ImageView)itemView.findViewById(R.id.report_icon);
+            icon = (ImageView)itemView.findViewById(R.id.report_icon);
             this.context=context;
 
             report.setOnClickListener(new View.OnClickListener() {
@@ -74,7 +83,7 @@ public class ReportRecyclerAdapter extends RecyclerView.Adapter<ReportRecyclerAd
                    onClickCustom();
         }
             });
-            img.setOnClickListener(new View.OnClickListener() {
+            icon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onClickCustom();
