@@ -72,7 +72,7 @@ public class CategoryRecyclerAdapterWithBar extends RecyclerView.Adapter<Categor
         int percentage = (int)Math.round((value/totalValue)*100);
 
         holder.categorynameWithPercentage.setText(category.getName()+" ("+percentage+" % )");
-        holder.categoryUsed.setText(String.valueOf(value));
+        holder.categoryUsed.setText("$ "+String.valueOf(value));
         holder.categoryPercentageBar.setProgress(percentage);
         holder.category=category;
         holder.icon.setImageBitmap(getImage(categories.get(position).getIcon()));

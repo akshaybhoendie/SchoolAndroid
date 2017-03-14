@@ -28,7 +28,7 @@ public class Schema {
 
         public static final String CREATE_USERTABLE =
                 "create table "+USER_TABLE+" ( "+ USER_ID +" integer primary key, "
-                        +PASSWORD+" string not null, "
+                        +PASSWORD+" string, "
                         +NAME_USER+" string , "
                         +SURNAME+" string , "
                         +EMAIL+" string , "
@@ -127,7 +127,6 @@ public class Schema {
                         +USER_ID +" integer); ";
 
         public static final String DROP_CURTABLE = "drop table if exists "+ CURTABLE;
-
 
     }
 

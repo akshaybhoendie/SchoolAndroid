@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.NumberPicker;
@@ -38,6 +39,7 @@ import sr.unasat.financialapp.activities.main.fragments.report.BarChartFragment;
 import sr.unasat.financialapp.activities.main.fragments.report.PieChartFragment;
 import sr.unasat.financialapp.activities.main.fragments.report.ReportsFragment;
 import sr.unasat.financialapp.activities.main.fragments.SettingsFragment;
+import sr.unasat.financialapp.activities.start.StartActivity;
 import sr.unasat.financialapp.db.dao.Dao;
 import sr.unasat.financialapp.dto.Category;
 
@@ -59,30 +61,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     static public MonthPickerDialog monthPickerDialog;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        //new Dao(this).getReadableDatabase();
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        Dao dao=new Dao(this);
+        //new Dao(this).getReadableDatabase();
 
-        toolbar = (Toolbar) findViewById(R.id.main_toolbar);
-        setSupportActionBar(toolbar);
+        if (dao.getUserById(1)==null){
+            startActivity(new Intent(this,StartActivity.class));
 
-        drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        actionBarDrawerToggle =
-                new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_closed);
 
-        drawerLayout.setDrawerListener(actionBarDrawerToggle);
-        getSupportFragmentManager().beginTransaction().add(R.id.main_container,new OverviewFragment()).commit();
-        getSupportActionBar().setTitle(R.string.overview);
+        }else {
+            setContentView(R.layout.activity_main);
 
-        navigationView = (NavigationView)findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+            toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+            setSupportActionBar(toolbar);
 
-        Calendar calendar=Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY,20);
-        calendar.set(Calendar.MINUTE,30);
+            drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+            actionBarDrawerToggle =
+                    new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_closed);
+
+            drawerLayout.setDrawerListener(actionBarDrawerToggle);
+            getSupportFragmentManager().beginTransaction().add(R.id.main_container, new OverviewFragment()).commit();
+            getSupportActionBar().setTitle(R.string.overview);
+
+            navigationView = (NavigationView) findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener(this);
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, 20);
+            calendar.set(Calendar.MINUTE, 30);
 
             Intent intent = new Intent(getApplicationContext(), TransacttionReminderBroadcastReceiver.class);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -91,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     AlarmManager.INTERVAL_DAY, pendingIntent);
 
 
-
+        }
  }
 
     
@@ -99,7 +108,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        actionBarDrawerToggle.syncState();
+        try {
+            actionBarDrawerToggle.syncState();
+        }catch (Exception e){
+            Log.d("","just catching the error");
+        }
     }
 
     @Override
@@ -234,7 +247,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch(fragmentAction) {
 
             case "transaction":
+
+
                 dao.deleteTransaction(addTransactionDialog.transactionToEditID);
+
                 addTransactionDialog.transactionToEditID = null;
                 confirmFragment.dismiss();
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_container, new BalanceFragment()).commit();
@@ -273,6 +289,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportActionBar().setTitle(getResources().getString(R.string.budgets));
                 fragmentAction=null;
                 addBudgetDialog.budgetCategoryToEdit=null;
+                break;
+
+            case "reset":
+                dao.reset();
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+                Toast.makeText(this, "account reset successful", Toast.LENGTH_LONG).show();
                 break;
 
 

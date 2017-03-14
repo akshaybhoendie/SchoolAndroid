@@ -41,6 +41,12 @@ public class BalanceFragment extends Fragment {
     Spinner spinner;
     View view;
     Bundle bundle;
+    TextView closingView,
+
+    transactionView,
+
+    openingView ;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -110,17 +116,17 @@ public class BalanceFragment extends Fragment {
         });
 
 
-        TextView closingView = (TextView)view.findViewById(R.id.balance_closing_value);
+         closingView = (TextView)view.findViewById(R.id.balance_closing_value);
 
-        TextView transactionView = (TextView)view.findViewById(R.id.transactions_value);
+         transactionView = (TextView)view.findViewById(R.id.transactions_value);
 
-        TextView openingView = (TextView)view.findViewById(R.id.starting_value);
+         openingView = (TextView)view.findViewById(R.id.starting_value);
 
         User user=dao.getUserById(1);
 
-        closingView.setText(String.valueOf(user.getClosing()));
-        transactionView.setText(String.valueOf(user.getTransactions()));
-        openingView.setText(String.valueOf(user.getOpening()));
+        closingView.setText("$ "+String.valueOf(user.getClosing()));
+        transactionView.setText("$ "+String.valueOf(user.getTransactions()));
+        openingView.setText("$ "+String.valueOf(user.getOpening()));
 
 
 
@@ -148,6 +154,11 @@ public class BalanceFragment extends Fragment {
         if (category!=null){
             days = dao.getDaysByCategory(month, year,category);
             spinner.setVisibility(View.GONE);
+            closingView.setVisibility(View.GONE);
+            openingView.setVisibility(View.GONE);
+            transactionView.setVisibility(View.GONE);
+
+
 
         }else{
             days = dao.getDays(month, year);

@@ -138,17 +138,26 @@ public class OverviewFragment extends Fragment {
 // remove vertical labels and lines
 
 
+        List<Double>val=new ArrayList<>();
+        for (double num:dayAmount){
+            val.add(num);
+        }
+        Collections.sort(val);
+        final double highest=val.get(val.size()-1);
+        final double lowest=val.get(0);
+
+
 
         series.setValueDependentColor(new ValueDependentColor<DataPoint>() {
             @Override
             public int get(DataPoint data) {
-                if (data.getY()>100){
+
+                if (data.getY()==highest){
                     return Color.RED;
-                }else if(data.getY()>50){
-                    return Color.BLUE;
-                }else{
+                }else if (data.getY()==lowest){
                     return Color.GREEN;
                 }
+                return Color.BLUE;
             }
         });
 

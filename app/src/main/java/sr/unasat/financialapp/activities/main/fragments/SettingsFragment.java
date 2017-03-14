@@ -29,11 +29,10 @@ public class SettingsFragment extends Fragment {
 
         option1="edit currency";option3="reset account";option2="backup database";
         List<String>options=new ArrayList<>();
-        options.add(option1);
-        options.add(option2);
+
         options.add(option3);
 
-        SettingsRecyclerAdapter adapter= new SettingsRecyclerAdapter(options,getContext());
+        SettingsRecyclerAdapter adapter= new SettingsRecyclerAdapter(options,getContext(),getFragmentManager());
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);

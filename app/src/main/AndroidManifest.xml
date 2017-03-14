@@ -19,7 +19,9 @@
         <receiver
             android:name=".TransacttionReminderBroadcastReceiver"
             android:enabled="true"
-            android:exported="true"></receiver>
+            android:exported="true" />
+
+        <activity android:name=".activities.start.StartActivity"></activity>
     </application>
 
 </manifest>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_start2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="sr.unasat.financialapp.activities.start.StartActivity">
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="202dp"
+        android:id="@+id/emailfield"
+        android:hint="your email ..."
+        android:textAlignment="center" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/opening_balance"
+        android:hint="your opening balance ..."
+        android:textAlignment="center"
+        android:layout_alignTop="@+id/emailfield"
+        android:layout_alignLeft="@+id/emailfield"
+        android:layout_alignStart="@+id/emailfield"
+        android:layout_marginTop="83dp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/next"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/opening_balance"
+        android:layout_toEndOf="@+id/opening_balance"
+        android:layout_marginBottom="24dp"
+        android:id="@+id/imageView"
+        android:onClick="startActivityEvent"/>
+
+</RelativeLayout>

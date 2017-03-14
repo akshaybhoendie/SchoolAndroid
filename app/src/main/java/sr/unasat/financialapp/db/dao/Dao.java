@@ -2,6 +2,7 @@ package sr.unasat.financialapp.db.dao;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -96,9 +97,8 @@ public class Dao extends SQLiteOpenHelper {
         db.execSQL(CREATE_CURTABLE);
 
 
-        setDefaultUser(db);
+        //setDefaultUser(db);
         setDefaultCategories(db);
-        // setDefaultCurrencies();
         Log.i(TAG, "onCreate: succesfull");
     }
 
@@ -106,16 +106,48 @@ public class Dao extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         if (newVersion>oldVersion){
+            setDefaultCurrencies();
 
-            db.execSQL(DROP_CATTABLE);
 
-            db.execSQL(CREATE_CATTABLE);
-            setDefaultCategories(db);
 
         }
     }
 
-     private void setDefaultCategories(SQLiteDatabase db){
+    private void setDefaultCurrencies() {
+
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues contentValues=new ContentValues();
+        contentValues.put(COUNTRY,"suriname");
+        contentValues.put(CURRENCY,"surinaamse dollars");
+        contentValues.put(CUR_LOGO,"srd");
+
+        ContentValues contentValues1=new ContentValues();
+        contentValues1.put(COUNTRY,"usa");
+        contentValues1.put(CURRENCY,"us dollars");
+        contentValues1.put(CUR_LOGO,"$");
+
+        ContentValues contentValues2=new ContentValues();
+        contentValues2.put(COUNTRY,"euro");
+        contentValues2.put(CURRENCY,"euro");
+        contentValues2.put(CUR_LOGO,"€ ");
+
+        List<ContentValues>contentValuesList=new ArrayList<>();
+
+        contentValuesList.add(contentValues);
+        contentValuesList.add(contentValues1);
+        contentValuesList.add(contentValues2);
+        for (ContentValues contentValues3:contentValuesList){
+            db.insert(CURTABLE,null,contentValues3);
+        }
+        getUserById(1).setCurrency(new Currency(0,"","uss","$"));
+    }
+
+    public void getUser(){
+
+
+    }
+
+    private void setDefaultCategories(SQLiteDatabase db){
 
          int[] drawables=
                  {
@@ -170,6 +202,11 @@ public class Dao extends SQLiteOpenHelper {
     }
 
     //methods to use db
+    public void setUser(ContentValues contentValues){
+
+        SQLiteDatabase db=getWritableDatabase();
+        db.insert(USER_TABLE, null, contentValues);
+    }
 
     public Currency getCurencyByID(int id){
         Currency currency = null;
@@ -220,8 +257,6 @@ public class Dao extends SQLiteOpenHelper {
         cursor.close();
         return user;
     }
-
-
 
     private void defaultCategories(SQLiteDatabase db,String name, String descr, double budget,byte[] icon,int color){
 
@@ -1169,4 +1204,13 @@ public class Dao extends SQLiteOpenHelper {
 
         return years;
     }
+
+    public void reset() {
+
+        context.deleteDatabase(DATABASE_NAME);
+
+
+    }
+
+
 }

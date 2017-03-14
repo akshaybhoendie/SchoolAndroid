@@ -2,6 +2,7 @@ package sr.unasat.financialapp.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -49,7 +50,9 @@ public class BalanceAdapter extends RecyclerView.Adapter<BalanceAdapter.Recycler
 
                 holder.icon.setImageBitmap(icon);
                 holder.balanceType.setText("opening");
-                holder.balanceAmount.setText((String.valueOf(user.getOpening())));
+                holder.balanceAmount.setText("$" + (String.valueOf(user.getOpening())));
+
+
                 break;
             case 1:
                 value=0;
@@ -59,27 +62,35 @@ public class BalanceAdapter extends RecyclerView.Adapter<BalanceAdapter.Recycler
                 for (Transaction transaction:dao.getIncome()){
                     value = value+transaction.getTran_amount();
                 }
-                holder.balanceAmount.setText((String.valueOf(value)));
+                holder.balanceAmount.setText("$ "+(String.valueOf(value)));
                 break;
             case 2:
                 value=0;
                 Bitmap icon2 = ((BitmapDrawable)(ContextCompat.getDrawable(context,R.drawable.expense))).getBitmap();
                 holder.icon.setImageBitmap(icon2);
                 for(Transaction transaction:dao.getTransactions()){
-                    if (!dao.getIncome().contains(transaction)){
+                    if (transaction.getCategory().getId()!=2){
                         value=value+transaction.getTran_amount();
                     }
                 }
                 holder.balanceType.setText("expense");
-                holder.balanceAmount.setText(String.valueOf(value));
+                holder.balanceAmount.setText("$ "+String.valueOf(value));
                 break;
             case 3:
                 Bitmap icon3 = ((BitmapDrawable)(ContextCompat.getDrawable(context,R.drawable.closing))).getBitmap();
                 holder.icon.setImageBitmap(icon3);
                 holder.balanceType.setText("closing");
-                holder.balanceAmount.setText(String.valueOf(user.getClosing()));
+                double closing=user.getClosing();
+
+                holder.balanceAmount.setText("$ "+String.valueOf(closing));
+                if (closing<0){
+                    holder.balanceAmount.setTextColor(Color.RED);
+                }
+
                 break;
+
         }
+
 
     }
 

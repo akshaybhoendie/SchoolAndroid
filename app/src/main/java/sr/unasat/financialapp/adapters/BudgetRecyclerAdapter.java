@@ -66,7 +66,7 @@ public class BudgetRecyclerAdapter extends RecyclerView.Adapter<BudgetRecyclerAd
         double budget= categories.get(position).getBudget();
         holder.categoryNameView.setText(categories.get(position).getName());
         double remaining =budget-used;
-        holder.budgetView.setText(String.valueOf(remaining));
+        holder.budgetView.setText("$ "+String.valueOf(remaining));
         holder.categoryID.setText(String.valueOf(categories.get(position).getId()));
         holder.icon.setImageBitmap(getImage(categories.get(position).getIcon()));
 

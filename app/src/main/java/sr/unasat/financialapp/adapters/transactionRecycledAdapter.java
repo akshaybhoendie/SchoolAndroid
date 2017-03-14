@@ -39,7 +39,7 @@ public class TransactionRecycledAdapter extends RecyclerView.Adapter<Transaction
 
 
         holder.transactionName.setText(transaction.getTran_name());
-        holder.amount.setText(String.valueOf(transaction.getTran_amount()));
+        holder.amount.setText("$ "+String.valueOf(transaction.getTran_amount()));
         holder.description.setText(transaction.getCategory().getName());
         holder.icon.setImageBitmap(getImage(transaction.getCategory().getIcon()));
 

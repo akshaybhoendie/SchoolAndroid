@@ -109,7 +109,7 @@ public class TransactionExpendableAdapter extends BaseExpandableListAdapter {
         Transaction transaction = dao.getTransactionByID(transactionID);
         tranName.setText(transaction.getTran_name());
         tranDescr.setText(transaction.getCategory().getName());
-        tranVal.setText(String.valueOf(transaction.getTran_amount()));
+        tranVal.setText("$ "+String.valueOf(transaction.getTran_amount()));
         tranID.setText(String.valueOf(transactionID));
         ((ImageView)convertView.findViewById(R.id.category_icon_at_balance)).setImageBitmap(getImage(transaction.getCategory().getIcon()));
 
