@@ -29,6 +29,8 @@ import static android.content.ContentValues.TAG;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.BUDGET;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.CAT_NAME;
 import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.CAT_TABLE;
+import static sr.unasat.financialapp.db.schema.Schema.SchemaCategory.ICON;
+import static sr.unasat.financialapp.util.IconUtil.getBytes;
 import static sr.unasat.financialapp.util.IconUtil.getImageBytes;
 
 /**
@@ -74,6 +76,7 @@ public class AddCategoryDialog extends DialogFragment {
             ContentValues contentValues = new ContentValues();
             contentValues.put(CAT_NAME, categorynName);
             contentValues.put(BUDGET, budget);
+
             Dao dao=new Dao(getActivity());
 
 
@@ -97,7 +100,8 @@ public class AddCategoryDialog extends DialogFragment {
                     return;
                 }else{
 
-                    if(dao.insertCategory(categorynName,null,budget,null)){
+                    if(dao.insertCategory(categorynName,null,budget,
+                            getImageBytes(((BitmapDrawable)getResources().getDrawable(R.drawable.logo_mini)).getBitmap()))){
                         Toast.makeText(getActivity(), "category added", Toast.LENGTH_SHORT).show();
 
                     }else{

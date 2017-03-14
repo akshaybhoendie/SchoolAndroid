@@ -367,6 +367,7 @@ public class Dao extends SQLiteOpenHelper {
         contentValues.put(BUDGET,budget);
         contentValues.put(USER_ID,1);
 
+
         return db.update(CAT_TABLE, contentValues,CAT_ID+" = ?", new String[] { "" + id })>0;
 
     }
