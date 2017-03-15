@@ -29,7 +29,7 @@ public class TransacttionReminderBroadcastReceiver extends BroadcastReceiver {
 
         NotificationCompat.Builder builder=new NotificationCompat.Builder(context)
                 .setContentIntent(pendingIntent)
-                .setSmallIcon(android.R.drawable.sym_def_app_icon)
+                .setSmallIcon(R.drawable.logo_mini)
                 .setContentTitle("daily transacction reminder")
                 .setContentText("dont forget to add your daily transactions")
                 .setAutoCancel(true);
