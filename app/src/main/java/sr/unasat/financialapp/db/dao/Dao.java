@@ -178,14 +178,14 @@ public class Dao extends SQLiteOpenHelper {
          defaultCategories(db,"no category",null,0,getImageBytes(icons[0]),Color.rgb(104, 98, 98));
          defaultCategories(db,"income","all income",0,getImageBytes(icons[1]),Color.rgb(46, 221, 37));
          defaultCategories(db,"food","food expenses",300,getImageBytes(icons[2]),Color.rgb(124, 197, 239));
-         defaultCategories(db,"shoping","clothing expenses",300,getImageBytes(icons[3]),Color.rgb(252, 241, 80));
+         defaultCategories(db,"shopping","clothing expenses",300,getImageBytes(icons[3]),Color.rgb(252, 241, 80));
          defaultCategories(db,"entertainment","entertainment expenses",300,getImageBytes(icons[4]),Color.rgb(239, 165, 160));
          defaultCategories(db,"transportation","",300,getImageBytes(icons[5]),Color.rgb(239, 197, 81));
          defaultCategories(db,"self improvement","",300,getImageBytes(icons[6]),Color.rgb(252, 100, 204));
          defaultCategories(db,"utilities","",300,getImageBytes(icons[7]),Color.rgb(186, 242, 184));
          defaultCategories(db,"health","",300,getImageBytes(icons[8]),Color.rgb(219, 60, 52));
          defaultCategories(db,"social","",300,getImageBytes(icons[9]),Color.rgb(126, 234, 213));
-         defaultCategories(db,"investents","",300,getImageBytes(icons[10]),Color.rgb(178, 78, 160));
+         defaultCategories(db,"investments","",300,getImageBytes(icons[10]),Color.rgb(178, 78, 160));
          defaultCategories(db,"fee","",300,getImageBytes(icons[11]),Color.RED);
 
 
