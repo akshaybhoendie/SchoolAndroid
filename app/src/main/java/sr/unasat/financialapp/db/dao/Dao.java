@@ -211,7 +211,7 @@ public class Dao extends SQLiteOpenHelper {
     public Currency getCurencyByID(int id){
         Currency currency = null;
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor=null;
+        Cursor cursor;
 
         cursor = db.query(CURTABLE, null,
                 CUR_ID+" = ?", new String[] { "" + id },null,null,null);
@@ -258,7 +258,7 @@ public class Dao extends SQLiteOpenHelper {
         return user;
     }
 
-    private void defaultCategories(SQLiteDatabase db,String name, String descr, double budget,byte[] icon,int color){
+    private void defaultCategories(SQLiteDatabase db,String name, String descr, double budget,byte  [] icon,int color){
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(CAT_NAME,name);
@@ -340,18 +340,18 @@ public class Dao extends SQLiteOpenHelper {
 
         Cursor  cursor = db.query(CAT_TABLE,null,null,null,null,null,null);
 
-        if (cursor .moveToFirst()) {
-            do {
-                int id = cursor.getInt(cursor.getColumnIndex(CAT_ID));
-                category = getCategoryById(id);
+            if (cursor .moveToFirst()) {
+                do {
+                    int id = cursor.getInt(cursor.getColumnIndex(CAT_ID));
+                    category = getCategoryById(id);
 
-                cursor.moveToNext();
+                    cursor.moveToNext();
 
-                list.add(category);
+                    list.add(category);
 
-            }while (!cursor.isAfterLast());
+                }while (!cursor.isAfterLast());
 
-        }
+            }
         cursor.close();
 
         return list;
